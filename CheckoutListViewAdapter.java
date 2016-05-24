@@ -81,7 +81,7 @@ public class CheckoutListViewAdapter extends BaseAdapter{
 
 	    public class Holder
 	    {
-	        TextView item_name,item_desc,mrp,you_save;
+	        //TextView item_name,item_desc,mrp,you_save;
 	        Button okler_price,image_cart;
 	        EditText units;
 	        ImageView deleteImage,image_favourite,red_plus_Image,red_minus_Image,image_favourite_filled;
@@ -94,7 +94,7 @@ public class CheckoutListViewAdapter extends BaseAdapter{
 	    	 if(check==1){
 	   	      odbean = Okler.getInstance().getSingleCart();
 	   	      }else{
-	   	    	  odbean = Okler.getInstance().getMainCart();
+	   	    	  
 	   	      }
 	    	final Holder holder=new Holder();
 	        View rowView;
