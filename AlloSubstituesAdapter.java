@@ -19,7 +19,7 @@ public class AlloSubstituesAdapter extends BaseAdapter{
 	Context context;
 	ArrayList<ProductDataBean> subList;
 	LayoutInflater inflater;
-	
+	/*This is testing*/
 	public AlloSubstituesAdapter(Context context2,ArrayList<ProductDataBean> subList2) {
 		this.context = context2;
 		this.subList = subList2;
