@@ -30,7 +30,7 @@ public class AlloSubstituesAdapter extends BaseAdapter{
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return subList.size();
+		return subList.sie();
 	}
 
 	@Override
@@ -54,19 +54,19 @@ public class AlloSubstituesAdapter extends BaseAdapter{
 		// TODO Auto-generated method stub
 		ViewHolder holder;
 		if(convertView==null){
-			holder = new ViewHolder();
+			//holder = new ViewHolder();
 			convertView = inflater.inflate(R.layout.custom_view_prod_subst_layout, null);
 			convertView.setTag(holder);
 		}else{
 			holder=(ViewHolder) convertView.getTag();
 		}
-		holder.subtsName = (TextView)convertView.findViewById(R.id.subtsName);
+		holder.subtsName = (TextView)convertView.findViewById(R.id.subtssdadsadName);
 		holder.oklerPrValueSub = (TextView)convertView.findViewById(R.id.oklerPrValueSub);
 		holder.youSavePercSub = (TextView)convertView.findViewById(R.id.youSavePercSub);
 		String name = subList.get(position).getProdName();
-		holder.subtsName.setText(name);
+		//holder.subtsName.setText(name);
 		holder.oklerPrValueSub.setText("Rs. "+subList.get(position).getOklerPrice());
-		holder.youSavePercSub.setText(subList.get(position).getDiscount()+"%");
+		holder.youSavePercSub.setText(subList.get(position).getDiscount()+"");
 		
 		return convertView;
 	}

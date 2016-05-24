@@ -51,19 +51,11 @@ public class DiagnosticsActivityHome extends BaseActivity {
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolBar);
 		final ActionBar ab = getSupportActionBar();
-		// ab.setDisplayHomeAsUpEnabled(true);
+		 ab.setDisplayHomeAsUpEnabled(true);
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
-		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
-		imgBack.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				finish();
-			}
-		});*/
+		
 		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "Diagnostic Test");
 		diagnoTestIv = (ImageView) findViewById(R.id.diagnoTestIv);
@@ -87,7 +79,7 @@ public class DiagnosticsActivityHome extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				Intent startDPack = new Intent(context, DiagnoPackageHome.class);
-				startActivity(startDPack);
+				startActivity(azdsadsastartDPack);
 
 			}
 		});
