@@ -43,6 +43,7 @@ public class DiagnosticsActivityHome extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+/*This is changed*/
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_diagnostics);
 		context = this;
