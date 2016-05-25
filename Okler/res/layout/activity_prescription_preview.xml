@@ -1,0 +1,159 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   
+    tools:context="com.okler.android.PrescriptionPreview" >
+     <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar"            
+            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"
+			android:layout_width="fill_parent"            />
+     
+     <LinearLayout
+         android:id="@+id/title_layout"
+         android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:elevation="4dip"
+        android:orientation="vertical"
+        android:paddingTop="0dp"
+        android:paddingBottom="0dp"
+        android:background="#FF2C32" >
+
+         <TextView
+             android:id="@+id/textView1"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_gravity="center"
+             android:gravity="center"
+             android:text="PRESCRIPTION PREVIEW"
+             android:textColor="@color/White"
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+     </LinearLayout>
+	<ScrollView 
+	    android:id="@+id/scroll_preview"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@+id/LL_for_buttons"
+	    android:layout_below="@+id/title_layout"
+	    >
+     <fragment
+         android:layout_below="@id/title_layout"
+         android:id="@+id/fragment1"
+         android:name="com.okler.fragment.PreviewImageFragment"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" />
+    </ScrollView>
+    
+    <LinearLayout
+        android:id="@+id/LL_for_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="60dp" 
+        android:orientation="horizontal"
+        android:layout_above="@+id/bottombar">
+<RelativeLayout 
+    android:id="@+id/btn_cancel"
+    android:layout_weight="1"
+    android:layout_height="fill_parent"
+    android:layout_width="0dp"
+    android:background="@color/Blue"
+    >
+<RelativeLayout 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+    >
+    <ImageView 
+        android:id="@+id/cancel_icon"
+        android:layout_width="24dp"
+		android:layout_height="24dp"
+		android:src="@drawable/white_cancel_icon"
+        />
+    <TextView 
+        android:layout_toRightOf="@+id/cancel_icon"
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true"
+		android:textColor="@color/White"
+		android:textSize="16sp"
+		android:layout_marginLeft="5dp"
+		android:text="CANCEL"
+		/>
+</RelativeLayout>
+    
+</RelativeLayout>
+
+
+<RelativeLayout 
+    android:layout_marginLeft="1dp"
+    android:id="@+id/btn_upload"
+	android:layout_weight="1"
+    android:layout_height="fill_parent"
+    android:layout_width="0dp"
+    android:background="@color/Red"
+    >
+    <RelativeLayout 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"   
+    >
+    <ImageView 
+        android:id="@+id/upload_icon"
+        android:layout_width="24dp"
+		android:layout_height="24dp"
+		android:src="@drawable/upload_icon"
+		/>
+    <TextView 
+        android:layout_toRightOf="@+id/upload_icon"
+        android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textColor="@color/White"
+		android:layout_centerVertical="true"
+		android:text="UPLOAD"
+		android:textSize="16sp"
+		android:layout_marginLeft="5dp"
+		/>
+</RelativeLayout>
+    
+</RelativeLayout>
+       <!--  <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"            
+            android:textColor="@color/White" 
+            android:background="@drawable/cancel"
+            android:layout_marginRight="1dp"/>
+
+        <Button
+            android:id="@+id/btn_upload"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"            
+            android:textColor="@color/White"
+            android:background="@drawable/upload_btn" />
+ -->
+    </LinearLayout>
+<include
+        android:id="@id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/layout_bottom_bar" />
+       <LinearLayout 
+        android:orientation="vertical" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" 
+        android:id="@+id/progressLinLayout" 
+        android:gravity="center" 
+        android:visibility="gone" 
+        android:layout_centerInParent="true">
+	<ProgressBar 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:indeterminate="true"/>
+     </LinearLayout>
+</RelativeLayout>

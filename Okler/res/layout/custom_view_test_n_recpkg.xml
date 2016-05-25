@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    >
+    
+	<RelativeLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    android:id="@+id/testRelParent">
+<include layout="@layout/separator_purple"/>
+	<!-- <TextView  
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/testId"
+	    android:visibility="gone"/> -->
+    <ImageView
+        android:id="@+id/tickImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/right_grey_tick"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"  />
+    <LinearLayout android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:id="@+id/selTestInfo"
+        android:layout_toRightOf="@id/tickImage"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp">
+                <LinearLayout 
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                <TextView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/testName"
+            android:text="Test:"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
+                <TextView 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/testValue"
+            android:text="testValue"
+            android:layout_marginTop="10dp" />
+                </LinearLayout>
+        <RelativeLayout android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:id="@+id/valuesLL"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp" >
+        	<TextView
+	                android:id="@+id/tv_MrpTag"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:textSize="15sp"
+	                android:text="MRP:"/>
+					<TextView
+					    android:id="@+id/tv_MrpValue"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="2000"
+					    android:textSize="15sp"
+					    android:layout_toRightOf="@id/tv_MrpTag"/>            		
+					
+				 <LinearLayout android:layout_width="wrap_content"
+				     android:layout_height="wrap_content"
+				     
+				     android:layout_alignParentRight="true"
+				     >
+		            <TextView
+		                android:id="@+id/tv_youSave"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                
+		                android:text="You Save:"
+		                android:textSize="15sp" />
+		               <TextView
+		                android:id="@+id/tv_youSaveValue"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                
+		                android:textColor="@color/Red"
+		                android:layout_marginRight="20dp"
+		                android:textSize="15sp"
+		                android:text=" 25%"/>
+		               </LinearLayout>
+		            </RelativeLayout>
+		            <Button 
+				    android:id="@+id/okler_Amount"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:background="@drawable/item_amount_background"
+		            android:text="Okler Price Rs.1500"
+		            android:textSize="13sp"
+		            android:layout_marginTop="10dp"
+		            android:layout_centerInParent="true" />
+    </LinearLayout>
+  </RelativeLayout>
+  <RelativeLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    android:id="@+id/pckgRelParent"
+    android:layout_below="@id/testRelParent"
+    android:layout_marginTop="10dp">
+
+    <ImageView
+        android:id="@+id/tickImagePkg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/right_grey_tick"
+        android:visibility="gone" />
+   <LinearLayout android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:id="@+id/recPkgInfo"
+        android:layout_toRightOf="@id/tickImagePkg"
+        android:orientation="vertical"
+        android:layout_marginLeft="10dp">
+		 <!--   <TextView  
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:id="@+id/rec_pckId"
+	    android:visibility="gone"/> -->
+		             <TextView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recPkgNameTitle"
+            android:text="Recommended Package"
+            android:textStyle="bold"/>
+                <TextView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pkgName"
+            android:text="package"/>
+     <RelativeLayout android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:id="@+id/pkgvaluesLL"
+            android:layout_marginTop="10dp" >
+            <TextView
+	                android:id="@+id/tv_MrpTagPkg"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:textSize="15sp"
+	                android:text="MRP:"/>
+					<TextView
+					    android:id="@+id/tv_MrpValuePkg"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text="2000"
+					    android:textSize="15sp"
+					    android:layout_toRightOf="@id/tv_MrpTagPkg"/>            		
+					
+					 <LinearLayout android:layout_width="wrap_content"
+				     android:layout_height="wrap_content"				     
+				     android:layout_alignParentRight="true"
+				     >
+		            <TextView
+		                android:id="@+id/tv_youSavePkg"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                
+		                android:text="You Save:"
+		                android:textSize="15sp" />
+		               <TextView
+		                android:id="@+id/tv_youSaveValuePkg"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                
+		                android:textColor="@color/Red"
+		                android:layout_marginRight="20dp"
+		                android:textSize="15sp"
+		                android:text=" 25%"/>
+		               </LinearLayout> 
+		            </RelativeLayout>
+		            <Button 
+				    android:id="@+id/okler_AmountPkg"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:background="@drawable/item_amount_background"
+		            android:text="Okler Price Rs.1500"
+		            android:textSize="13sp"
+		            android:layout_marginTop="10dp"
+		            android:layout_centerInParent="true" />
+    </LinearLayout> 
+  </RelativeLayout> 
+</RelativeLayout>

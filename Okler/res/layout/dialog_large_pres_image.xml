@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     >
+    <ImageView android:id="@+id/deleteImg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/red_cross"
+            />
+        
+    <RelativeLayout android:id="@+id/innerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/deleteImg"
+        >
+        <RelativeLayout
+            android:id="@+id/leftArrowImgRl"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            
+             >
+        
+        <ImageView 
+            android:id="@+id/leftArrowImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/less_than_icon"
+            android:layout_centerVertical="true"/>
+        </RelativeLayout>
+        
+        <RelativeLayout 
+            android:id="@+id/rightArrowImgRl"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            
+            >
+        <ImageView 
+            android:id="@+id/rightArrowImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/greater_than_icon"
+            android:layout_centerVertical="true"
+            />
+        </RelativeLayout>
+        <com.android.volley.toolbox.NetworkImageView android:id="@+id/presImageView"
+            android:layout_width="fill_parent"
+            android:layout_height="600dp"
+            android:src="@drawable/camera"      
+            android:layout_toRightOf="@id/leftArrowImgRl"        
+            android:layout_toLeftOf="@id/rightArrowImgRl"      
+            android:layout_centerInParent="true"/>
+      
+    </RelativeLayout>
+
+</RelativeLayout>

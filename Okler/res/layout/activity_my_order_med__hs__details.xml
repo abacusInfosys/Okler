@@ -1,0 +1,106 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   tools:context="com.okler.android.MyOrderMed_Hs_Details" >
+ <LinearLayout
+        android:id="@+id/toolBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
+		<include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar"/>
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@color/Blue800"
+            android:textColor="@color/White"
+            android:text="Medicines And HealthShop Order History"
+             />
+     </LinearLayout>
+    <ScrollView 
+        android:layout_below="@id/toolBarLayout"
+       android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/bottomlayout">
+    <RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent">
+       	<!--  *******02__my_order_medicines_and_healthShop_details.jpg -->
+   
+ 		
+    	<LinearLayout 
+    	    android:id="@+id/custview"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    
+		    android:orientation="vertical">
+        <!-- <include 
+	             android:id="@+id/prodOrder"
+	             layout="@layout/include_order_prod_details"
+	            /> -->
+        
+        </LinearLayout>   	
+ 
+    	<LinearLayout
+    	    android:id="@+id/amountLinLayout" 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@id/custview"
+		    android:orientation="vertical">
+        <include 
+	             android:id="@+id/titleOrderId"
+	             layout="@layout/include_title_for_mycart"
+	            />
+        <include 
+	             android:id="@+id/amountLayout"
+	             layout="@layout/include_amount_layout"
+	            />
+
+        <LinearLayout
+            android:id="@+id/address_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <include
+                android:id="@+id/titleOrderId"
+                layout="@layout/include_title_for_mycart" />
+
+        </LinearLayout>
+        <include 
+            android:id="@+id/address_delivery_detail"
+            layout="@layout/include_address_by_type_layout"/>
+        <include 
+            android:id="@+id/address_billing_detail"
+            layout="@layout/include_address_by_type_layout"/>
+		</LinearLayout>
+        
+</RelativeLayout>		
+</ScrollView>
+    <LinearLayout 
+        android:id="@+id/bottomlayout"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentBottom="true"
+		    android:orientation="vertical">
+		<Button 
+		    android:id="@+id/cancelButton"
+		    android:layout_width="fill_parent"
+		    android:layout_height="?actionBarSize"
+		    android:text="Cancel Order"
+		    android:textColor="@color/White"
+		    android:background="@color/Blue800"
+		    android:gravity="center"/>
+		<include
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_bottom_bar" />
+		</LinearLayout>
+   
+</RelativeLayout>
