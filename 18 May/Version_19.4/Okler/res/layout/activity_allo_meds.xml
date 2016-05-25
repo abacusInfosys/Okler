@@ -1,0 +1,394 @@
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    
+    >
+    <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar_cart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            
+            
+            />
+<com.sothree.slidinguppanel.SlidingUpPanelLayout 
+   
+    android:id="@+id/sliding_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    sothree:umanoPanelHeight="45dp"
+    sothree:umanoShadowHeight="4dp"
+    sothree:umanoParallaxOffset="100dp"
+    sothree:umanoDragView="@+id/dragView"
+    sothree:umanoOverlay="true"
+    android:layout_below="@+id/toolbar"
+    android:layout_above="@+id/bottombar"
+    sothree:umanoScrollableView="@+id/list"
+    tools:context="com.okleruser.AlloMedsActivity"
+    >
+	
+	
+ <FrameLayout 
+    android:id="@+id/main_frame_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/LightGreyWhite"
+   	
+     >  
+     
+   <ScrollView 
+       android:id="@+id/scrl_alloMeds"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/toolbar"
+       android:layout_above="@+id/bottombar"
+       android:background="@color/White" 
+       >
+       <RelativeLayout 
+           android:id="@+id/RL_for_alloMedsScrl"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           >
+	 	 <RelativeLayout 
+	 	    android:id="@+id/relativeImageLayout"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerInParent="true"
+		    android:layout_alignParentTop="true"
+		    android:layout_marginLeft="10dp"
+		    android:layout_marginRight="10dp">
+			 <!-- com.android.volley.toolbox.NetworkImageView -->
+			 
+			 <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/item_image"
+			        android:layout_width="50dp"
+			        android:layout_height="50dp"
+			        android:layout_centerInParent="true"
+			        android:src="@drawable/no_image_found"
+			        android:layout_marginBottom="10dp"
+			  />
+				    
+			</RelativeLayout>
+			<RelativeLayout 
+		    		android:id="@+id/relativeNameLayout"
+					android:layout_width="match_parent"
+	    			android:layout_height="wrap_content"
+	    			android:layout_centerInParent="true"
+	    			android:layout_below="@id/relativeImageLayout"
+	    			android:layout_marginTop="5dp"
+	    			android:layout_marginLeft="10dp"
+		    		android:layout_marginRight="10dp">
+				    
+				    <TextView
+				        android:id="@+id/item_name"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerHorizontal="true"
+				        android:textSize="20sp"
+				        android:textStyle="bold"
+				        android:textAllCaps="true"
+				        android:layout_alignParentTop="true"
+				        android:text="PRODUCT NAME 25 MG" 
+				        android:layout_marginBottom="5dp"/>
+					
+				    <TextView
+				        android:id="@+id/brand_name"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerHorizontal="true"
+				        android:layout_below="@id/item_name"
+				        android:inputType="textCapWords"
+				        android:layout_marginLeft="10dp"
+				        android:text="Brandname"
+				        android:ellipsize="end"
+						android:singleLine="true"					       
+				        android:textStyle="italic"
+				        android:layout_marginRight="10dp"
+				        android:textSize="17sp"
+				        />
+				<!-- Hidden Layout -->
+				<RelativeLayout 
+				    	android:id="@+id/relativeHiddenLayout"
+						android:layout_width="match_parent"
+		    			android:layout_height="wrap_content"
+		    			android:layout_below="@id/brand_name"
+		    			android:layout_centerInParent="true"
+		    			android:layout_marginTop="5dp"
+		    			android:layout_marginLeft="10dp"
+				    	android:layout_marginRight="10dp"
+				    	>
+				    
+				    <TextView 
+				        android:id="@+id/presc_req"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerHorizontal="true"
+				        android:text="Prescription Required"
+				        android:textColor="@color/Red"
+				        android:textStyle="bold"
+				        android:layout_marginLeft="10dp"
+				        android:layout_marginRight="10dp"
+				        android:textSize="17sp"
+				        />
+				    
+				</RelativeLayout>
+						    
+		</RelativeLayout>
+	
+		
+        <RelativeLayout
+           		android:id="@+id/relativeMrpLayout"
+				android:layout_width="match_parent"
+    			android:layout_height="wrap_content"
+    			android:layout_below="@id/relativeNameLayout"
+    			android:layout_centerInParent="true"
+    			android:layout_marginTop="5dp"
+    			android:layout_marginLeft="10dp"
+		    	android:layout_marginRight="10dp">
+				    
+				    <RelativeLayout
+				        android:id="@+id/MrpLayout"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_alignParentLeft="true"
+				       
+				        android:layout_marginLeft="10dp"
+				        android:layout_marginRight="10dp">
+					<TextView
+	                android:id="@+id/tv_MrpTag"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:textSize="15sp"
+	                android:text="MRP : "/>
+					<TextView
+					    android:id="@+id/tv_MrpValue"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text=""
+					    android:textSize="15sp"
+					     android:layout_toLeftOf="@+id/tv_youSave"
+					    android:layout_toRightOf="@id/tv_MrpTag"/>
+            		
+					
+				    <TextView
+		                android:id="@+id/tv_youSaveValue"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_alignParentRight="true"
+		                android:textColor="@color/Red"
+		                android:textSize="15sp"
+		                android:text=" 0%"
+		                
+		                android:layout_marginRight="10dp"/>
+		            <TextView
+		                android:id="@+id/tv_youSave"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:text="You Save:"
+		                android:layout_toLeftOf="@+id/tv_youSaveValue"
+		                android:textSize="15sp"
+		                android:layout_marginLeft="10dp" />
+
+		            </RelativeLayout>
+        	</RelativeLayout>
+			<RelativeLayout 
+		    		android:id="@+id/relativeAmountLayout"
+					android:layout_width="match_parent"
+	    			android:layout_height="wrap_content"
+	    			android:layout_centerInParent="true"
+	    			android:layout_below="@id/relativeMrpLayout"
+	    			android:layout_marginLeft="10dp"
+		    		android:layout_marginRight="10dp"
+		    		android:layout_marginBottom="10dp"
+	    			android:layout_marginTop="5dp">
+   <RelativeLayout
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_centerInParent="true" >
+				<Button 
+				    android:id="@+id/okler_Amount"
+		      		android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+		            android:background="@drawable/item_amount_background"
+		            android:text="Okler Price: Rs. "
+		            android:textSize="12sp"
+		            android:layout_centerInParent="true" />
+				 
+				</RelativeLayout>					    
+			</RelativeLayout>
+<RelativeLayout 
+    android:id="@+id/med_info_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/relativeAmountLayout"
+    android:layout_centerHorizontal="true"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="10dp"
+    >
+   <RelativeLayout 
+       android:id="@+id/med_info_heading_layout"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerHorizontal="true"
+       
+       >
+   	<TextView 
+   	    android:id="@+id/tv_med_info"
+   	    android:layout_width="wrap_content"
+   	    android:layout_height="wrap_content"
+   	    android:text="@string/medicine_info"
+   	    android:layout_alignParentBottom="true"
+   	    android:textColor="@color/Blue"
+   	    android:textSize="17sp"
+   	    />
+   	<ImageView 
+   	    android:id="@+id/right_arrow"
+   	    android:layout_width="20dp"
+   	    android:layout_height="20dp"
+   	    android:layout_alignParentBottom="true"
+   	    android:src="@drawable/medicine_info_icon"
+   	    android:layout_toRightOf="@+id/tv_med_info"
+   	    />
+   	</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/med_info_linLay"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/med_info_heading_layout"
+        android:visibility="gone"
+         >
+	
+    </LinearLayout>
+</RelativeLayout>
+<RelativeLayout 
+    android:id="@+id/quantity_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/med_info_layout"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="10dp"
+    >
+    <include 
+        layout="@layout/include_allo_unit_layout"
+        
+        />
+</RelativeLayout>
+			
+<RelativeLayout 
+    android:id="@+id/pincode_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/quantity_layout"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    >
+    <include 
+        layout="@layout/include_check_pin_layout"
+        />
+    
+    
+</RelativeLayout>
+
+<RelativeLayout 
+    android:id="@+id/buy_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/pincode_layout"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    >
+    <include 
+        layout="@layout/include_share_add_buy"
+        />
+    
+</RelativeLayout>
+<RelativeLayout 
+    android:id="@+id/empty_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="45dp"
+    android:layout_below="@+id/buy_layout"
+    android:background="@color/LightGreyWhite"
+    >
+    
+    
+</RelativeLayout>
+</RelativeLayout>
+       
+   </ScrollView>
+    	
+  </FrameLayout> 
+	<!-- Slider -->		
+ <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="false"
+        android:id="@+id/dragView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:background="@color/Blue">
+
+            <TextView
+                android:id="@+id/sliderHeader"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="16sp"
+                android:textColor="@color/White"
+                android:paddingLeft="10dp"/>
+
+            <ImageView
+                android:id="@+id/sliderIndicatorRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:src="@drawable/generic_right_icon"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                />
+            
+            <ImageView
+                android:id="@+id/sliderIndicatorDown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:src="@drawable/generic_down_icon"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+        </ListView>
+    </LinearLayout>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+<include
+    	android:layout_alignParentBottom="true"
+        android:id="@+id/bottombar"
+       	android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_bottom_bar"
+         />	
+</RelativeLayout>
