@@ -1,0 +1,129 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="5" >
+
+<!--     <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/camera"
+        android:orientation="vertical" >
+    </LinearLayout> -->
+<FrameLayout android:id="@+id/imagesStack"
+       android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_weight="3">
+    <com.android.volley.toolbox.NetworkImageView android:id="@+id/img1"
+        android:layout_height="100dp"
+        android:layout_width="100dp"
+    	  android:layout_marginLeft="5dp"
+        android:src="@drawable/gallery"/>
+        <com.android.volley.toolbox.NetworkImageView android:id="@+id/img2"
+        android:layout_height="100dp"
+        android:layout_width="100dp" 
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+         android:src="@drawable/gallery"/>
+         <com.android.volley.toolbox.NetworkImageView android:id="@+id/img3"
+        android:layout_height="100dp"
+        android:layout_width="100dp"        
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="20dp"/> 
+     <!--    <com.android.volley.toolbox.NetworkImageView android:id="@+id/singleImg"
+        android:layout_height="140dp"
+        android:layout_width="140dp"
+         android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        />  -->
+</FrameLayout>
+           
+<RelativeLayout android:id="@+id/restPrescDetails"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="2"
+    >
+       <TextView
+        android:id="@+id/pName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/linearLayout1"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/linearLayout1"
+        android:text="Patient Name"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pSName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/pName"
+        android:layout_marginLeft="18dp"
+        android:layout_toRightOf="@+id/pName"
+        android:text="Surname"
+          android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dSName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/dName"
+        android:layout_alignBottom="@+id/dName"
+        android:layout_alignLeft="@+id/pSName"
+        android:text="Surname"
+         android:textSize="15sp"
+         />
+
+    <TextView
+        android:id="@+id/prescIDVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/prescID"
+        android:layout_toRightOf="@+id/prescID"
+        android:text="12345" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/prescID"
+        android:layout_below="@+id/prescID"
+        android:text="Status" />
+
+    <TextView
+        android:id="@+id/statusVal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/status"
+        android:layout_alignBottom="@+id/status"
+        android:layout_alignLeft="@+id/prescIDVal"
+        android:text="Pending for digitization" />
+
+    <TextView
+        android:id="@+id/dName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/pName"
+        android:layout_below="@+id/pName"
+        android:text="Doctors name" 
+        android:textSize="15sp"/>
+
+    <TextView
+        android:id="@id/prescID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/dName"
+        android:layout_below="@+id/dName"
+        android:text="Prescription ID:" />
+    </RelativeLayout>
+
+
+</LinearLayout>

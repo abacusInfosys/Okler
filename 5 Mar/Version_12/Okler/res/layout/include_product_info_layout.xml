@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/RL_For_Prod_Info"
+        >
+        
+       <include
+        android:id="@+id/prodDetailsfragment"
+        layout="@layout/row_prod_details_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+                /> 
+    <RelativeLayout 
+        android:id="@+id/desc_outer_RL"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/prodDetailsfragment"
+        
+        >
+    <!--ViewMore  -->
+    <RelativeLayout 
+        android:id="@+id/viewMoreLessRL"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        >
+    <TextView 
+        
+        android:id="@+id/viewMoreTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/viewMore"
+        android:textColor="@color/Blue"
+        android:textSize="17sp"
+        
+        />
+    <TextView 
+		    
+        android:id="@+id/viewLessTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/viewLess"
+        android:textColor="@color/Blue"
+        android:visibility="gone"
+        android:textSize="17sp"/>
+    </RelativeLayout>
+    <!-- Medicines descriptions dropdown -->
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:id="@+id/desc_Main_RL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/viewMoreLessRL"
+        android:visibility="gone"
+        android:orientation="vertical"
+        >
+		</LinearLayout>
+    </RelativeLayout>
+    <include 
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/desc_outer_RL"
+        android:id="@+id/unit_L"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        layout="@layout/include_unit"
+        android:layout_margin="10dp"
+        />
+    <include 
+       
+        android:layout_below="@id/unit_L"
+        android:id="@+id/pincode_L"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        layout="@layout/include_check_pin_layout"
+        android:layout_margin="10dp"
+        />
+    <include 
+        android:id="@+id/buyNowL"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pincode_L"
+        layout="@layout/include_share_add_buy"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        />
+</RelativeLayout>    
