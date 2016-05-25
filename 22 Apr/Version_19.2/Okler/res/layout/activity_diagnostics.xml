@@ -1,0 +1,93 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"  
+    tools:context="com.okler.diagnostics.DiagnosticsActivityHome"
+    android:background="@drawable/category_menu_bg" >
+
+    <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar"
+            android:layout_alignParentTop="true"/>
+   
+    <ScrollView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/bottombar">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    <ImageView 
+        android:id="@+id/diagnoTestIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"        
+        android:src="@drawable/search_by_test_btn"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        />
+    <ImageView 
+        android:id="@+id/diagnoPackageIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/diagnoTestIv"
+        android:src="@drawable/search_by_package_btn"
+        android:layout_marginBottom="10dp"
+        />
+    <ImageView 
+        android:id="@+id/diagnoDiseaseIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/diagnoPackageIv"
+        android:src="@drawable/search_by_diagnostic"
+        android:layout_marginBottom="10dp"
+        />
+    <ImageView 
+        android:id="@+id/diagnoUpPrescIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/diagnoDiseaseIv"
+        android:src="@drawable/upload_diagnostic_prescription_btn"
+        android:layout_marginBottom="10dp"
+        />
+   <!--  <ImageView
+        android:id="@+id/diagnoPackageIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/diagnoTestIv"
+        android:src="@drawable/search_by_package_btn"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        />
+
+    <ImageView
+        android:id="@+id/diagnoDisease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_below="@id/diagnoPackageIv"
+        android:src="@drawable/search_by_diagnostic"
+        android:layout_marginTop="10dp" 
+        android:layout_marginBottom="10dp"/>
+    
+        <ImageView
+        android:id="@+id/uploadDagnoIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+         android:layout_marginBottom="10dp"
+        android:layout_below="@id/diagnoDisease"
+        android:src="@drawable/upload_diagnostic_prescription_btn" 
+        android:layout_marginTop="10dp"/> -->
+        
+        </RelativeLayout>    
+		</ScrollView>
+<include
+    	android:layout_alignParentBottom="true"
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_bottom_bar" />
+</RelativeLayout>
