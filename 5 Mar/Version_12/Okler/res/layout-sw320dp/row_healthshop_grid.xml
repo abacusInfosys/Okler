@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:background="@android:color/white">
+    <!-- 
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp"
+     -->
+	<RelativeLayout 
+	    android:id="@+id/health_shop_greed_main_layout"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    >
+	 	 <RelativeLayout 
+	 	    android:id="@+id/relativeImageLayout"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_centerInParent="true"
+		    android:layout_alignParentTop="true"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginLeft="10dp"
+		    android:layout_marginRight="10dp">
+			 <!-- com.android.volley.toolbox.NetworkImageView -->
+			 
+			 <com.android.volley.toolbox.NetworkImageView
+                    android:id="@+id/item_image"
+			        android:layout_width="90dp"
+			        android:layout_height="90dp"
+			        android:layout_centerInParent="true"
+			        android:src="@drawable/tempcuff"
+			        android:layout_marginBottom="10dp" />
+			 	<View 
+			 	    android:id="@+id/black_separator_item"
+    				android:layout_width="90dp"
+    				android:layout_height="2dp"
+    				android:background="@color/Black"
+         			android:layout_below="@id/item_image"
+         			android:layout_centerHorizontal="true"/>
+		  
+ 				<!-- <include 
+	 				    layout="@layout/seperator"
+	 				    android:layout_below="@id/item_image"/> -->
+					    
+					
+				<ImageView
+				        android:id="@+id/image_favourite"
+				        android:layout_width="30dp"
+				        android:layout_height="30dp"
+				        android:layout_alignParentRight="true"
+				        android:src="@drawable/favourites"
+				        android:layout_marginRight="10dp"
+				        android:layout_marginTop="5dp" />
+				
+				<ImageView
+				        android:id="@+id/image_favourite_filled"
+				        android:layout_width="30dp"
+				        android:layout_height="30dp"
+				        android:layout_alignParentRight="true"
+				        android:src="@drawable/fav_filled_heart_icon"
+				        android:layout_marginRight="10dp"
+				        android:visibility="gone"
+				        android:layout_marginTop="5dp" />
+				    
+			</RelativeLayout>
+			<RelativeLayout 
+		    		android:id="@+id/relativeNameLayout"
+					android:layout_width="match_parent"
+	    			android:layout_height="wrap_content"
+	    			android:layout_centerInParent="true"
+	    			android:layout_below="@id/relativeImageLayout"
+	    			android:layout_marginTop="5dp"
+	    			android:layout_marginLeft="10dp"
+		    		android:layout_marginRight="10dp">
+				    
+				    <TextView
+				        android:id="@+id/item_name"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerInParent="true"
+				        android:textSize="20sp"
+				        android:textStyle="bold"
+				        android:layout_alignParentTop="true"
+				        android:text="" 
+				        android:maxLines="1"
+				        android:textColor="@color/Black"
+				        android:layout_marginBottom="5dp"/>
+								    
+				    <TextView
+				        android:id="@+id/item_description"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerVertical="true"
+				        android:layout_below="@id/item_name"
+				        android:inputType="textMultiLine"
+				        android:maxLines="3"
+				        android:text=""
+				        android:textColor="@color/Black"
+				        android:textSize="13sp" 
+				        android:layout_marginLeft="10dp"/>
+				<!-- Hidden Layout -->
+				<RelativeLayout 
+				    	android:id="@+id/relativeHiddenLayout"
+						android:layout_width="match_parent"
+		    			android:layout_height="wrap_content"
+		    			android:layout_below="@id/item_description"
+		    			android:layout_centerInParent="true"
+		    			android:layout_marginTop="5dp"
+		    			android:layout_marginLeft="10dp"
+				    	android:layout_marginRight="10dp"
+				    	android:visibility="gone">
+				    <TextView 
+				        android:id="@+id/brand_name"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerHorizontal="true"
+				        android:text=""
+				        android:textColor="@color/Black"
+				        android:textSize="17sp"
+				        android:textStyle="bold"
+				        />
+				    <TextView 
+				        android:id="@+id/presc_req"
+				        android:layout_below="@id/brand_name"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_centerHorizontal="true"
+				        android:text="Prescription Required"
+				        android:textColor="@color/Red"
+				        android:textSize="17sp"
+				        
+				        />
+				    
+				</RelativeLayout>
+						    
+		</RelativeLayout>
+	
+		
+        <RelativeLayout
+           		android:id="@+id/relativeMrpLayout"
+				android:layout_width="match_parent"
+    			android:layout_height="wrap_content"
+    			android:layout_below="@id/relativeNameLayout"
+    			android:layout_centerInParent="true"
+    			android:layout_marginTop="5dp"
+    			android:layout_marginLeft="10dp"
+		    	android:layout_marginRight="10dp">
+				    
+				    <RelativeLayout
+				        android:id="@+id/MrpLayout"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_alignParentLeft="true"
+				        android:layout_marginLeft="10dp"
+				        android:layout_marginRight="10dp">
+					<TextView
+	                android:id="@+id/tv_MrpTag"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:textSize="13sp"
+	                android:textColor="@color/Black"
+	                android:text="MRP:"/>
+					<TextView
+					    android:id="@+id/tv_MrpValue"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text=""
+					    android:textSize="13sp"
+					    android:textColor="@color/Black"
+					    android:layout_toRightOf="@id/tv_MrpTag"/>
+            		</RelativeLayout>
+					
+				    <TextView
+		                android:id="@+id/tv_youSaveValue"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_toRightOf="@id/tv_youSave"
+		                android:layout_below="@id/MrpLayout"
+		                android:textColor="@color/Red"
+		                android:textSize="13sp"
+		                android:text=" 0%"
+		                android:layout_marginTop="5dp"/>
+		            <TextView
+		                android:id="@+id/tv_youSave"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                android:layout_below="@id/MrpLayout"
+		                android:text="You Save:"
+		                android:textSize="13sp"
+		                android:textColor="@color/Black"
+		                android:layout_marginTop="5dp"
+		                android:layout_marginLeft="10dp" />
+
+		            
+        	</RelativeLayout>
+			<RelativeLayout 
+		    		android:id="@+id/relativeAmountLayout"
+					android:layout_width="match_parent"
+	    			android:layout_height="wrap_content"
+	    			android:layout_centerInParent="true"
+	    			android:layout_below="@id/relativeMrpLayout"
+	    			android:layout_marginLeft="10dp"
+		    		android:layout_marginRight="10dp"
+		    		android:layout_marginBottom="10dp"
+	    			android:layout_marginTop="5dp">
+   				<LinearLayout
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_centerInParent="true" >
+				<RelativeLayout 
+				    android:id="@+id/okler_Amount_RL"
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="70"
+				    >
+				<Button 
+				    android:id="@+id/okler_Amount"
+		     		android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+		            android:background="@drawable/item_amount_background"
+		            android:text="Okler Price:\n Rs. "
+		            android:textColor="@color/Black"
+		            android:textSize="12sp"
+		            android:layout_centerInParent="true" />
+				</RelativeLayout>
+				<RelativeLayout 
+				    android:layout_width="0dp"
+				    android:layout_height="wrap_content"
+				    android:layout_weight="30"
+				    android:layout_toRightOf="@id/okler_Amount_RL"  
+				    >
+				<Button
+		            android:id="@+id/image_cart"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginRight="10dp"
+		            
+		            android:background="@drawable/health_shop_shoppingcart" /> 
+		            </RelativeLayout>
+				</LinearLayout>					    
+			</RelativeLayout>
+</RelativeLayout>		
+    </RelativeLayout>

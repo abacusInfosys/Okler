@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="MaterialTheme" parent="@style/Theme.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/primary_text_default_material_light</item>
+        <item name="android:textColorSecondary">@color/secondary_text_default_material_light</item>
+      <!--   <item name="android:editTextStyle">@style/MaterialTheme.EditText</item>      -->   
+        <item name="android:textColor">@color/primary_text_default_material_light</item>
+        <item name="drawerArrowStyle">@style/MaterialTheme.DrawerArrowStyle</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>    
+    </style>
+    
+    
+       <style name="MaterialTheme.DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+       
+        <item name="android:background">@drawable/burger_icon</item>
+        <item name="spinBars">true</item>
+    </style>
+   
+</resources>
