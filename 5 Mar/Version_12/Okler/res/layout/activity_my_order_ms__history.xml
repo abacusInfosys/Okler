@@ -1,0 +1,176 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.okler.android.MyOrderMS_History" >
+    
+    <LinearLayout
+	        android:id="@+id/topLayout"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:orientation="vertical" >
+
+	        <include
+	            android:id="@+id/toolbarMyorder"
+	            layout="@layout/tool_bar" />
+
+	        <TextView
+	            android:id="@+id/textView_screen_title"
+	            android:layout_width="match_parent"
+	            android:layout_height="?actionBarSize"
+	            android:layout_gravity="center"
+	            android:gravity="center"
+	            android:text="Medicine Services Order History" />
+	    </LinearLayout>
+    
+	    <ScrollView 
+	        android:id="@+id/scrolViewMyOrder"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/topLayout"
+	        android:layout_above="@id/bottombar">
+        <LinearLayout
+            android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	         android:orientation="vertical">
+	         <include 
+	             android:id="@+id/titleOrderId1"
+	             layout="@layout/include_title_for_mycart"/>
+
+	         <TextView
+	             android:id="@+id/orderId"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:layout_marginBottom="10dp"
+	             android:layout_marginLeft="10dp"
+	             android:layout_marginTop="10dp"
+	             android:text="" />
+
+	          <include 
+	             android:id="@+id/titleOrderId2"
+	             layout="@layout/include_title_for_mycart"/>
+	          <include 
+	             android:id="@+id/titleOrderId3"
+	             layout="@layout/include_appointment_info"
+	            />
+	           <include 
+	             android:id="@+id/titleOrderId4"
+	             layout="@layout/include_title_for_mycart"/>
+	           <ImageView 
+				        android:id="@+id/edit_red_pencil"
+				        android:layout_width="fill_parent"
+				        android:layout_height="wrap_content"
+				        android:src="@drawable/blue_order_status_placed_image"
+				       />
+	           <include 
+	             android:id="@+id/titleOrderId5"
+	             layout="@layout/include_title_for_mycart"/>
+	           <RelativeLayout
+				    android:layout_width="match_parent"
+				    android:layout_height="match_parent"
+				    android:layout_marginLeft="10dp"
+				    android:layout_marginRight="10dp"
+				    >
+			    	<TextView 
+			        android:id="@+id/addr_title_name"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:textStyle="bold"
+			        android:layout_alignParentLeft="true"
+			        android:layout_alignParentTop="true"
+			        android:text=""
+			        />
+				    
+				    <TextView 
+				        android:id="@+id/addr_tv"
+				        android:layout_width="wrap_content"
+				        android:layout_height="wrap_content"
+				        android:layout_below="@+id/addr_title_name"
+				        android:maxLines="10"
+				       	android:text="SVP nagar\nVenden Avenue Colony\nMatunga Road\nMumbai - 4000019\n Maharashtra"
+				        />
+
+			</RelativeLayout>
+			<RelativeLayout 
+            android:id="@+id/contact_RL"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/LightGrey"
+            android:layout_below="@+id/pickup_addr_RL"
+            >
+            <TextView 
+                android:id="@+id/queryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/queryText"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                />
+            <TextView 
+                android:id="@+id/phoneTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/phone"
+                android:layout_below="@+id/queryText"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
+                />
+            <TextView 
+                android:id="@+id/phoneValueTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+91022234567890"
+                android:layout_below="@+id/queryText"
+                android:layout_toRightOf="@+id/phoneTv"
+                android:layout_marginBottom="5dp"
+                />
+            <TextView 
+                android:id="@+id/emailTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/email"
+                android:layout_below="@+id/phoneTv"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="20dp"
+                />
+            	
+            <TextView 
+                android:id="@+id/emailValueTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="care@okler.com"
+                android:layout_below="@+id/phoneTv"
+                android:layout_toRightOf="@+id/emailTv"
+                android:layout_marginBottom="20dp"
+                
+                />
+            
+            
+        </RelativeLayout>
+
+			<Button
+			    android:id="@+id/btn_cancel_order"
+			    android:layout_width="match_parent"
+			    android:layout_height="?actionBarSize"
+			    android:text="CANCEL ORDER" />
+
+	    </LinearLayout>
+	        
+	    </ScrollView>
+	    
+	     <include
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/layout_bottom_bar" />
+
+	    
+
+</RelativeLayout>

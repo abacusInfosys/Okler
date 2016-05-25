@@ -1,0 +1,97 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.okler.android.AlloPrescActivity" >
+
+   <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar_cart"
+            android:layout_alignParentTop="true"
+            />
+   <TextView 
+       android:id="@+id/checkout_Tv"
+	        android:layout_width="fill_parent"
+	        android:layout_height="?actionBarSize"
+    		android:minHeight="?actionBarSize"
+	        android:background="@color/Brightyellow"
+	        android:text="@string/checkout"
+	        android:textSize="20sp"
+	        android:gravity="center"
+	        android:layout_below="@+id/toolbar"
+	        />
+   <ImageView
+       android:id="@+id/checout_process_IV"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:src="@drawable/md_process_prescription_image"
+       android:layout_below="@+id/checkout_Tv"
+       />
+   <ScrollView 
+       android:id="@+id/scrll_presc"
+       android:layout_width="fill_parent"
+       android:layout_height="fill_parent"
+       android:layout_below="@+id/checout_process_IV"
+       android:layout_above="@+id/upload_later"
+       
+       >
+   <RelativeLayout 
+       android:id="@+id/upload_pres_RL"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:background="@color/LightGreyWhite"
+       android:paddingTop="15dp"
+       android:paddingBottom="10dp"
+         >
+       <TextView 
+           android:id="@+id/up_pres_TV"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textSize="20sp"
+           android:text="@string/up_your_presc"
+           android:layout_centerHorizontal="true"
+           android:layout_marginBottom="15dp"
+           />
+   <fragment 
+       android:id="@+id/frag_cam_gal"
+       android:layout_height="wrap_content"
+       android:layout_width="fill_parent"
+       android:name="com.okler.fragment.CameraGallery"
+       android:layout_below="@+id/up_pres_TV"
+       android:layout_marginBottom="15dp"
+       />
+  
+   <TextView 
+	        android:id="@+id/choose_from_existing"
+	        android:layout_width="fill_parent"
+	        android:layout_height="?actionBarSize"
+    		android:minHeight="?actionBarSize"
+	        android:background="@color/Gray"
+	        android:text="@string/choose_from_existing"
+	        android:textSize="20sp"
+	        android:gravity="center"
+	        android:textColor="@color/White"
+	        android:layout_below="@id/frag_cam_gal"
+	        />
+    </RelativeLayout>
+    </ScrollView>
+   <TextView 
+	        android:id="@+id/upload_later"
+	        android:layout_width="fill_parent"
+	        android:layout_height="?actionBarSize"
+    		android:minHeight="?actionBarSize"
+	        android:background="@color/Blue"
+	        android:text="@string/upload_later"
+	        android:textSize="20sp"
+	        android:gravity="center"
+	        android:textColor="@color/White"
+	        android:layout_above="@+id/bottombar"
+	        
+	        />
+<include
+    	android:layout_alignParentBottom="true"
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_bottom_bar" />
+</RelativeLayout>

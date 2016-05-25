@@ -1,0 +1,192 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   
+    tools:context="com.okler.android.MedicalServices" >
+     <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar"            
+            android:layout_alignParentTop="true"
+            android:layout_height="wrap_content"
+			android:layout_width="fill_parent"            />
+     
+     <LinearLayout
+         android:id="@+id/title_layout"
+         android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="#FF2C32" >
+
+         <TextView
+             android:id="@+id/textView1"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_gravity="center"
+             android:gravity="center"
+             android:text="PRESCRIPTION PREVIEW"
+             android:textColor="@color/White"
+             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+     </LinearLayout>     
+	<ScrollView 
+	    android:id="@+id/scroll_for_delivery"
+	    android:layout_below="@+id/title_layout"
+	    android:layout_above="@+id/btn_proceed"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    >
+	    
+	    
+	
+     <LinearLayout
+         android:id="@+id/delivery_layout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/title_layout"
+         android:layout_above="@id/bottombar"
+         android:orientation="vertical" >
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="170dp"
+             android:layout_gravity="center"
+             android:layout_marginTop="25dp"
+             android:background="@color/LightGrey"
+             android:layout_marginLeft="30dp"
+             android:layout_marginRight="30dp"
+             android:orientation="vertical" >
+
+             <ImageView
+                 android:id="@+id/imageView1"
+                 android:layout_width="66dp"
+                 android:layout_height="51dp"
+                 android:layout_gravity="center"
+                 android:layout_marginTop="30dp"
+                 android:src="@drawable/red_tempo_icon" />
+
+             <TextView
+                 android:id="@+id/textView2"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center"
+                 android:layout_marginTop="10dp"
+                 android:text="Should we deliver all the" />
+
+             <TextView
+                 android:id="@+id/textView3"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center"
+                 android:text="medicines mentioned in your" />
+
+             <TextView
+                 android:id="@+id/textView4"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center"
+                 android:text="prescriptions?" />
+
+         </LinearLayout>
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="40dp"
+             android:layout_marginLeft="20dp"
+             android:layout_marginRight="20dp"
+             android:layout_marginTop="40dp"
+             android:id="@+id/yesAllMedsLL"
+             android:onClick="yesAllClicked"
+             android:background="@drawable/border"
+             android:orientation="horizontal" >
+
+             <ImageView
+                 android:id="@+id/yesAllMedsImg"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center"
+                 android:layout_marginLeft="20dp"
+                 android:src="@drawable/blue_radio_btn" />
+
+             <TextView
+                 android:id="@+id/yesAllMedsTxt"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center"
+                 android:layout_marginLeft="10dp"
+                 android:textColor="@color/Blue800"
+                 android:text="Yes, I want all the medicines" />
+
+         </LinearLayout>
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="40dp"
+             android:layout_marginLeft="20dp"
+             android:layout_marginRight="20dp"
+             android:layout_marginTop="40dp"
+             android:background="@drawable/border"
+             android:id="@+id/callMeLL"
+             android:onClick="callMeClicked"
+             android:orientation="horizontal" >
+             
+             <ImageView
+                 android:id="@+id/callMeImg"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center"
+                 android:layout_marginLeft="20dp"
+                 android:src="@drawable/grey_radio_btn" />
+             
+				<TextView
+				    android:id="@+id/callMeTxt"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:layout_gravity="center"
+				    android:layout_marginLeft="10dp"
+				    android:textColor="@color/Blue800"
+				    android:text="Call me to discuss" />
+
+         </LinearLayout>
+
+     </LinearLayout>
+</ScrollView>
+     <Button
+         android:id="@+id/btn_proceed"
+         android:layout_width="match_parent"
+         android:layout_height="?actionBarSize"
+         android:layout_above="@id/bottombar"
+         android:background="#C9050B"
+         android:drawableRight="@drawable/white_arrow_small"
+         android:gravity="center"
+         android:text="Proceed"
+         android:textColor="@color/White"
+         android:textSize="16sp"
+         android:textStyle="normal" />
+     
+     <include
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/layout_bottom_bar" />
+     
+       <LinearLayout 
+        android:orientation="vertical" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" 
+        android:id="@+id/progressLinLayout" 
+        android:gravity="center" 
+        android:visibility="gone" 
+        android:layout_centerInParent="true">
+	<ProgressBar 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:indeterminate="true"/>
+     </LinearLayout>
+     
+
+</RelativeLayout>

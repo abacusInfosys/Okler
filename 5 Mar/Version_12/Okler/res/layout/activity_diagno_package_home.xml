@@ -1,0 +1,94 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.okler.diagnostics.DiagnoPackageHome" >
+     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:id="@+id/topLayout" 
+        android:orientation="vertical"
+        >
+<include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar_extended_search_only"
+            />
+<TextView 
+    android:id="@+id/select_package_activity_heading"
+    android:layout_width="fill_parent"
+    android:layout_height="?actionBarSize"
+    android:minHeight="?actionBarSize"
+    android:background="@color/ModerateMagenta"
+    android:layout_below="@+id/toolbar"
+    android:textColor="@color/White"
+    android:text="@string/select_package"
+    android:gravity="center"
+    />
+</LinearLayout>
+
+			<TextView
+		    android:id="@+id/currentPosition_Diagno_Pac"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"    
+		    android:text="#"
+		    android:textColor="@color/Red"
+		    android:textSize="22sp"
+		    android:layout_marginLeft="10dp"
+			android:layout_below="@+id/topLayout"
+			/>
+<LinearLayout android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:id="@+id/relParent"    
+    android:layout_below="@id/currentPosition_Diagno_Pac"
+    android:layout_above="@+id/bottomLayout"
+    android:layout_alignParentRight="true"
+    android:orientation="horizontal"
+    >
+    <ListView
+        android:id="@+id/lvPackages"
+        android:layout_width="0dp"
+        android:layout_weight="85"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:dividerHeight="1dp"
+        >
+    </ListView> 
+	<ListView
+        android:id="@+id/alphabetsScrViewPac"
+        android:layout_width="0dp"
+        android:layout_weight="15"
+        android:layout_height="wrap_content"  
+        android:divider="@null"              
+         android:layout_alignParentRight="true">
+    </ListView>
+    </LinearLayout>
+
+     <LinearLayout 
+        android:id="@id/bottomLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+		
+				<include
+		    	android:layout_alignParentBottom="true"
+		        android:id="@+id/bottombar"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        layout="@layout/layout_bottom_bar"/>
+	</LinearLayout>
+ <LinearLayout 
+        android:orientation="vertical" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" 
+        android:id="@+id/progressLinLayout" 
+        android:gravity="center" 
+        android:visibility="gone" 
+        android:layout_centerInParent="true">
+	<ProgressBar 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:indeterminate="true"/>
+    </LinearLayout>
+</RelativeLayout>

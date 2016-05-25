@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.okler.android.Medicines"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_page_bkgrnd" >
+    <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar_cart"
+            android:layout_alignParentTop="true"
+            />
+    <RelativeLayout 
+        android:id="@+id/locationRelLL"
+        android:layout_height="?actionBarSize"
+        android:minHeight="?actionBarSize"
+        android:layout_width="fill_parent"
+        android:background="#acd926"
+        android:layout_below="@id/toolbar"
+        android:visibility="gone"
+        >
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+        android:orientation="horizontal"    
+            >
+        <TextView 
+            android:id="@+id/locationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/your_location"
+            android:textSize="18sp"
+            />
+        <Spinner 
+            android:id="@+id/locationSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        </LinearLayout>
+    </RelativeLayout>
+    <ScrollView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/bottombar">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+    <ImageView 
+        android:layout_marginTop="10dp"
+        android:id="@+id/allopathyIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/allopathy_menu_icon_2"
+        android:layout_marginBottom="10dp"
+        />
+    <ImageView 
+        android:layout_marginBottom="10dp"
+        android:id="@+id/ayurvedicIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/allopathyIv"
+        android:src="@drawable/ayurvedic_menu_icon_2"
+        
+        />
+    <ImageView
+        android:layout_marginBottom="10dp"
+        android:id="@+id/homeopathyIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ayurvedicIv"
+        android:src="@drawable/homeopathy_menu_icon_2"
+        
+        />
+    
+        </RelativeLayout>    
+		</ScrollView>
+<include
+    	android:layout_alignParentBottom="true"
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_bottom_bar" />
+</RelativeLayout>

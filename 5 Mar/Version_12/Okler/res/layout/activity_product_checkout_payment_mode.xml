@@ -1,0 +1,103 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/LightGreyWhite">
+
+    <LinearLayout
+        android:id="@+id/toolBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
+		<include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar_cart"/>
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Checkout"
+            android:background="#FCAB12" />
+        <ImageView 
+            android:id="@+id/progressInScreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/process_payment"
+            android:layout_marginLeft="5dp"
+            android:background="@color/White"
+            android:layout_marginRight="5dp"/>
+    </LinearLayout>
+
+ 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/LightGreyWhite"
+        android:layout_above="@+id/bottomLinearLayout"
+        android:layout_below="@id/toolBarLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:weightSum="1" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:text="@string/payment_Information"/>
+        <include 
+            layout="@layout/separator_grey_1dp"
+            />
+		<RelativeLayout 
+		    android:id="@+id/cashOnDeliveryLayout"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginTop="10dp">
+		    <ImageView 
+		        android:id="@+id/image"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentLeft="true"
+		        android:layout_marginLeft="10dp"
+		        android:src="@drawable/selected_radio_button"/>
+		    <TextView 
+		        android:id="@+id/tv_cashonDelivery"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/cashOndelivery"
+		        android:layout_toRightOf="@id/image"
+		        android:layout_marginLeft="10dp"
+		        android:textSize="15dp"
+		        android:layout_centerVertical="true"/>
+		</RelativeLayout>	
+         
+    </LinearLayout>
+    <LinearLayout 
+        android:id="@+id/bottomLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+    <Button
+            android:id="@+id/payment_placeorder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/Blue"
+            android:text="Place Order"
+            android:textColor="@color/White" />
+
+    <include
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_bottom_bar" />
+    </LinearLayout>
+</RelativeLayout>

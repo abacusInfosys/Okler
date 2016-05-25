@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.okler.diagnostics.DiagnoTestsHome" >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:id="@+id/topLayout" 
+        android:orientation="vertical">
+    	<include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar_extended_search_no_cart"
+            />
+    	
+		<RelativeLayout 
+    	android:id="@+id/titleLayout"
+    	android:layout_width="fill_parent"
+    	android:layout_height="?actionBarSize"
+    	android:background="@color/ModerateMagenta">
+     		<TextView
+        	 android:id="@+id/tvTitle"
+       		 android:layout_width="wrap_content"
+        	 android:layout_height="wrap_content"
+        	 android:text="@string/select_test"
+        	 android:layout_centerInParent="true"
+        	 android:textColor="@color/White"
+        	 android:textSize="20dp"/>
+		</RelativeLayout>
+	</LinearLayout>
+
+	<LinearLayout android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:id="@+id/middleLayout"    
+    android:layout_below="@id/topLayout"
+    android:layout_alignParentRight="true"
+    android:orientation="horizontal"
+    android:layout_above="@+id/bottomLayout">
+    	<ListView
+        android:id="@+id/lvTests"
+        android:layout_width="0dp"
+        android:layout_weight="85"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:divider="@null"/>
+    	<TextView android:id="@+id/no_data_found"
+    	    android:layout_width="0dp"
+    	    android:layout_height="wrap_content"
+    	    android:layout_weight="85"
+    	    android:visibility="gone"
+    	    android:layout_alignParentLeft="true"
+    	    android:textColor="@color/Black"
+    	    />
+  		
+  		<ListView
+        android:id="@+id/alphabetsScrView"
+        android:layout_width="0dp"
+        android:layout_weight="15"
+        android:layout_height="wrap_content"  
+        android:divider="@null"              
+         android:layout_alignParentRight="true"/>
+    </LinearLayout>        
+      
+    <LinearLayout 
+        android:id="@id/bottomLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+		<Button
+   		 	android:id="@+id/nextBtn"
+    		android:layout_width="fill_parent"
+		    android:layout_height="?actionBarSize"    
+		    android:layout_above="@+id/bottombar"    
+		    android:background="@color/ModerateMagenta"
+		    android:textColor="@color/White"
+		    android:text="@string/next_btn" />
+				<include
+		    	android:layout_alignParentBottom="true"
+		        android:id="@+id/bottombar"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        layout="@layout/layout_bottom_bar"/>
+	</LinearLayout>
+	   <LinearLayout 
+        android:orientation="vertical" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" 
+        android:id="@+id/progressLinLayout" 
+        android:gravity="center" 
+        android:visibility="gone" 
+        android:layout_centerInParent="true">
+	<ProgressBar 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:indeterminate="true"/>
+    </LinearLayout>
+</RelativeLayout>
+

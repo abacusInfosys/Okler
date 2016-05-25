@@ -1,0 +1,33 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.okler.helpnsupport.LegalActivity" >
+
+    <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar"
+            android:layout_alignParentTop="true"
+            />
+   <!--  <TextView 
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This will contain Legal text"
+        android:layout_below="@+id/toolbar"
+        /> -->
+    <WebView 
+        android:id="@+id/legal_webView"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:layout_below="@+id/tv"
+        android:layout_above="@+id/bottombar"
+        />
+    <include
+    	android:layout_alignParentBottom="true"
+        android:id="@id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_bottom_bar" />
+
+</RelativeLayout>

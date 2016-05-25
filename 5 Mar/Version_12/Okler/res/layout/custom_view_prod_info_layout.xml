@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+ 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/indication_RL"
+            
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/LightGrey"
+            
+            >
+            <RelativeLayout 
+               android:id="@+id/title_RL"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_margin="10dp"
+                >
+    <TextView 
+           android:id="@+id/indi_title"
+           android:layout_height="wrap_content"
+           android:layout_width="250dp"
+           android:text="ADD NEW PATIENT INFORMATION AND ADDRESS"
+           android:textSize="14sp"
+           android:textStyle="normal"           
+           
+           />
+       <ImageView
+           android:layout_alignParentTop="true"
+           android:layout_alignParentRight="true"
+           android:id="@+id/add_Button_indi"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:src="@drawable/add"
+          />
+       <ImageView
+           android:layout_alignParentTop="true"
+           android:layout_alignParentRight="true"
+           android:id="@+id/minusButton_indi"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:src="@drawable/black_minus"
+           android:visibility="gone"
+          />
+       </RelativeLayout>
+       <RelativeLayout 
+          android:layout_height="wrap_content" 
+          android:layout_width="wrap_content"
+          android:id="@+id/indi_details_RL"
+          android:layout_below="@id/title_RL"
+          android:visibility="gone"
+          android:layout_margin="10dp"
+          >
+           <TextView 
+               android:id="@+id/details"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:minLines="1"
+               android:text=""
+               android:layout_marginRight="10dp"
+               />
+           
+           </RelativeLayout>   
+    
+    
+</RelativeLayout>   
