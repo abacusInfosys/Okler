@@ -44,6 +44,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,6 +73,8 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 	Activity ack;
 	boolean isDialog = false;
 	int userId;
+	RelativeLayout back_layout;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +124,15 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 		// toolBar.setBackgroundResource(R.drawable.custom_view_grad_healthshop);
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
@@ -129,7 +141,9 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
+		
 		if (check == 1) {
 			cdbean = Okler.getInstance().getSingleCart();
 		} else {

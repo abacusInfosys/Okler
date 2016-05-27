@@ -155,6 +155,7 @@ public class ProductDetailsActivity extends BaseActivity {
 	CartDataBean mainbean;
 	String prod_id_recent_prod = "", prod_id_similar_prod = "";
 	JustViewedProdsDataBean jbean;
+	RelativeLayout back_layout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -188,6 +189,15 @@ public class ProductDetailsActivity extends BaseActivity {
 		// ab.setDisplayHomeAsUpEnabled(true);
 		image_favourite = (ImageView) findViewById(R.id.image_favourite);
 		image_favourite.setVisibility(View.INVISIBLE);
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
@@ -198,8 +208,9 @@ public class ProductDetailsActivity extends BaseActivity {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 			}
-		});
+		});*/
 
+		UIUtils.setBackClick(toolBar, activity);
 		unitValue = (EditText) findViewById(R.id.unitValue);
 		unitValue.requestFocus();
 		params = new LinearLayout.LayoutParams(

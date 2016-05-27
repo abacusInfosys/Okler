@@ -88,6 +88,8 @@ AutoCompleteTextView edt_city, edt_state,bedt_city, bedt_state;
 boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=false;
 	
 	int user_id;
+	RelativeLayout back_layout;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -146,6 +148,15 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 	    	   Utilities.setTitleText(toolBar, "Cart");
 	       }
 			//end of code to be copied
+	      /* back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+			back_layout.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+				finish();	
+				}
+			});
 	       imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
 	       imgBack.setOnClickListener(new OnClickListener() {
 			@Override
@@ -153,7 +164,9 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 				// TODO Auto-generated method stub
 			finish();	
 			}
-		});
+		});*/
+	       
+	       UIUtils.setBackClick(toolBar, ack);
 			
 	       /*toolBar.setBackgroundResource(R.drawable.custom_view_grad_healthshop);*/
 	       bottomBarLayout = findViewById(R.id.bottombar);

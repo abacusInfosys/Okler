@@ -87,11 +87,14 @@ public class PrescriptionPreview extends BaseActivity {
 	ImageView imgBack;
 	boolean isMedPres;
 	LinearLayout progressLinLayout;
-	Activity act;
-	ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-	PrescriptionsDataBean prescriptionsDataBean;
-	int required_type=0;
-	String uploadPrescrUrl;
+Activity act;
+ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+PrescriptionsDataBean prescriptionsDataBean;
+int required_type=0;
+String uploadPrescrUrl;
+RelativeLayout back_layout;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -120,13 +123,22 @@ public class PrescriptionPreview extends BaseActivity {
 			toolBar.setBackgroundResource(R.drawable.custom_view_grad_upload_pesc);
 			Utilities.writeToLogFIle("PrescPrev: Med");
 		}
+		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			Okler.getInstance().getPrescriptionsDataBeans().getPresImages().clear();
+			finish();	
+			}
+		});
 		imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
 	       imgBack.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Okler.getInstance().getPrescriptionsDataBeans().getPresImages().clear();
-				
+			Okler.getInstance().getPrescriptionsDataBeans().getPresImages().clear();
 			finish();	
 			}
 		});

@@ -73,6 +73,7 @@ public class ProductCheckoutSummary extends BaseActivity {
 	ImageView blueuntick, bluetick, trackinImage;
 	Button checkout_count;
 	String ccCode;
+	RelativeLayout back_layout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -206,6 +207,15 @@ public class ProductCheckoutSummary extends BaseActivity {
 			}
 
 		});
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
@@ -214,7 +224,9 @@ public class ProductCheckoutSummary extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		
+		UIUtils.setBackClick(toolBar, ack);
 
 		// code to be copied for checkout summary for action bar and etc
 		checkout_progress_summary_Iv = (ImageView) findViewById(R.id.checkout_progress_summary_Iv);

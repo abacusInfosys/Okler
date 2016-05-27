@@ -76,6 +76,8 @@ public class ProductCheckoutDeliveryAddress extends BaseActivity {
 	ArrayList<AddressDataBean> aList;
 	boolean isSelected=false,isCheckedAddr=false;
 	int id2;
+	RelativeLayout back_layout;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -134,7 +136,6 @@ public class ProductCheckoutDeliveryAddress extends BaseActivity {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(getApplicationContext(),ProductCheckoutNewAddress.class);
 				intent.putExtra("Check", check);
-				finish();
 				startActivity(intent);
 			}
 		});
@@ -177,6 +178,15 @@ public class ProductCheckoutDeliveryAddress extends BaseActivity {
 			}
 			}
 		});
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		 imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
 	       imgBack.setOnClickListener(new OnClickListener() {
 			
@@ -185,8 +195,9 @@ public class ProductCheckoutDeliveryAddress extends BaseActivity {
 				// TODO Auto-generated method stub
 			finish();	
 			}
-		});
-	    
+		});*/
+	    UIUtils.setBackClick(toolBar, ack);
+		
 	   getAllAddress();   
 	   // setUi();
 	      

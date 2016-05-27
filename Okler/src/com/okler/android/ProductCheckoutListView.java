@@ -79,6 +79,8 @@ public class ProductCheckoutListView extends BaseActivity {
 	
 	UsersDataBean ubean;
 	LinearLayout progressLinLayout;
+	RelativeLayout back_layout;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +132,15 @@ public class ProductCheckoutListView extends BaseActivity {
 			Utilities.setTitleText(toolBar, "Cart");
 		}
 
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
@@ -138,7 +149,9 @@ public class ProductCheckoutListView extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
+		
 		amountLayout_chList = (RelativeLayout) findViewById(R.id.amountLayout_chList);
 		emptyText = (TextView) findViewById(R.id.emptyText);
 		next = (TextView) findViewById(R.id.next);

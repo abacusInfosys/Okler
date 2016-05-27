@@ -28,7 +28,6 @@ import com.okler.databeans.CartDataBean;
 import com.okler.databeans.DiseaseDataBean;
 import com.okler.databeans.ProductDataBean;
 import com.okler.network.WebJsonObjectRequest;
-import com.okler.utils.MySuggestionsProvider;
 import com.okler.utils.Okler;
 import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
@@ -36,13 +35,10 @@ import com.okleruser.R;
 
 import android.R.bool;
 import android.app.Activity;
-import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,6 +53,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,6 +91,8 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 	boolean onScrollinProg = false;
 	String searchTxt = "";
 	String abc = "#";
+	RelativeLayout back_layout;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +135,15 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 		}
 
 		currentPosition = (TextView) findViewById(R.id.currentPosition);
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
@@ -144,7 +152,8 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, act);
 		searchView = (SearchView) toolBar.findViewById(R.id.menu_search);
 		btnCart = (Button) toolBar.findViewById(R.id.toolBarCount);
 		toolBar.setBackgroundResource(UIUtils.getToolBarDrawable(Okler
@@ -209,9 +218,6 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 		});
 		lvDieseases.setOnScrollListener(this);
 		// lvDieseases.setAdapter(dieseasesAdap);
-		  SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		  searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-		  searchView.setIconifiedByDefault(false); 
 	}
 
 	private void setItemClickOnAlphabetList()
@@ -321,7 +327,6 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 		searchView.setIconifiedByDefault(false);
 		searchView.setOnQueryTextListener(this);
 		searchView.setSubmitButtonEnabled(true);
-		searchView.setOnSearchClickListener(this);
 		searchView.setQueryHint("Search");
 	}
 
@@ -440,8 +445,6 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 			Toast.makeText(getApplicationContext(), e.getMessage(),
 					Toast.LENGTH_LONG).show();
 		}
-
-		
 	}
 
 	@Override
@@ -449,16 +452,6 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-		
-		Intent intent  = getIntent();
-
-		    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-		        String query1 = intent.getStringExtra(SearchManager.QUERY);
-		        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-		                MySuggestionsProvider.AUTHORITY, MySuggestionsProvider.MODE);
-		        suggestions.saveRecentQuery(query1, null);	        
-		    }
-		        
 		return false;
 	}
 
@@ -473,20 +466,6 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 	@Override
 	public boolean onQueryTextChange(String searchText) {
 
-
-		 Intent intent  = getIntent();
-
-		   // if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-		   /*     String query = intent.getStringExtra(SearchManager.QUERY);
-		        SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-		                MySuggestionsProvider.AUTHORITY, MySuggestionsProvider.MODE);
-		        suggestions.saveRecentQuery(query, null);
-		        query = "c";
-		        suggestions.saveRecentQuery(query, null);
-		        query = "n";
-		        suggestions.saveRecentQuery(query, null);*/
-		        
-		//    }
 		try {
 
 			searchText = URLEncoder.encode(searchText, "utf-8");
@@ -572,24 +551,6 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 		}
 		return url;
 	}
-	
-	@Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-         setIntent(intent);
-        handleIntent(intent);
-    }
- 
-    private void handleIntent(Intent intent) {
- 
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-	                MySuggestionsProvider.AUTHORITY, MySuggestionsProvider.MODE);
-	        suggestions.saveRecentQuery(query, null);
-            //showResults(query);
-        }
-    }
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {

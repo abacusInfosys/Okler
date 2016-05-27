@@ -23,6 +23,7 @@ import com.okler.network.WebJsonObjectRequest;
 import com.okler.network.WebStringRequest;
 import com.okler.utils.MediPhysioTextValidations;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
 
@@ -97,7 +98,7 @@ static String city1;
 		
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_physio);
 		
-		imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
 	       imgBack.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -108,7 +109,8 @@ static String city1;
 		    imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, currActivity);
 	      Utilities.setTitleText(toolBar, "Physiotherapy Services");
 	      fragmentManager = getFragmentManager();
 	      fragmentTransaction = fragmentManager.beginTransaction();
@@ -318,20 +320,20 @@ static String city1;
 		String fstname= edt_firstname.getText().toString();
 		
 		String fname=null;
-		/*try {
+		try {
 			fname = URLEncoder.encode(fstname, "utf-8");
 		} catch (UnsupportedEncodingException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
-		}*/
+		}
 		String famiName= edt_surname.getText().toString();
 		String sname=null;
-		/*try {
+		try {
 			sname = URLEncoder.encode(famiName, "utf-8");
 		} catch (UnsupportedEncodingException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
-		}*/
+		}
 		String email = edt_email.getText().toString();
 		String phoneNumber = edt_phoneno.getText().toString();
 		String state = edt_state.getText().toString();
@@ -353,8 +355,8 @@ static String city1;
    		String weight = edt_weight.getText().toString();
    		
    		try {
-			fname =  URLEncoder.encode(fstname, "UTF-8");
-			sname =  URLEncoder.encode(famiName, "UTF-8");
+			fname =  URLEncoder.encode(fname, "UTF-8");
+			sname =  URLEncoder.encode(sname, "UTF-8");
 			state = URLEncoder.encode(state,"UTF-8");
 			city = URLEncoder.encode(city,"UTF-8");
 			address = URLEncoder.encode(address, "utf-8");
@@ -368,14 +370,14 @@ static String city1;
    		pDatabean.setsurname(famiName);
    		pDatabean.setphoneno(phoneNumber);
    		pDatabean.setemail(email);
-   		pDatabean.setState(edt_state.getText().toString());
-   		pDatabean.setCity(edt_city.getText().toString());
+   		pDatabean.setState(state);
+   		pDatabean.setCity(city);
    		pDatabean.setPincode(pincode);
    		pDatabean.setfrom(From);
    		pDatabean.setto(to);
-   		pDatabean.setAddress(edt_address.getText().toString());
+   		pDatabean.setAddress(address);
    		pDatabean.setRelation(relation);
-   		pDatabean.setService(spinner_service.getSelectedItem().toString());
+   		pDatabean.setService(service);
    		pDatabean.setCustId(""+uid);
 		Okler.getInstance().setPhysioMedBean(pDatabean);
 		

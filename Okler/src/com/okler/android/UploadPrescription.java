@@ -7,9 +7,11 @@ import com.okler.databeans.PrescriptionImagesDataBean;
 import com.okler.databeans.PrescriptionsDataBean;
 import com.okler.utils.CameraGalleryImageInfo;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -50,11 +52,13 @@ public class UploadPrescription extends BaseActivity {
 	PrescriptionsDataBean prsDtBean;
 	boolean isMedPres ;
 	public static boolean changetab = false;
+	Activity ack;
+	
 	@Override	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_upload_prescription);
-	
+		ack = this;
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 		Utilities.writeToLogFIle(" In Upload Prescription Start");
@@ -76,7 +80,7 @@ public class UploadPrescription extends BaseActivity {
 				spinnerPrescriptionType.setSelection(1);
 				Utilities.writeToLogFIle(" In Diagno Upload Prescription");
 			}
-			imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
+			/*imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
 	       imgBack.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -87,7 +91,8 @@ public class UploadPrescription extends BaseActivity {
 		    imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 	      Utilities.setTitleText(toolBar, "Upload Prescriptions [1/3]");
 
 	      Utilities.writeToLogFIle(" In Upload Prescription 2");

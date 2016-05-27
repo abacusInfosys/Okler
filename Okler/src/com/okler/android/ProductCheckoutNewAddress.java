@@ -124,7 +124,7 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 		defaultBill = (CheckBox) findViewById(R.id.defaultShip);
 		defaultShip = (CheckBox) findViewById(R.id.defaultShip);
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -134,15 +134,14 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "New Address");
 		save = (Button) findViewById(R.id.saveButton);
 		save.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				
-				save.setEnabled(false);
 
 				editAddress();
 
@@ -408,7 +407,6 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 												getApplicationContext(),
 												ProductCheckoutDeliveryAddress.class);
 										intent.putExtra("Check", check);
-										finish();
 										startActivity(intent);
 
 									}
@@ -447,7 +445,6 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 															intent.putExtra(
 																	"Check",
 																	check);
-															finish();
 															startActivity(intent);
 															// }
 														}
@@ -481,7 +478,6 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 											getApplicationContext(),
 											ProductCheckoutDeliveryAddress.class);
 									intent.putExtra("Check", check);
-									finish();
 									startActivity(intent);
 								}
 							} catch (JSONException jsonEx) {

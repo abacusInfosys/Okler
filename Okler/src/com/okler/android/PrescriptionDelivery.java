@@ -24,6 +24,7 @@ import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
 
@@ -130,7 +131,7 @@ public class PrescriptionDelivery extends BaseActivity {
 			Utilities.writeToLogFIle("Prdel: med");
 		}
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -139,7 +140,8 @@ public class PrescriptionDelivery extends BaseActivity {
 				Utilities.writeToLogFIle("Prdel: imgback");
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, act);
 		Utilities.setTitleText(toolBar, "Upload Prescriptions[3/3]");
 	}
 

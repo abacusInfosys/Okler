@@ -42,6 +42,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class PrescriptionList extends BaseActivity implements OnScrollListener {
@@ -69,6 +70,8 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 	int pageNumber=0,totalResultsFromWebService=0;
 	PrescriptionList pct;
 	boolean isParentMyAccount,isDiagnoBooking=false;
+	RelativeLayout back_layout;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -159,7 +162,24 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 		
 	Utilities.writeToLogFIle("PrList: 3");
 		
+	back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+	back_layout.setOnClickListener(new OnClickListener() {
 		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			if(!isParentMyAccount)
+			{
+				Intent intent = new Intent(getApplicationContext(), UploadPrescription.class);
+				 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				 if(isDiagnoBooking){
+					 intent.putExtra("isMedPres", false);
+				 }
+				startActivity(intent);
+			}
+		finish();	
+		}
+	});
 		imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
 	       imgBack.setOnClickListener(new OnClickListener() {
 			
