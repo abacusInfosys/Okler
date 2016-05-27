@@ -22,6 +22,7 @@ import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
 
@@ -90,6 +91,8 @@ public class MyCart extends BaseActivity implements Response.Listener,
 	int prodId1, prodId2;
 	boolean flag = false,isPlusClicked=false;
 	ArrayList<ProductDataBean> setPdLisths, setPdList;
+	RelativeLayout back_layout;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +127,15 @@ public class MyCart extends BaseActivity implements Response.Listener,
 				.getImageLoader();
 		mtitle_mycart.setText("MEDICINES");
 		htitle_mycart.setText("HEALTHSHOP");
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -131,7 +143,8 @@ public class MyCart extends BaseActivity implements Response.Listener,
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);

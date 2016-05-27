@@ -24,6 +24,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -51,7 +52,7 @@ public class MyOrderMS_History extends BaseActivity {
 	String add;
 	String custId, ordId;
 	int servType, get;
-
+	RelativeLayout back_layout;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,6 +88,31 @@ public class MyOrderMS_History extends BaseActivity {
 		btn_cancel_order = (Button) findViewById(R.id.btn_cancel_order);
 
 		// txt_firstname = (TextView) findViewById(R.id.);
+		
+		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// finish();
+				if (get == 1) {
+					Intent newIntent = new Intent(act,
+							ServiceCategoryActivity.class);
+					newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(newIntent);
+				} else {
+					if (get == 2) {
+						Intent newIntent = new Intent(act,
+								ServiceCategoryActivity.class);
+						newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(newIntent);
+					} else {
+						finish();
+					}
+				}
+			}
+		});
 
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {

@@ -76,7 +76,6 @@ public class LocationActivity extends BaseActivity implements SearchView.OnQuery
 		setContentView(R.layout.activity_location);
 		ack = this;
 		findViews();
-			cityAdp = new ArrayAdapter<>(ack, android.R.layout.simple_list_item_1, android.R.id.text1);
 		//	location_text = (TextView)findViewById(R.id.location_text);
 		setUpSearchView();
 		setSupportActionBar(toolBar);
@@ -84,7 +83,8 @@ public class LocationActivity extends BaseActivity implements SearchView.OnQuery
 		/*int a = Okler.getInstance().getBookingType();*/
 		toolBar.setBackgroundResource(UIUtils.getToolBarDrawable(Okler.getInstance().getBookingType()));
 		Utilities.setTitleText(toolBar, "Select Location");
-	//	UIUtils.setBackClick(toolBar, ack);
+		//UIUtils.setBackClick(toolBar, ack);
+		
 		serverUrl = getString(R.string.serverUrl);
 		
 		locationsListView.setAdapter(cityAdp);
@@ -107,8 +107,13 @@ public class LocationActivity extends BaseActivity implements SearchView.OnQuery
 			    	city = ubean.getUserCity();
 			    	country = ubean.getUserCountry();*/
 			    
-			    	Intent startMedHome = new Intent(getApplicationContext(),MedicineHomeActivity.class);
-			    	startMedHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					Intent startMedHome = null;
+					if(Okler.getInstance().getBookingType()==9){
+						startMedHome = new Intent(getApplicationContext(),DiagnosticsActivityHome.class);	
+					}else{
+						startMedHome = new Intent(getApplicationContext(),MedicineHomeActivity.class);
+					}
+					startMedHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			    	startMedHome.putExtra("isFromLocation", true);
 			    	startActivity(startMedHome);			    	
 			    	finish();
@@ -169,14 +174,13 @@ public class LocationActivity extends BaseActivity implements SearchView.OnQuery
 	}
 
 	public void findViews(){
-	
+		cityAdp = new ArrayAdapter<>(ack, android.R.layout.simple_list_item_1, android.R.id.text1);
 		searchView = (SearchView) findViewById(R.id.searchview_location);
 		locationsListView = (ListView) findViewById(R.id.cityList);
 		auto_detect_rl = (RelativeLayout)findViewById(R.id.auto_detect_rl);
 		progressLinLayout = (LinearLayout) findViewById(R.id.progressLinLayout);
 		toolBar = (Toolbar)findViewById(R.id.toolbar);
-		
-		/*	back_layout = (RelativeLayout)findViewById(R.id.back_layout);*/
+		back_layout = (RelativeLayout)findViewById(R.id.back_layout);
 		imgback = (ImageView)findViewById(R.id.toolbar_back);
 	}
 	

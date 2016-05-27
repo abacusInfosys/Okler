@@ -56,6 +56,7 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -96,6 +97,8 @@ public class GroupByMedsActivity extends BaseActivity implements
 	DrawerLayout mDrawerLayout;
 	int diseaseId, lastBrandsPage, totalBrands;
 	BrandsDataBean brndHS;
+	RelativeLayout back_layout;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -403,6 +406,17 @@ public class GroupByMedsActivity extends BaseActivity implements
 	}
 
 	private void setToolBarListeners() {
+		
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
+		
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 			@Override
@@ -410,7 +424,9 @@ public class GroupByMedsActivity extends BaseActivity implements
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
+		
 		overflow = (ImageView) toolBar.findViewById(R.id.overflowIcon);
 		overflow.setOnClickListener(new OnClickListener() {
 
@@ -646,7 +662,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 
 	public void getProductInfoById(String pid) {
 		String part1, part2, part3, getProdUrl;
-
+		showProgress(true);
 		part1 = getString(R.string.getProdInfoByIdUrlPart1);
 		part2 = getString(R.string.getProdInfoByIdUrlPart2);
 		part3 = getString(R.string.getProdInfoByIdUrlPart3);
@@ -678,8 +694,6 @@ public class GroupByMedsActivity extends BaseActivity implements
 
 							hsBean = new ProductDataBean();
 							hsBean.setProdName(jobj2.optString("name"));
-							if (jobj2.has("type_of_packing")) {
-							}
 							hsBean.setDesc(jobj2.optString("description"));
 							hsBean.setProdType(prodtype);
 							if (jobj2.has("type_of_packing")) {
@@ -732,6 +746,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 								image_name = URLEncoder.encode(url2, "UTF-8");
 							} catch (UnsupportedEncodingException e) {
 								// TODO Auto-generated catch block
+								showProgress(false);
 								e.printStackTrace();
 							}
 							// JSONObject jimg2 = jimg.getJSONObject("");
@@ -800,11 +815,13 @@ public class GroupByMedsActivity extends BaseActivity implements
 									ProductDetailsActivity.class);
 							intent.putExtra("MedId", hsbean);
 							startActivity(intent);
+							showProgress(false);
 							}
 							// finish();
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+							showProgress(false);
 						}
 
 					}
@@ -813,7 +830,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 					@Override
 					public void onErrorResponse(VolleyError error) {
 						// TODO Auto-generated method stub
-
+						showProgress(false);
 					}
 				});
 

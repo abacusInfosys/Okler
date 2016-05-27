@@ -18,11 +18,13 @@ import com.okler.dialogs.DialogCancellation;
 import com.okler.dialogs.OrderCancellationDialog;
 import com.okler.network.VolleyRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -52,12 +54,13 @@ public class MyOrderMed_Hs_Details extends BaseActivity {
 	Button okler_amount, image_cart;
 	CustomViewOrderProdDetails customProd[] = new CustomViewOrderProdDetails[50];
 	LinearLayout custview;
+	Activity ack;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_order_med__hs__details);
-
+		ack = this;
 		TextView title_mycart = (TextView) findViewById(R.id.title_mycart);
 		title_mycart.setText("SUMMARY");
 		View view = (View) findViewById(R.id.address_title);
@@ -98,7 +101,7 @@ public class MyOrderMed_Hs_Details extends BaseActivity {
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 
-		ImageView imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*ImageView imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -107,7 +110,8 @@ public class MyOrderMed_Hs_Details extends BaseActivity {
 				finish();
 			}
 
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 
 		Utilities.setTitleText(toolBar, "My Orders");
 

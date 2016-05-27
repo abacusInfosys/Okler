@@ -18,9 +18,11 @@ import com.okler.network.NetworkUtils;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.RoundedImageView;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -62,7 +64,7 @@ public class MyAccount extends BaseActivity {
 	UsersDataBean currentUser;
 
 	int user_id;
-
+	Activity ack;
 	ImageLoader imgLoader;
 
 	@Override
@@ -75,7 +77,7 @@ public class MyAccount extends BaseActivity {
 		 */
 
 		setContentView(R.layout.activity_my_account);
-
+		ack = this;
 		profile_image = (RoundedImageView) findViewById(R.id.profile_photo);
 
 		text_name = (TextView) findViewById(R.id.text_name);
@@ -331,7 +333,7 @@ public class MyAccount extends BaseActivity {
 		// ab.setDisplayShowHomeEnabled(true);
 
 		// toolBar.setBackgroundColor(Color.BLUE);
-		LinearLayout Back_arrow = (LinearLayout) toolBar
+		/*LinearLayout Back_arrow = (LinearLayout) toolBar
 				.findViewById(R.id.Back_arrow_ll);
 		Back_arrow.setOnClickListener(new OnClickListener() {
 
@@ -350,7 +352,9 @@ public class MyAccount extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		
+		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "My Account");
 		signOut = (Button) findViewById(R.id.button_sign_out);
 		signOut.setTransformationMethod(null);

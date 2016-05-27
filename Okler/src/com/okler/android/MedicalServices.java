@@ -26,6 +26,7 @@ import com.okler.network.WebStringRequest;
 import com.okler.utils.MediPhysioTextValidations;
 import com.okler.utils.Okler;
 import com.okler.utils.TextValidations;
+import com.okler.utils.UIUtils;
 import com.okler.utils.UserStatusEnum;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
@@ -91,6 +92,7 @@ public class MedicalServices extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_medical_services);
+		currActivity = this;
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 		progressLinLayout = (LinearLayout) findViewById(R.id.progressLinLayout);
@@ -103,7 +105,7 @@ public class MedicalServices extends BaseActivity {
 		ArrayList<String> states = new ArrayList<String>();
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_medi_services);
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -114,9 +116,10 @@ public class MedicalServices extends BaseActivity {
 				imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, currActivity);
 		Utilities.setTitleText(toolBar, "Medical Services");
-		currActivity = this;
+		
 		footer1 = (LinearLayout) findViewById(R.id.layout_footer1);
 		footer2 = (LinearLayout) findViewById(R.id.layout_footer2);
 
@@ -369,13 +372,13 @@ public class MedicalServices extends BaseActivity {
 		service_id = txtservice.getText().toString();
 
 		String address = edt_address.getText().toString();
-		/*try {
+		try {
 			address = URLEncoder.encode(address, "utf-8");
 
 		} catch (UnsupportedEncodingException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}*/
+		}
 		String pincode = edt_pincode.getText().toString();
 		relation1 = spinner_relation.getSelectedItem().toString();
 		service1 = spinner_service.getSelectedItem().toString();

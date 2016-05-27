@@ -46,7 +46,9 @@ public class OtpConfirmationActivity extends BaseActivity {
 	String customer_name;
 	ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 	public static int flag = 0;
-
+	
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -264,7 +266,8 @@ public class OtpConfirmationActivity extends BaseActivity {
 					Intent success = new Intent(OtpConfirmationActivity.this,
 							ServiceCategoryActivity.class);
 					startActivity(success);
-					
+					finish();
+					/*
 					UsersDataBean ubean = Utilities
 							.getCurrentUserFromSharedPref(OtpConfirmationActivity.this);
 
@@ -312,9 +315,9 @@ public class OtpConfirmationActivity extends BaseActivity {
 
 							});
 
-					VolleyRequest.addJsonObjectRequest(OtpConfirmationActivity.this, webObjReq);
+					VolleyRequest.addJsonObjectRequest(OtpConfirmationActivity.this, webObjReq);*/
 					
-					finish();
+					
 				} else {
 
 					Toast.makeText(getApplicationContext(),
@@ -331,5 +334,57 @@ public class OtpConfirmationActivity extends BaseActivity {
 			}
 
 		}
+	}
+	
+	public void registrationCallbackMail(){
+		UsersDataBean ubean = Utilities
+				.getCurrentUserFromSharedPref(act);
+
+		int cust_id = ubean.getId();
+		String salutation = ubean.getSalutation();
+		String name = ubean.getFname();
+		String email = ubean.getEmail();
+
+		String user_registration = act.getResources()
+				.getString(R.string.serverUrl)
+				+ act.getResources().getString(
+						R.string.user_registration_url)
+				+ "salutation="
+				+ salutation
+				+ "&cust_id="
+				+ cust_id
+				+ "&customer_name="
+				+ name
+				+ "&email="
+				+ email;
+
+		WebJsonObjectRequest webObjReq = new WebJsonObjectRequest(
+				Method.GET, user_registration, new JSONObject(),
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+						Log.i("contact us", "*****  mail sent*****");
+					}
+
+				}, new Response.ErrorListener() {
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+
+						// Log.e("error", new
+						// String(error.networkResponse.data));
+
+						Log.i("error", "" + error.getStackTrace());
+
+						Log.i("contact us",
+								"***** fail to send mail****");
+
+					}
+
+				});
+
+		VolleyRequest.addJsonObjectRequest(act, webObjReq);
+
 	}
 }

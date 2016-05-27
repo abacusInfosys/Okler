@@ -48,9 +48,7 @@ public class MedicineHomeActivity extends BaseActivity {
 	Activity ack;
 	double longi,latti;
 	Location loc,newLoc;
-	
 	LocationManager locationManager;
-	
 	GPSTracker gps;
 	boolean isLocation=false;
 	RelativeLayout back_layout;
@@ -68,9 +66,15 @@ public class MedicineHomeActivity extends BaseActivity {
 		ActionBar ab = getSupportActionBar();
 		//ab.setDisplayHomeAsUpEnabled(true);
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_medicine);
-		imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
 		notifCount = (Button) toolBar.findViewById(R.id.notif_count);
-	       imgBack.setOnClickListener(new OnClickListener() {
+		
+		UIUtils.setBackClick(toolBar, ack);
+		
+		/*imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
+		
+		
+		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -78,6 +82,16 @@ public class MedicineHomeActivity extends BaseActivity {
 			finish();	
 			}
 		});
+		
+	       imgBack.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});*/
+	       
 	      Utilities.setTitleText(toolBar, "Medicines");
 	      userLocation = (TextView)findViewById(R.id.userLocation);
 		locationTv = (TextView)findViewById(R.id.locationText);

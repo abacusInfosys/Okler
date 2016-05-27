@@ -61,6 +61,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -94,6 +95,8 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 	int cust_id, service_type;
 	Activity ack;
 	TextView text_name;
+	RelativeLayout back_layout;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,12 +117,12 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 		ubean = Utilities.getCurrentUserFromSharedPref(this);
 		cust_id = ubean.getId();
 		// myPhysioUrl =
-		// "https://www.okler.com/api//nurse/GetAllservicesByuser?user_id="+cust_id+"&service_type=";
+		// "http://183.82.110.105:8081/oklerapi//nurse/GetAllservicesByuser?user_id="+cust_id+"&service_type=";
 		// myMedUrl =
-		// "https://www.okler.com/api/order/getorders?cust_id="+cust_id+"&order_id="+"&page=";
+		// "http://183.82.110.105:8081/oklerapi/order/getorders?cust_id="+cust_id+"&order_id="+"&page=";
 		myMedUrl = setMedUrl(cust_id, order_id, pageNo);
 		// digno_url =
-		// "https://www.okler.com/api/lab/retrivelabbook?cust_id="+cust_id;
+		// "http://183.82.110.105:8081/oklerapi/lab/retrivelabbook?cust_id="+cust_id;
 		digno_url = setDiagnoUrl(cust_id, order_id, pageNo);
 
 		myOrderUrl = "";
@@ -253,7 +256,21 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 			ordAdapter.notifyDataSetChanged();
 			Utilities.writeToLogFIle("My ord lisr ewlse");
 		}
-
+		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if (fromOrder) {
+					Intent intent = new Intent(MyOrderHome.this,
+							ServiceCategoryActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
+					finish();
+				}
+				finish();
+			}
+		});
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
