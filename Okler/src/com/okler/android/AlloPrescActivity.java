@@ -1,14 +1,13 @@
 package com.okler.android;
+
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-
 import com.okler.databeans.PrescriptionImagesDataBean;
 import com.okler.utils.CameraGalleryImageInfo;
 import com.okler.utils.Okler;
 import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
