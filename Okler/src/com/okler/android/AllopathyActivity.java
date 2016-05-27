@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 public class AllopathyActivity extends BaseActivity {
 	View bottomBarLayout;
@@ -25,6 +26,7 @@ public class AllopathyActivity extends BaseActivity {
 	ImageView searchByMedi, searchByDiesease;
 	Activity ack;
 	ImageView imgBack;
+	RelativeLayout back_layout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,16 @@ public class AllopathyActivity extends BaseActivity {
 		}
 		toolBar.setBackgroundResource(UIUtils.getToolBarDrawable(Okler
 				.getInstance().getBookingType()));
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -55,7 +66,9 @@ public class AllopathyActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		
+		UIUtils.setBackClick(toolBar, ack);
 
 		// toolBar.setBackgroundResource(R.drawable.custom_view_grad_medicine);
 		bottomBarLayout = findViewById(R.id.bottombar);
