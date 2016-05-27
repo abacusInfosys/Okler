@@ -88,7 +88,6 @@ public class AlloMedsActivity extends BaseActivity {
 	Button notifCount;
 	ProductDataBean hsBean;
 	
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
