@@ -240,6 +240,7 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 						userBean.setUser_image(userimage);
 						Utilities.writeCurrentUserToSharedPref(actCntx,userBean);	
 						Utilities.writeUserStatusToSharedPref(actCntx.getApplicationContext(), UserStatusEnum.LOGGED_IN);
+						//registrationCallbackMail();
 						//userBean=Okler.getInstance().getuDataBean();
 						//Utilities.writeCurrentUserToSharedPref(actCntx, userBean);
 						webOtpCall();
@@ -275,6 +276,7 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 					@Override
 					public void onResponse(JSONObject response) {
 						// TODO Auto-generated method stub
+						registrationCallbackMail();
 						JSONObject j = (JSONObject) response;
 						getOtp(response.toString());
 
@@ -391,7 +393,7 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 		@Override
 		protected Object doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			String url = getString(R.string.registerUser);
+			String url = actCntx.getResources().getString(R.string.registerUser);
 			String Result = String.valueOf(Utilities.RegisterNewUser(url,
 					resetPassNameValPair));
 			return Result;
@@ -413,61 +415,13 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 					Utilities.writeUserStatusEnumToSharedPref(actCntx,
 							UserStatusEnum.LOGGED_IN);
 					Utilities.writeCurrentUserToSharedPref(actCntx, userBean);
-					Intent success = new Intent(diaContext,
+					Intent success = new Intent(actCntx,
 							ServiceCategoryActivity.class);
 					startActivity(success);
 					Toast.makeText(actCntx, "OTP is verified successfully",
 							Toast.LENGTH_LONG).show();
 
-					UsersDataBean ubean = Utilities
-							.getCurrentUserFromSharedPref(actCntx);
-
-					int cust_id = ubean.getId();
-					String salutation = ubean.getSalutation();
-					String name = ubean.getFname();
-					String email = ubean.getEmail();
-
-					String user_registration = actCntx.getResources()
-							.getString(R.string.serverUrl)
-							+ actCntx.getResources().getString(
-									R.string.user_registration_url)
-							+ "salutation="
-							+ salutation
-							+ "&cust_id="
-							+ cust_id
-							+ "&customer_name="
-							+ name
-							+ "&email="
-							+ email;
-
-					WebJsonObjectRequest webObjReq = new WebJsonObjectRequest(
-							Method.GET, user_registration, new JSONObject(),
-							new Response.Listener<JSONObject>() {
-
-								@Override
-								public void onResponse(JSONObject response) {
-									Log.i("contact us", "*****  mail sent*****");
-								}
-
-							}, new Response.ErrorListener() {
-
-								@Override
-								public void onErrorResponse(VolleyError error) {
-
-									// Log.e("error", new
-									// String(error.networkResponse.data));
-
-									Log.i("error", "" + error.getStackTrace());
-
-									Log.i("contact us",
-											"***** fail to send mail****");
-
-								}
-
-							});
-
-					VolleyRequest.addJsonObjectRequest(actCntx, webObjReq);
-
+					//registrationCallbackMail();
 				} else {
 					Toast.makeText(actCntx, messageReceived, Toast.LENGTH_LONG)
 							.show();
@@ -483,5 +437,57 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 			}
 
 		}
+	}
+	
+	public void registrationCallbackMail(){
+		UsersDataBean ubean = Utilities
+				.getCurrentUserFromSharedPref(actCntx);
+
+		int cust_id = ubean.getId();
+		String salutation = ubean.getSalutation();
+		String name = ubean.getFname();
+		String email = ubean.getEmail();
+
+		String user_registration = actCntx.getResources()
+				.getString(R.string.serverUrl)
+				+ actCntx.getResources().getString(
+						R.string.user_registration_url)
+				+ "salutation="
+				+ salutation
+				+ "&cust_id="
+				+ cust_id
+				+ "&customer_name="
+				+ name
+				+ "&email="
+				+ email;
+
+		WebJsonObjectRequest webObjReq = new WebJsonObjectRequest(
+				Method.GET, user_registration, new JSONObject(),
+				new Response.Listener<JSONObject>() {
+
+					@Override
+					public void onResponse(JSONObject response) {
+						Log.i("contact us", "*****  mail sent*****");
+					}
+
+				}, new Response.ErrorListener() {
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+
+						// Log.e("error", new
+						// String(error.networkResponse.data));
+
+						Log.i("error", "" + error.getStackTrace());
+
+						Log.i("contact us",
+								"***** fail to send mail****");
+
+					}
+
+				});
+
+		VolleyRequest.addJsonObjectRequest(actCntx, webObjReq);
+
 	}
 }
