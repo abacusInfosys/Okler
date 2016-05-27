@@ -17,6 +17,7 @@ import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.UserStatusEnum;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
@@ -24,6 +25,7 @@ import com.okleruser.R;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -54,7 +56,7 @@ public class FavouritesActivity extends BaseActivity {
 	
 	ArrayList<ProductDataBean> myfav = new ArrayList<ProductDataBean>();
 	ProductDataBean add = new ProductDataBean();
-	
+	Activity ack;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class FavouritesActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_favourites);
-		
+		ack = this;
 		layout = (LinearLayout) findViewById(R.id.layout_address);
 		clearButton = (Button) findViewById(R.id.clearButton);
 		
@@ -77,7 +79,7 @@ public class FavouritesActivity extends BaseActivity {
 		
 		toolBar.setBackgroundColor(getResources().getColor(R.color.Blue800));
 		
-		imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
 	       imgBack.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -85,7 +87,8 @@ public class FavouritesActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 			finish();	
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 	      Utilities.setTitleText(toolBar, "Favourites");
 	      
 	      UsersDataBean ubean =Utilities.getCurrentUserFromSharedPref(this);//  Okler.getInstance().getuDataBean();

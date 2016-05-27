@@ -88,6 +88,7 @@ public class AlloMedsActivity extends BaseActivity {
 	Button notifCount;
 	ProductDataBean hsBean;
 	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,6 +96,7 @@ public class AlloMedsActivity extends BaseActivity {
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		ack=this;
 		setSupportActionBar(toolBar);
+		ubean = Utilities.getCurrentUserFromSharedPref(ack);
 		medId = getIntent().getStringExtra("MedId");
 		toolBar.setBackgroundResource(UIUtils.getToolBarDrawable(
 				Okler.getInstance().getBookingType()));
@@ -102,7 +104,7 @@ public class AlloMedsActivity extends BaseActivity {
 		bottomBarLayout = findViewById(R.id.bottombar);
 		subProdList = new ArrayList<ProductDataBean>();
 		handleMapping(bottomBarLayout);
-		ubean = Utilities.getCurrentUserFromSharedPref(ack);
+		
 		userId = ubean.getId();
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgloader = VolleyRequest.getInstance(getApplicationContext())
@@ -110,6 +112,15 @@ public class AlloMedsActivity extends BaseActivity {
 		serverUrl = getString(R.string.serverUrl);
 		pArrList2 = new ArrayList<ProductDataBean>();
 		pArrList2 = Okler.getInstance().getProdList();
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -120,7 +131,8 @@ public class AlloMedsActivity extends BaseActivity {
 						getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 		
 		med_info = new SpannableString("Medicine Info");
 		med_info.setSpan(new UnderlineSpan(), 0, med_info.length(), 0);
@@ -762,7 +774,7 @@ public class AlloMedsActivity extends BaseActivity {
 		}
 
 		String addToCartUrl, add1, add2, add3;
-		add1 = "https://www.okler.com/api/products/usercart/savecart?product=";
+		add1 = "http://183.82.110.105:8081/oklerapi/products/usercart/savecart?product=";
 		add2 = "&cust_id=";
 		add3 = "&quantity=";
 		int userId = ubean.getId();

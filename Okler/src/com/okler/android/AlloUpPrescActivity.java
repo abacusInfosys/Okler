@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -19,6 +20,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+
 import com.google.gson.Gson;
 import com.okler.databeans.CartDataBean;
 import com.okler.databeans.PrescriptionImagesDataBean;
@@ -45,6 +47,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +71,7 @@ public class AlloUpPrescActivity extends BaseActivity {
 	int totalCnt;
 	Activity ack;
 	UsersDataBean ubean;
+	RelativeLayout back_layout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +93,23 @@ public class AlloUpPrescActivity extends BaseActivity {
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 		checkout_Tv = (TextView) findViewById(R.id.checkout_Tv);
-/*Testing*/
 
 		uploadPrescrUrl = getString(R.string.upload_pres);
 		choose_from_existing = (TextView) findViewById(R.id.choose_from_existing);
 		choose_from_existing.setVisibility(View.INVISIBLE);
 
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		
+		UIUtils.setBackClick(toolBar, ack);
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -105,7 +119,7 @@ public class AlloUpPrescActivity extends BaseActivity {
 						.clear();
 				finish();
 			}
-		});
+		});*/
 		if (check == 0) {
 			toolBar.setBackgroundColor(Color.BLUE);
 			checkout_Tv.setBackgroundColor(Color.BLUE);
