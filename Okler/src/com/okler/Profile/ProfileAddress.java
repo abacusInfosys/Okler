@@ -20,6 +20,7 @@ import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
 import android.app.Activity;
@@ -330,7 +331,7 @@ public class ProfileAddress extends BaseActivity {
 
 		selectAddress.setText(length + " " + "Saved Addresses");
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -338,7 +339,8 @@ public class ProfileAddress extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, act);
 		Utilities.setTitleText(toolBar, "Address");
 	}
 

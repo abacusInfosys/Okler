@@ -23,8 +23,10 @@ import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
 import com.okler.utils.RoundedImageView;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -66,6 +68,7 @@ public class MyProfileActivity extends BaseActivity implements
 
 	TextView bill_address, delilvery_address, text_view_bill_add,
 			text_view_delivery_add;
+	Activity ack;
 
 	ArrayList<AddressDataBean> address = new ArrayList<AddressDataBean>();
 
@@ -77,12 +80,12 @@ public class MyProfileActivity extends BaseActivity implements
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_my_profile);
-
+		ack = this;
 		ImageView pencil = (ImageView) findViewById(R.id.edit_red_pencil);
 		pencil.setVisibility(View.GONE);
 		TextView bill = (TextView) findViewById(R.id.addr_title_tv);
 		bill.setText("Billing Address");
-
+		
 		profile_image = (RoundedImageView) findViewById(R.id.profile_photo);
 
 		View view = (View) findViewById(R.id.delivery_address);
@@ -174,7 +177,7 @@ public class MyProfileActivity extends BaseActivity implements
 
 		toolBar.setBackgroundColor(getResources().getColor(R.color.Blue));
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -182,7 +185,8 @@ public class MyProfileActivity extends BaseActivity implements
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "My Profile");
 
 		currentUser = Utilities.getCurrentUserFromSharedPref(this);

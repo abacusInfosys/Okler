@@ -334,7 +334,7 @@ public class ProfileNewAddress extends BaseActivity {
 		// ab.setDisplayHomeAsUpEnabled(true);
 		// Okler.getInstance().setBookingType(9);
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -344,7 +344,8 @@ public class ProfileNewAddress extends BaseActivity {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, act);
 
 		adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, gender);

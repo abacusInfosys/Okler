@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -49,6 +50,7 @@ import com.okler.network.VolleyRequest;
 import com.okler.utils.CameraGalleryImageInfo;
 import com.okler.utils.Okler;
 import com.okler.utils.RoundedImageView;
+import com.okler.utils.UIUtils;
 import com.okler.utils.UserStatusEnum;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
@@ -73,13 +75,15 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 	ImageLoader imgLoader;
 	String base64string;
 	int uid;
+	Activity ack;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_profile);
-
+		ack = this;
 		now = Calendar.getInstance();
 		now.set(Calendar.HOUR, 00);
 		now.set(Calendar.MINUTE, 00);
@@ -243,14 +247,15 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 			}
 		});
 
-		imgBack.setOnClickListener(new OnClickListener() {
+		/*imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "My Profile");
 	}
 

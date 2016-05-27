@@ -18,8 +18,10 @@ import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
 import com.okler.utils.TextValidations;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -49,6 +51,7 @@ public class ProfileChangePassword extends BaseActivity {
 	private EditText editTextToValidate;
 	TextValidations text;
 	String old_pass, new_pass, retype_pass;
+	Activity ack;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +61,7 @@ public class ProfileChangePassword extends BaseActivity {
 		setContentView(R.layout.activity_profile_change_password);
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
-
+		ack = this;
 		textemail = (TextView) findViewById(R.id.text_email);
 		textphone = (TextView) findViewById(R.id.text_phone);
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
@@ -210,7 +213,7 @@ public class ProfileChangePassword extends BaseActivity {
 
 		toolBar.setBackgroundColor(Color.BLUE);
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -218,7 +221,8 @@ public class ProfileChangePassword extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "Change Password");
 
 	}
