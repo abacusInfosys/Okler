@@ -91,7 +91,7 @@ public class AlloUpPrescActivity extends BaseActivity {
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 		checkout_Tv = (TextView) findViewById(R.id.checkout_Tv);
-
+/*Testing*/
 		uploadPrescrUrl = getString(R.string.upload_pres);
 		choose_from_existing = (TextView) findViewById(R.id.choose_from_existing);
 		choose_from_existing.setVisibility(View.INVISIBLE);
