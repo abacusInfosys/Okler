@@ -25,9 +25,11 @@ import com.okler.databeans.TestDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
 import android.R.integer;
+import android.app.Activity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -53,6 +55,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,7 +85,8 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 	boolean loadingInProgress = false;
 	int pagecount = 0, totalTestsCount = 0, currPageNo = 0, lastPage = 0;
 	ImageView overflowIcon;
-
+	RelativeLayout back_layout;
+	Activity ack;
 	private String[] alpha = { "#", "A", "B", "C", "D", "E", "F", "G", "H",
 			"I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
 			"V", "W", "X", "Y", "Z" };
@@ -92,6 +96,7 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_diagno_tests);
 		context = getApplicationContext();
+		ack = this;
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolBar);
 		final ActionBar ab = getSupportActionBar();
@@ -101,6 +106,15 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		overflowIcon = (ImageView) findViewById(R.id.overflowIcon);
 		overflowIcon.setVisibility(View.INVISIBLE);
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -110,7 +124,9 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 			}
-		});
+		});*/
+		
+		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "Diagnostic Test [1/5]");
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
 		diseaseIdReceived = getIntent().getIntExtra("DiseaseId", 0);

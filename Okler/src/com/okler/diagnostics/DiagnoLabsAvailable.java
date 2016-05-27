@@ -32,6 +32,7 @@ import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.UserStatusEnum;
 import com.okler.utils.Utilities;
 
@@ -71,6 +72,7 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 	private Context context;
 	Activity activity;
 	boolean isCalled;
+	RelativeLayout back_layout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,15 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 		final ActionBar ab = getSupportActionBar();
 		// ab.setDisplayHomeAsUpEnabled(true);
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
@@ -97,7 +108,8 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, activity);
 		Utilities.setTitleText(toolBar, "Diagnostic Test [2/5]");
 		calledFrom = getIntent().getStringExtra("callFromKey");
 		if (calledFrom.equals("FromTest")) {

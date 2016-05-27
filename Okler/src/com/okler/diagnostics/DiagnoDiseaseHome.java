@@ -32,6 +32,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -50,6 +51,7 @@ import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,7 +80,8 @@ public class DiagnoDiseaseHome extends BaseActivity implements Response.Listener
 	String searchURL;
 	TextView no_items;
 	ImageView overflowIcon;
-	
+	RelativeLayout back_layout;
+	Activity ack;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,7 @@ public class DiagnoDiseaseHome extends BaseActivity implements Response.Listener
 		setContentView(R.layout.activity_diagno_disease_home);
 		toolBar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolBar);
+		ack = this;
 		ActionBar ab = getSupportActionBar();
 		//ab.setDisplayHomeAsUpEnabled(true);
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
@@ -99,6 +103,15 @@ public class DiagnoDiseaseHome extends BaseActivity implements Response.Listener
 		overflowIcon = (ImageView) findViewById(R.id.overflowIcon);
 		overflowIcon.setVisibility(View.INVISIBLE);
 		//Back navigation
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 		imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 			@Override
@@ -109,7 +122,9 @@ public class DiagnoDiseaseHome extends BaseActivity implements Response.Listener
 		    imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 
 			}
-		});
+		});*/
+		
+		UIUtils.setBackClick(toolBar, ack);
 		//webservice call for all disease on default screen
 		getAllDiagnoDiseaseUrl = getString(R.string.getDiagnoDisease)+getString(R.string.getDiagnoDisease1)+getString(R.string.getDiagnoDisease2)+"0";
 		getDiseaseWebCall(getAllDiagnoDiseaseUrl);

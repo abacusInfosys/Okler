@@ -2,6 +2,7 @@ package com.okler.diagnostics;
 
 import com.okler.android.BaseActivity;
 import com.okler.android.LocationActivity;
+import com.okler.android.MedicineHomeActivity;
 import com.okler.android.NewSignIn;
 import com.okleruser.R;
 import com.okler.android.UploadPrescription;
@@ -33,16 +34,19 @@ public class DiagnosticsActivityHome extends BaseActivity {
 	ImageView diagnoTestIv, diagnoPackageIv, diagnoDiseaseIv, diagnoUploadPres;
 	Context context;
 	ImageView imgBack;
+	Activity ack;
 	TextView locationTv,userLocation;
 	GPSTracker gps;
 	double latti,longi;
-boolean isLocation=false;
-Activity ack;
+	boolean isLoacation=false;
+	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_diagnostics);
 		context = this;
+		ack = this;
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolBar);
 		final ActionBar ab = getSupportActionBar();
@@ -50,7 +54,7 @@ Activity ack;
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -58,14 +62,15 @@ Activity ack;
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "Diagnostic Test");
 		diagnoTestIv = (ImageView) findViewById(R.id.diagnoTestIv);
 		diagnoPackageIv = (ImageView) findViewById(R.id.diagnoPackageIv);
 		diagnoDiseaseIv = (ImageView) findViewById(R.id.diagnoDiseaseIv);
 		diagnoUploadPres = (ImageView) findViewById(R.id.diagnoUpPrescIv);
 		userLocation = (TextView)findViewById(R.id.userLocation);
-		ack = this;
+		
 		diagnoTestIv.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -126,7 +131,7 @@ Activity ack;
 		
 		@Override
 		public void onClick(View v) {
-	isLocation = true;
+			isLoacation = true;
 			Intent intent = new Intent(DiagnosticsActivityHome.this,LocationActivity.class);
 			startActivity(intent);
 			
@@ -158,9 +163,9 @@ Activity ack;
 		// TODO Auto-generated method stub
 		super.onResume();
 		boolean isFromLocation = getIntent().getBooleanExtra("isFromLocation", false);
-		if(isFromLocation||isLocation)
+		if(isFromLocation||isLoacation)
 		{
-			isLocation =false;
+			isLoacation =false;
 			UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(ack);
 			String city,country;
 	    	city = ubean.getUserCity();

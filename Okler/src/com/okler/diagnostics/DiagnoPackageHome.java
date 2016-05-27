@@ -25,11 +25,13 @@ import com.okler.databeans.TestDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -49,6 +51,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,12 +78,16 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 	boolean onScrollinProg = false;
 	boolean flagNoPckFound=false;
 	ImageView overflowIcon;
+	RelativeLayout back_layout;
+	Activity ack;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_diagno_package_home);
 		toolBar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolBar);
+		ack = this;
 		ActionBar ab = getSupportActionBar();
 		//ab.setDisplayHomeAsUpEnabled(true);
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
@@ -90,6 +97,15 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 		imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
 		overflowIcon = (ImageView) findViewById(R.id.overflowIcon);
 		overflowIcon.setVisibility(View.INVISIBLE);
+		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			finish();	
+			}
+		});
 	    imgBack.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -99,7 +115,8 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 		    imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 	    Utilities.setTitleText(toolBar, "Diagnostic  [1/5]");
 	    Okler.getInstance().setBookingType(9);
 	    progressLinLayout = (LinearLayout)findViewById(R.id.progressLinLayout);

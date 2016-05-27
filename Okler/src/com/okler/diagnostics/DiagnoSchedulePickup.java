@@ -31,6 +31,7 @@ import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
 import com.okler.utils.TextValidations;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
 import android.app.Activity;
@@ -164,7 +165,7 @@ public class DiagnoSchedulePickup extends BaseActivity implements
 
 		handleMapping(bottomBarLayout);
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -172,7 +173,8 @@ public class DiagnoSchedulePickup extends BaseActivity implements
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "Diagnostic");
 		mainLabsLayout = (RelativeLayout) findViewById(R.id.lab_Visit_RL);
 		mainHomeLayout = (RelativeLayout) findViewById(R.id.home_pickup_RL);

@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,8 @@ public class DiagnoOrderDetails extends BaseActivity {
 	Activity ack;
 	String BookingId;
 	TextView title_mycart;
+	RelativeLayout back_layout;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,18 @@ public class DiagnoOrderDetails extends BaseActivity {
 				intent.putExtra("value", 2);
 				startActivity(intent);
 
+			}
+		});
+		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent startServCat = new Intent(ack,
+						ServiceCategoryActivity.class);
+				startServCat.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(startServCat);	
 			}
 		});
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);

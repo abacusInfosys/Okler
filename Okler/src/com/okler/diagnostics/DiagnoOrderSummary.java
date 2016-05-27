@@ -30,6 +30,7 @@ import com.okler.dialogs.DiagnoOrderCancellation;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
 import android.app.Activity;
@@ -186,7 +187,7 @@ public class DiagnoOrderSummary extends BaseActivity implements
 		// ab.setDisplayHomeAsUpEnabled(true);
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -194,7 +195,8 @@ public class DiagnoOrderSummary extends BaseActivity implements
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 		if (!isFromOrder)
 			Utilities.setTitleText(toolBar, "Diagnostic Test [5/5]");
 		else

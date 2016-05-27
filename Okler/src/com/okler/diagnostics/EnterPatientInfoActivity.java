@@ -115,7 +115,7 @@ public class EnterPatientInfoActivity extends BaseActivity {
 		genderSpinner = (Spinner) findViewById(R.id.genderSpinner);
 		stateTv = (AutoCompleteTextView) findViewById(R.id.stateTv);
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -123,7 +123,8 @@ public class EnterPatientInfoActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "Diagnostic Test [3/5]");
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
 		btn_sced_pickup = (Button) findViewById(R.id.btn_sced_pickup);

@@ -23,6 +23,7 @@ import com.okler.databeans.AddressDataBean;
 import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
 import android.R.layout;
@@ -76,7 +77,7 @@ public class SelectPatientInfoActivity extends BaseActivity {
 		paList = ubean.getPatAddList();
 		addMore = findViewById(R.id.include_for_add);
 
-		imgBack.setOnClickListener(new OnClickListener() {
+		/*imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -85,7 +86,9 @@ public class SelectPatientInfoActivity extends BaseActivity {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 			}
-		});
+		});*/
+		
+		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "Diagnostic Test [3/5]");
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
 		btn_sced_pickup = (Button) findViewById(R.id.btn_sced_pickup);

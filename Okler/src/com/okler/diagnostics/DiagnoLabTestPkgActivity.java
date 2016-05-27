@@ -27,6 +27,7 @@ import com.okler.databeans.TestDataBean;
 import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
+import com.okler.utils.UIUtils;
 import com.okler.utils.UserStatusEnum;
 import com.okler.utils.Utilities;
 import com.google.gson.Gson;
@@ -376,7 +377,7 @@ public class DiagnoLabTestPkgActivity extends BaseActivity {
 
 			}
 		});
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -384,7 +385,9 @@ public class DiagnoLabTestPkgActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		
+		UIUtils.setBackClick(toolBar, activity);
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
 		Utilities.setTitleText(toolBar, "Diagnostic Test [2/5]");
 	}
