@@ -29,11 +29,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,6 +56,10 @@ public class UIUtils {
 	static ArrayList<SubCategoriesDataBean> subCatsList;
 	static SubCategoriesDataBean subCat;
 	static Context cntx;
+	static ArrayList<UsersDataBean> citiesList = new ArrayList<UsersDataBean>();
+	static int totalPages;
+	static int totalWebServiceResults;
+	static boolean isCityFound=false;
 
 	// 15_01_2016 Gitesh start
 	public UIUtils() {
@@ -545,6 +551,11 @@ public class UIUtils {
     	
     	ubean.setUserCity(city);
     	ubean.setUserCountry(country);
+    	int pageNo =1;
+    	//getCityId(ack,pageNo,city);
+    	
+    	
+    	
     	}
     	else{
     		ubean.setUserCity("");
@@ -553,4 +564,112 @@ public class UIUtils {
     	
     	Utilities.writeCurrentUserToSharedPref(ack, ubean);
 	}
+	
+	public static void getCityId(Activity ack,int pageNo,String city){
+		String url = ack.getString(R.string.serverUrl)+ack.getString(R.string.getAllCitiesPart1)+pageNo+ack.getString(R.string.getProdsByGroup4)+city;
+		boolean returnvalue;
+		returnvalue = getCitiesWebService(url,city,ack,pageNo);
+		
+		for(int i=0;i<totalPages;i++){
+		if(!returnvalue && (totalPages+1)>pageNo){
+			pageNo++;
+			Log.e("TP pageNo", ""+pageNo);
+			url = ack.getString(R.string.serverUrl)+ack.getString(R.string.getAllCitiesPart1)+pageNo+ack.getString(R.string.getProdsByGroup4)+city;
+			returnvalue = getCitiesWebService(url,city,ack,pageNo);
+		}
+		}
+	}
+	public static boolean getCitiesWebService(String getCityUrl,final String city,final Activity ack,final int pageNo){
+		
+		
+		
+		WebJsonObjectRequest cityjson = new WebJsonObjectRequest(Method.GET, getCityUrl, new JSONObject(), new Response.Listener<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				
+				if(response.optInt("cities_count")>0){
+					
+					JSONArray resArr = response.optJSONArray("result");
+					
+					UsersDataBean cityBean;
+					for (int i = 0; i < resArr.length(); i++) {
+						
+						JSONObject jobj = resArr.optJSONObject(i);
+						cityBean = new UsersDataBean();
+						
+						cityBean.setUserCity(jobj.optString("city_name"));
+						cityBean.setUserCityId(jobj.optString("city_id"));
+						cityBean.setUserCountryId(jobj.optString("country_id"));
+						cityBean.setUserCountry(jobj.optString("country_name"));
+						citiesList.add(cityBean);
+					}
+					
+				totalWebServiceResults = response.optInt("cities_count");
+				totalPages = response.optInt("page_count");
+				
+				}
+				for (int i = 0; i < citiesList.size(); i++) {
+					
+					String tp = city+" == "+citiesList.get(i).getUserCity();
+					//Log.e("TP", city+" == "+citiesList.get(i).getUserCity());
+					if(city.equals(citiesList.get(i).getUserCity())){
+						UsersDataBean ubBean = Utilities.getCurrentUserFromSharedPref(ack);
+						ubBean.setUserCity(citiesList.get(i).getUserCity());
+						ubBean.setUserCityId(citiesList.get(i).getUserCityId());
+						ubBean.setUserCountry(citiesList.get(i).getUserCountry());
+						ubBean.setUserCountryId(citiesList.get(i).getUserCountryId());
+						Utilities.writeCurrentUserToSharedPref(ack, ubBean);
+						isCityFound=true;
+						break;
+						
+					}
+					
+				}
+				
+			}
+		}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		VolleyRequest.addJsonObjectRequest(ack, cityjson);
+		
+		return isCityFound;
+	}
+	public static void setBackClick(Toolbar toolBar,final Activity ack)
+    {
+		final RelativeLayout back_layout;
+		final ImageView imgBack;
+		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
+		imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
+		
+		back_layout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			ack.finish();	
+			InputMethodManager imm = (InputMethodManager) 
+					ack.getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(back_layout.getWindowToken(), 0);
+			}
+		});
+		
+	       imgBack.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			ack.finish();	
+			InputMethodManager imm = (InputMethodManager) 
+					ack.getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
+			}
+		});
+    }
 }

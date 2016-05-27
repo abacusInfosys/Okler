@@ -34,7 +34,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 					String senderNum = phoneNumber;
 					String message = currentMessage.getDisplayMessageBody();
 					if ((senderNum.equals("HP-EOKLER"))
-							|| (senderNum.equals("MM-EOKLER"))) {
+							|| (senderNum.equals("MM-EOKLER")) || (senderNum.equals("BZ-EOKLER"))) {
 						String otp = Utilities.getOtpFromSharedPref(context);
 						boolean flag = message.contains(otp);
 						System.out.println("otpflag" + flag);
