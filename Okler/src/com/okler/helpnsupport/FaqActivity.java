@@ -17,6 +17,7 @@ import com.okler.databeans.ProductDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
 import android.annotation.SuppressLint;
@@ -68,7 +69,7 @@ public class FaqActivity extends BaseActivity {
 		dynamicURL = getString(R.string.get_faq_term_dynamic_url);
 		GetDynamicURLS();
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -76,7 +77,8 @@ public class FaqActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, activity);
 		toolBar.setBackgroundColor(getResources().getColor(R.color.Blue));
 		Utilities.setTitleText(toolBar, "FAQ");
 	}

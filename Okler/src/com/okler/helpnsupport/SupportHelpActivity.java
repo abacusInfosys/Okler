@@ -25,8 +25,10 @@ import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SyncStateContract.Helpers;
@@ -62,7 +64,7 @@ public class SupportHelpActivity extends BaseActivity {
 	ArrayList<Integer> reason_id = new ArrayList<Integer>();
 
 	TextView capcha_img;
-
+	Activity ack;
 	int reason_id1 = 0;
 	int cust_id;
 
@@ -71,7 +73,7 @@ public class SupportHelpActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_support_help);
 		reason_list.add("Select Reason");
-
+		ack = this;
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolBar);
 		bottomBarLayout = findViewById(R.id.bottombar);
@@ -128,7 +130,7 @@ public class SupportHelpActivity extends BaseActivity {
 		});
 
 		handleMapping(bottomBarLayout);
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -136,7 +138,8 @@ public class SupportHelpActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 		toolBar.setBackgroundColor(getResources().getColor(R.color.Blue));
 		Utilities.setTitleText(toolBar, "Support/Help");
 

@@ -14,8 +14,10 @@ import com.okler.android.BaseActivity;
 import com.okleruser.R;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +39,7 @@ public class LegalActivity extends BaseActivity {
 	int progress;
 	LinearLayout progressLinLayout;
 	ProgressBar progBar;
+	Activity ack;
 
 	@SuppressLint("SetJavaScriptEnabled")
 	@Override
@@ -45,6 +48,7 @@ public class LegalActivity extends BaseActivity {
 		setContentView(R.layout.activity_legal);
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolBar);
+		ack = this;
 		bottomBarLayout = findViewById(R.id.bottombar);
 		progressLinLayout = (LinearLayout) findViewById(R.id.progressLinLayout);
 		handleMapping(bottomBarLayout);
@@ -71,7 +75,7 @@ public class LegalActivity extends BaseActivity {
 			showProgress(false);
 		}
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -79,7 +83,8 @@ public class LegalActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});
+		});*/
+		UIUtils.setBackClick(toolBar, ack);
 
 		toolBar.setBackgroundColor(getResources().getColor(R.color.Blue));
 	}
