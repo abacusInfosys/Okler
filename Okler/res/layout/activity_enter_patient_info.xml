@@ -8,8 +8,7 @@
             android:id="@+id/toolbar" 
             layout="@layout/tool_bar"            
             android:layout_alignParentTop="true"
-            android:layout_height="wrap_content"
-			android:layout_width="fill_parent" />
+             />
    <!--  <TextView 
         android:id="@+id/schedule_pickup"
         android:layout_width="fill_parent"

@@ -9,8 +9,7 @@
         android:id="@+id/toolbar"
         android:layout_alignParentTop="true"
         layout="@layout/tool_bar"
-        android:layout_height="wrap_content"
-android:layout_width="fill_parent" />
+        />
 
     <ScrollView
         android:id="@+id/scrollView1"

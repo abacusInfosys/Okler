@@ -8,8 +8,7 @@
             android:id="@+id/toolbar" 
             layout="@layout/toolbar_my_acc"            
             android:layout_alignParentTop="true"
-            android:layout_height="wrap_content"
-			android:layout_width="fill_parent" />
+            />
      
      <RelativeLayout
          android:id="@+id/layout_personal_info"

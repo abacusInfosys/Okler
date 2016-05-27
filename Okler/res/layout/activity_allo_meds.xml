@@ -9,8 +9,6 @@
     <include 
             android:id="@+id/toolbar" 
             layout="@layout/tool_bar_cart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             
             
@@ -261,6 +259,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/med_info_heading_layout"
         android:visibility="gone"
          >

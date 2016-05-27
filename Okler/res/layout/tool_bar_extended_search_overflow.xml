@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar_cart"
     android:layout_width="match_parent"
     android:layout_height="115dp"
     android:minHeight="115dp"
      android:elevation="4dp"
-    android:paddingBottom="10dp"> 
+    android:paddingBottom="10dp"
+    app:contentInsetLeft="0dp"
+	app:contentInsetStart="0dp"
+    android:background="@color/actionBarBackground"> 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,20 +20,26 @@
     	android:layout_height="match_parent"
 		android:orientation="vertical"    
             > 
-           <RelativeLayout
+           <RelativeLayout 
                 android:id="@+id/top_rl"
         android:layout_width="match_parent"
     	android:layout_height="wrap_content"
-         android:layout_weight="1" 
+         android:layout_weight="1"
+         
                 >
+        <RelativeLayout 
+                android:id="@+id/back_layout"
+        android:layout_width="60dp"
+    	android:layout_height="57dp"
+        
+                >   
                <ImageView
         android:layout_width="20dp"
-        android:layout_height="20dp" 
-        android:layout_alignParentLeft="true"       
+        android:layout_height="20dp"        
+        android:layout_centerInParent="true"
         android:id="@+id/toolbar_back" 
-        android:layout_marginTop="20dp"
         android:src="@drawable/back_arrow_white"/>
-        
+        </RelativeLayout>
      <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
