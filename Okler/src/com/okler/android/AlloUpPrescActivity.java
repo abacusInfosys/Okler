@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.okler.databeans.CartDataBean;
 import com.okler.databeans.PrescriptionImagesDataBean;
 import com.okler.databeans.PrescriptionsDataBean;
+import com.okler.databeans.ProductDataBean;
 import com.okler.databeans.UsersDataBean;
 import com.okler.dialogs.CameraGalleryDialog;
 import com.okler.utils.CameraGalleryImageInfo;
@@ -78,9 +79,11 @@ public class AlloUpPrescActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_allo_up_presc);
 		prescriptionsDataBean = Okler.getInstance().getPrescriptionsDataBeans();
+		Utilities.writeToLogFIle("prescriptionsDataBean number of images are:"+prescriptionsDataBean.getPresImages().size());
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		notifCount = (Button) toolBar.findViewById(R.id.notif_count);
 		check = getIntent().getIntExtra("Check", 11);
+		Utilities.writeToLogFIle("Value of check is:"+check);
 		setSupportActionBar(toolBar);
 		ack = this;
 		ActionBar ab = getSupportActionBar();
@@ -101,6 +104,16 @@ public class AlloUpPrescActivity extends BaseActivity {
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		
 		UIUtils.setBackClick(toolBar, ack);
+		
+		cdbean = Okler.getInstance().getSingleCart();
+		ArrayList<ProductDataBean> thisIsTempList = cdbean.getProdList();
+		Utilities.writeToLogFIle("IN allo up presc activity On create. Size of cdbean"+thisIsTempList.size());
+		for(int counter = 0 ; counter < thisIsTempList.size(); counter++)
+		{
+			Utilities.writeToLogFIle("In all up presc activity On create.This is product from cart"+thisIsTempList.get(counter).getProdName());
+		}
+		
+		
 		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
 		back_layout.setOnClickListener(new OnClickListener() {
 			
@@ -131,17 +144,21 @@ public class AlloUpPrescActivity extends BaseActivity {
 		// thumbnail = (ImageView) view.findViewById(R.id.thumbnail_image);
 
 		upload = (Button) findViewById(R.id.upload);
-
+		Utilities.writeToLogFIle("Before if.. get Image File Path");
 		if (getIntent().getExtras().get("imageFilePath") != null) {
 			imageFilePath = getIntent().getExtras().get("imageFilePath")
 					.toString();
+			Utilities.writeToLogFIle("Before if.. get Image File Path"+imageFilePath);
 			if (getIntent().getExtras().get("imgFileName") != null) {
 				imageFileName = getIntent().getExtras().get("imgFileName")
 						.toString();
 				imageFilePath = imageFilePath + "/" + imageFileName;// 06_01_2016
 																	// Gitesh
+				Utilities.writeToLogFIle("within if.. get Image File Name"+imageFileName);
 			}
 		}
+		Utilities.writeToLogFIle("After if. Image file path"+imageFilePath);
+		Utilities.writeToLogFIle("After if. Image file name"+imageFileName);
 		// flag =getIntent().getBooleanExtra("flag",false);
 		// Create a bundle and put bitmap in compressed format in a bundle
 		Bundle bundle = new Bundle();
@@ -153,21 +170,31 @@ public class AlloUpPrescActivity extends BaseActivity {
 		bundle.putByteArray("image", bs.toByteArray());
 
 		imgPreview.setImageBitmap(imgBitmap);
-
+		cdbean = Okler.getInstance().getSingleCart();
+		thisIsTempList = cdbean.getProdList();
+		Utilities.writeToLogFIle("Writing before upload btn click..IN allo up presc activity. Size of cdbean"+thisIsTempList.size());
+		for(int counter = 0 ; counter < thisIsTempList.size(); counter++)
+		{
+			Utilities.writeToLogFIle("In all up presc activity before upload.This is product from cart"+thisIsTempList.get(counter).getProdName());
+		}
 		upload.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
 				int size = prescriptionsDataBean.getPresImages().size();
+				Utilities.writeToLogFIle("In upload click..Size is"+size);
 				imagesBase64 = new String[prescriptionsDataBean.getPresImages()
 						.size()];
+				Utilities.writeToLogFIle("In upload click..Image base 64"+imagesBase64);
 				imageTypes = new String[prescriptionsDataBean.getPresImages()
 						.size()];
+				Utilities.writeToLogFIle("In upload click..imageTypes size"+imageTypes.length);
 				for (int i = 0; i < size; i++) {
 					imagesBase64[i] = prescriptionsDataBean.getPresImages()
 							.get(i).getBase64ConvrtedImg();
 					imageTypes[i] = "jpeg";
+					Utilities.writeToLogFIle("In upload click..in for loop.. base 64 is"+imagesBase64[i]);
 				}
 				Gson gson = new Gson();
 				String base64 = gson.toJson(imagesBase64);
@@ -329,6 +356,7 @@ public class AlloUpPrescActivity extends BaseActivity {
 		@Override
 		protected Object doInBackground(String... params) {
 			try {
+				Utilities.writeToLogFIle("in do in back gorund");
 				InputStream inputStream = null;
 				HttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(uploadPrescrUrl);
@@ -350,19 +378,22 @@ public class AlloUpPrescActivity extends BaseActivity {
 					while ((line = bufferedReader.readLine()) != null) {
 						result += line;
 					}
-
+					Utilities.writeToLogFIle("Result from async task is : "+result);
 					Log.e("ERRORISIS", "IS: " + result);
 					inputStream.close();
 					return result;
 				}
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
+				Utilities.writeToLogFIle("In async task-- Exception occurred-unsupported encoding "+e.getStackTrace());
 				return null;
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
+				Utilities.writeToLogFIle("In async task-- Exception occurred- client protocol"+e.getStackTrace());
 				return null;
 			} catch (IOException e) {
 				e.printStackTrace();
+				Utilities.writeToLogFIle("In async task-- Exception occurred- IO "+e.getStackTrace());
 				return null;
 			}
 			return null;
@@ -377,13 +408,27 @@ public class AlloUpPrescActivity extends BaseActivity {
 				Toast.makeText(getApplicationContext(),
 						"Prescription is uploaded", Toast.LENGTH_LONG).show();
 				cdbean = Okler.getInstance().getSingleCart();
+				ArrayList<ProductDataBean> thisIsTempList = cdbean.getProdList();
+				Utilities.writeToLogFIle("IN allo up presc activity. Size of cdbean"+thisIsTempList.size());
+				for(int counter = 0 ; counter < thisIsTempList.size(); counter++)
+				{
+					Utilities.writeToLogFIle("In all up presc activity.This is product from cart"+thisIsTempList.get(counter).getProdName());
+				}
+				
 				String s1[] = resu.split(",");
+				Utilities.writeToLogFIle("String s1 size is:"+s1.length);
 				String s2 = s1[3];
+				Utilities.writeToLogFIle("String s2 is:"+s2);
 				String s3[] = s2.split(":");
+				Utilities.writeToLogFIle("String s3 size is:"+s3.length);
 				String ss = s3[1].substring(0, s3[1].length() - 1);
+				Utilities.writeToLogFIle("String ss is:"+ss);
 				String presc_id = ss;
+				Utilities.writeToLogFIle("String presc_id:"+presc_id);
 				cdbean.setPresc_id(presc_id);
+				Utilities.writeToLogFIle("IN allo presc before set single cart");
 				Okler.getInstance().setSingleCart(cdbean);
+				Utilities.writeToLogFIle("IN allo presc after set single cart. Size is :"+cdbean.getProdList().size());
 				Intent in = new Intent(AlloUpPrescActivity.this,
 						ProductCheckoutSummary.class);
 				in.putExtra("Check", check);

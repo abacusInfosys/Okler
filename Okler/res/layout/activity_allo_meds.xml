@@ -70,6 +70,14 @@
 			        android:src="@drawable/no_image_found"
 			        android:layout_marginBottom="10dp"
 			  />
+
+			 <ImageView
+			     android:id="@+id/image_favourite"
+			     android:layout_width="wrap_content"
+			     android:layout_height="wrap_content"
+			     android:src="@drawable/favourites"
+			     android:layout_alignParentTop="true"
+			     android:layout_alignParentRight="true" />
 				    
 			</RelativeLayout>
 			<RelativeLayout 

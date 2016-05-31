@@ -352,7 +352,9 @@ public class Utilities {
 					try {
 						Utilities.writeToLogFIle("Before URI:");
 						Utilities.writeToLogFIle("Before URI: photofile "+photoFile);
-						Uri fileUri= Uri.fromFile(photoFile);
+						
+						/**************Commenting temporarily to identifyy redn=mi crash*************/
+						/*Uri fileUri= Uri.fromFile(photoFile);
 						Utilities.writeToLogFIle("URI:"+fileUri);
 						imageFilePath=fileUri.getPath();
 						Utilities.writeToLogFIle("URI image file path:"+imageFilePath);
@@ -362,12 +364,16 @@ public class Utilities {
 						if(thumbnailImg == null)
 							Utilities.writeToLogFIle("URI image thumbnail is null");
 						thumbnailImg = rotateImageIfRequired(imageFilePath,thumbnailImg);
-						Utilities.writeToLogFIle("URI image thumbnail after rotation");
-						//thumbnailImg = (Bitmap) data.getExtras().get("data"); 
-						//c = Calendar.getInstance(); 
-						//seconds = c.get(Calendar.SECOND);
-						//fileName = seconds+context.getResources().getString(R.string.jpeg_extension);
-						//imageFilePath = Utilities.saveToInternalSorage(thumbnailImg, context, context.getResources().getString(R.string.PrescriptionImgeasDirPath),fileName );
+						Utilities.writeToLogFIle("URI image thumbnail after rotation");*/
+						/**************Commenting temporarily to identifyy redn=mi crash*************/
+						
+						/**************Uncommenting temporarily to identifyy redn=mi crash*************/
+						thumbnailImg = (Bitmap) data.getExtras().get("data"); 
+						c = Calendar.getInstance(); 
+						seconds = c.get(Calendar.SECOND);
+						fileName = seconds+context.getResources().getString(R.string.jpeg_extension);
+						imageFilePath = Utilities.saveToInternalSorage(thumbnailImg, context, context.getResources().getString(R.string.PrescriptionImgeasDirPath),fileName );
+						
 					}catch (Exception e) {
 						e.printStackTrace();   
 						Utilities.writeToLogFIle("URI thumbnail"+e.getStackTrace());

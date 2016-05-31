@@ -14,6 +14,7 @@ import com.facebook.login.widget.LoginButton;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.Request.Method;
+import com.android.volley.Response.Listener;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.okler.utils.SocialMediaUtils;
@@ -83,6 +84,7 @@ public class NewSignIn extends BaseActivity {
 	UsersDataBean ubean2 = new UsersDataBean();
 	UsersDataBean ubean = new UsersDataBean();
 	String msg;
+	ArrayList<ProductDataBean> myfav = new ArrayList<ProductDataBean>();
 
 	// end
 	@Override
@@ -275,6 +277,7 @@ public class NewSignIn extends BaseActivity {
 					setUserData(jobj1);
 					setUserCart(jarr3);
 					setUserAddress();
+					getAllFavourites();
 					Toast.makeText(getApplicationContext(),
 							"Logged in Successfully", Toast.LENGTH_LONG).show();
 					navigation();
@@ -742,5 +745,107 @@ public class NewSignIn extends BaseActivity {
 		} catch (ActivityNotFoundException e) {
 			return false;
 		}
+	}
+	
+	private void getAllFavourites()
+	{
+		
+			if (Utilities.getUserStatusFromSharedPref(this) == UserStatusEnum.LOGGED_IN ||
+					(Utilities.getUserStatusFromSharedPref(this) == UserStatusEnum.LOGGED_IN_FB) ||
+					(Utilities.getUserStatusFromSharedPref(this) == UserStatusEnum.LOGGED_IN_GOOGLE))
+			{
+				UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(this);
+				int uid = ubean.getId();
+	    	  String get_fav = getString(R.string.get_fav_url)+uid;
+	 	     
+	 	     
+	 	     WebJsonObjectRequest webjson=new WebJsonObjectRequest(Method.GET, get_fav, new JSONObject(),new Listener<JSONObject>() 
+	 					{
+	 						@Override
+	 						public void onResponse(JSONObject response) 
+	 						{
+	 							// TODO Auto-generated method stub
+	 							
+	 							ProductDataBean pbean;
+	 							
+	 							try
+	 							{
+	 							JSONObject responseObj =(JSONObject)response;
+	 							String result = responseObj.getString("result");
+	 					//		Toast.makeText(getApplicationContext(), "result" + result, Toast.LENGTH_LONG).show();
+	 							
+	 							JSONArray doctorsArr = responseObj.getJSONArray("result");
+	 							//docCount=responseObj.getInt("TotalCount");
+	 							myfav = new ArrayList<ProductDataBean>();
+	 							for(int i = 0 ; i < doctorsArr.length();i++)
+	 							{
+	 								pbean = new ProductDataBean();
+	 								try
+	 								{
+	 									JSONObject docObj =(JSONObject) doctorsArr.get(i);
+	 									pbean.setProdName(docObj.getString("name"));
+	 									pbean.setProdId(docObj.getInt("id"));
+	 									pbean.setDesc(docObj.getString("description"));
+	 									pbean.setMrp(docObj.getInt("price"));
+	 									pbean.setOklerPrice(docObj.getInt("saleprice"));
+	 									Float discount = Float.parseFloat(docObj.getString("discount"));
+	 									pbean.setDiscount(discount);
+	 									
+	 									String jimg = docObj.getString("images");
+	 									String url2;
+	 									if(jimg.equals(null)||jimg.equals("null")||jimg.equals("")){
+	 										url2 = "drawable://" + R.drawable.tempcuff;
+	 									}else{
+	 									String j1[] =jimg.split(",");
+	 									String j2=j1[0];
+	 									String colon = ":";
+	 									String j3[]=j2.split(colon);
+	 									String url = j3[2];
+	 									//String url1 = url.substring(1);
+	 									int length = url.length();
+	 									url2 = url.substring(1, (length-1));
+	 									}
+	 									//JSONObject jimg2 = jimg.getJSONObject("");
+	 									//JSONObject jimg3 = jobj2.getJSONObject("images");
+	 									//pdBean.setImgUrl(jobj2.getJSONObject("images").getJSONObject("").getString("filename"));
+	 									pbean.setImgUrl(url2);
+	 									
+	 									Log.i("tag", "json object" + docObj);
+	 									}catch (JSONException e) {
+	 										// TODO: handle exception
+	 										Log.e("JSON Exception", e.getMessage());
+	 									}
+	 								
+	 								myfav.add(pbean);
+	 								
+	 							 }
+	 								Okler.getInstance().setFavourites(myfav);
+	 								
+	 							}catch(JSONException jsonEx)
+	 							{
+	 								Log.e("Exception json", jsonEx.getStackTrace().toString());
+	 							}
+	 					
+	 						}}, 
+	 						new Response.ErrorListener() 
+	 						{
+
+	 							@Override
+	 							public void onErrorResponse(VolleyError error) 
+	 							{
+	 								// TODO Auto-generated method stub
+	 					
+	 							}
+	 						}
+	 			);
+	 		
+	 	VolleyRequest.addJsonObjectRequest(getApplicationContext(),webjson);
+			}
+	      
+	      {
+	    	  ProductDataBean pbean = new ProductDataBean();
+	    	  //pbean = Utilities.getFavouritesFromSharedPref(this);
+	    	  Log.i("product", ""+pbean);
+	      }
 	}
 }

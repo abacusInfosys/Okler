@@ -130,7 +130,7 @@ public class BaseActivity extends AppCompatActivity implements OnClickListener {
 				}
 				break;
 	case R.id.btnManageProfile:	
-			case R.id.manageProfRL:Okler.getInstance().setBookingType(12);
+			case R.id.manageProfRL:Okler.getInstance().setBookingType(Okler.getInstance().getBookingType());
 	//		Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
 			checkInternet(curStatus);
 				

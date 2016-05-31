@@ -478,7 +478,7 @@ public class HealthShopGrid extends BaseActivity  implements Response.Listener,R
 						searchText="";
 						finallist.clear();
 					pageCount=0;
-					//	String price_url = "http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=&search=&prod_id=&pro_type=1&order_by=desc&price_range=&brand_id=&subcat_id="+cate_id+"&sort_price="+asc;
+					//	String price_url = "https://www.okler.com/api/products/products/productsbyprotype?page=&search=&prod_id=&pro_type=1&order_by=desc&price_range=&brand_id=&subcat_id="+cate_id+"&sort_price="+asc;
 						getAllMedsUrl = setUrl("0", "", "", "1", "", "", "", cate_id, asc, "", "");
 						WebJsonObjectRequest webjson = new WebJsonObjectRequest(Method.GET, getAllMedsUrl, new JSONObject(), new Listener<JSONObject>() 
 								{
@@ -544,7 +544,7 @@ public class HealthShopGrid extends BaseActivity  implements Response.Listener,R
 						brandIdVal="";
 						finallist.clear();
 					pageCount=0;
-					//	String brand_url = "http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=&search=&prod_id=&pro_type=1&order_by=desc&price_range=&brand_id=&subcat_id="+cate_id+"&sort_price="+desc;
+					//	String brand_url = "https://www.okler.com/api/products/products/productsbyprotype?page=&search=&prod_id=&pro_type=1&order_by=desc&price_range=&brand_id=&subcat_id="+cate_id+"&sort_price="+desc;
 						getAllMedsUrl = setUrl("0", "", "", "1", "", "", "", cate_id, desc, "", "");
 						WebJsonObjectRequest webjson = new WebJsonObjectRequest(Method.GET, getAllMedsUrl, new JSONObject(), new Listener<JSONObject>() 
 								{
@@ -695,7 +695,7 @@ public class HealthShopGrid extends BaseActivity  implements Response.Listener,R
 							finallist.clear();
 							searchText="";
 							pageCount=0;
-						//	String brand_url = "http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=&search=&prod_id=&pro_type=1&order_by=desc&price_range=&brand_id="+brand_id+"&subcat_id="+ cate_id+"&sort_price=asc";
+						//	String brand_url = "https://www.okler.com/api/products/products/productsbyprotype?page=&search=&prod_id=&pro_type=1&order_by=desc&price_range=&brand_id="+brand_id+"&subcat_id="+ cate_id+"&sort_price=asc";
 						 	getAllMedsUrl = setUrl("0", "", "", "1", "", brand_id, "", cate_id, "", "", ""); 
 							
 							WebJsonObjectRequest webjson = new WebJsonObjectRequest(Method.GET, getAllMedsUrl, new JSONObject(), new Listener<JSONObject>() 
@@ -852,7 +852,7 @@ public class HealthShopGrid extends BaseActivity  implements Response.Listener,R
 					finallist.clear();
 					searchText="";
 					pageCount=0;
-				//	String pRange = "http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=&search=&prod_id=&pro_type=1&order_by=desc&price_range="+range+"&brand_id=&subcat_id="+cate_id+"&sort_price=asc";
+				//	String pRange = "https://www.okler.com/api/products/products/productsbyprotype?page=&search=&prod_id=&pro_type=1&order_by=desc&price_range="+range+"&brand_id=&subcat_id="+cate_id+"&sort_price=asc";
 					getAllMedsUrl = setUrl("0", "", "", "1", priceRangeVal, "", "", cate_id, "", "", "");
 					WebJsonObjectRequest webjson = new WebJsonObjectRequest(Method.GET, getAllMedsUrl, new JSONObject(), new Listener<JSONObject>() 
 							{
@@ -1348,7 +1348,7 @@ public class HealthShopGrid extends BaseActivity  implements Response.Listener,R
 					//		Toast.makeText(getApplicationContext(), cate_id, Toast.LENGTH_LONG).show();
 							searchText="";
 							pageCount=0;
-							//String cate_url = "http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=&search=&prod_id=&pro_type=1&order_by=desc&price_range=&brand_id=&subcat_id="+cate_id+"&sort_price=asc";
+							//String cate_url = "https://www.okler.com/api/products/products/productsbyprotype?page=&search=&prod_id=&pro_type=1&order_by=desc&price_range=&brand_id=&subcat_id="+cate_id+"&sort_price=asc";
 							String cate_url = setUrl("0", "", "", ""+prodtype, "", "", "", cate_id, "", "", "");
 							finallist.clear();
 						

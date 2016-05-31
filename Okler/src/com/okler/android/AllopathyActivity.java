@@ -27,6 +27,7 @@ public class AllopathyActivity extends BaseActivity {
 	Activity ack;
 	ImageView imgBack;
 	RelativeLayout back_layout;
+	String bookingtype;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +38,8 @@ public class AllopathyActivity extends BaseActivity {
 		notifCount = (Button) toolBar.findViewById(R.id.notif_count);
 		setSupportActionBar(toolBar);
 		ActionBar ab = getSupportActionBar();
-	
-		if (Okler.getInstance().getBookingType() == 0) {
-				Utilities.setTitleText(toolBar, getString(R.string.allopathy));
-		} else if (Okler.getInstance().getBookingType() == 3) {
-			Utilities.setTitleText(toolBar, getString(R.string.ayurvedic));
-	
-		} else {
-			Utilities.setTitleText(toolBar, getString(R.string.homeopathy));
-	
-		}
-		toolBar.setBackgroundResource(UIUtils.getToolBarDrawable(Okler
-				.getInstance().getBookingType()));
+		
+		
 		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
 		back_layout.setOnClickListener(new OnClickListener() {
@@ -82,6 +73,7 @@ public class AllopathyActivity extends BaseActivity {
 			public void onClick(View v) {
 				Intent intent = new Intent(getApplicationContext(),
 						SearchByDiseasesActivity.class);
+				intent.putExtra("bookingType", bookingtype);
 				startActivity(intent);
 			}
 		});
@@ -92,6 +84,7 @@ public class AllopathyActivity extends BaseActivity {
 				Intent intent = new Intent(getApplicationContext(),
 						GroupByMedsActivity.class);
 				intent.putExtra("FromWhere", "searchByMedi");
+				intent.putExtra("bookingType", bookingtype);
 				startActivity(intent);
 
 			}
@@ -102,6 +95,22 @@ public class AllopathyActivity extends BaseActivity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		bookingtype = getIntent().getStringExtra("bookingType");
+		Okler.getInstance().setBookingType(UIUtils.getBookingType(bookingtype));
+		
+		//Toast.makeText(getApplicationContext(), ""+boingtype, Toast.LENGTH_SHORT)
+	
+		if (Okler.getInstance().getBookingType() == 0) {
+				Utilities.setTitleText(toolBar, getString(R.string.allopathy));
+		} else if (Okler.getInstance().getBookingType() == 3) {
+			Utilities.setTitleText(toolBar, getString(R.string.ayurvedic));
+	
+		} else {
+			Utilities.setTitleText(toolBar, getString(R.string.homeopathy));
+	
+		}
+		toolBar.setBackgroundResource(UIUtils.getToolBarDrawable(Okler
+				.getInstance().getBookingType()));
 		UIUtils.setCartCount(notifCount, ack);
 	}
 

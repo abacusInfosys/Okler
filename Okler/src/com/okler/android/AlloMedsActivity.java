@@ -10,8 +10,10 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -53,7 +55,7 @@ import com.okleruser.R;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
-
+import com.android.volley.Response.Listener;
 public class AlloMedsActivity extends BaseActivity {
 
 	private View bottomBarLayout;
@@ -83,10 +85,13 @@ public class AlloMedsActivity extends BaseActivity {
 	RelativeLayout minus_units_rl,plus_units_rl;
 	Button check;
 	RelativeLayout back_layout;
+	ImageView img_favourite;
 	CartDataBean mainbean;
 	boolean addCart = false,isAddedToCart = false,buy = false;
 	Button notifCount;
 	ProductDataBean hsBean;
+	ArrayList<ProductDataBean> array1 = new ArrayList<ProductDataBean>();
+	boolean isFav = false;
 	
 
 	@Override
@@ -109,6 +114,7 @@ public class AlloMedsActivity extends BaseActivity {
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgloader = VolleyRequest.getInstance(getApplicationContext())
 				.getImageLoader();
+	img_favourite = (ImageView) findViewById(R.id.image_favourite);
 		serverUrl = getString(R.string.serverUrl);
 		pArrList2 = new ArrayList<ProductDataBean>();
 		pArrList2 = Okler.getInstance().getProdList();
@@ -323,8 +329,40 @@ public class AlloMedsActivity extends BaseActivity {
                 startActivity(i);
             }
         });*/
-	
-	
+        
+        img_favourite.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) 
+			{
+				// TODO Auto-generated method stub
+				
+				if (Utilities.getUserStatusFromSharedPref(AlloMedsActivity.this) == UserStatusEnum.LOGGED_IN
+						|| (Utilities.getUserStatusFromSharedPref(AlloMedsActivity.this) == UserStatusEnum.LOGGED_IN_FB)
+						|| (Utilities.getUserStatusFromSharedPref(AlloMedsActivity.this) == UserStatusEnum.LOGGED_IN_GOOGLE)) 
+				{
+					if(isFav == true)
+					{
+						removeFromFavourites();
+					}
+					else
+					{
+						addToFavourites();
+					}
+				}
+				else 
+				{	
+					Intent in = new Intent(AlloMedsActivity.this, NewSignIn.class);
+					startActivity(in);
+				}
+			}
+		});
+        
+        // Code to display favourote
+        
+       
+        
+        
 	}
 
 	public void getConstituents(String url){
@@ -774,7 +812,7 @@ public class AlloMedsActivity extends BaseActivity {
 		}
 
 		String addToCartUrl, add1, add2, add3;
-		add1 = "http://183.82.110.105:8081/oklerapi/products/usercart/savecart?product=";
+		add1 = "https://www.okler.com/api/products/usercart/savecart?product=";
 		add2 = "&cust_id=";
 		add3 = "&quantity=";
 		int userId = ubean.getId();
@@ -934,6 +972,24 @@ public class AlloMedsActivity extends BaseActivity {
 				buy = false;
 				buy();
 			}
+			 array1 = Okler.getInstance().getFavourites();
+				
+				if(array1.size() != 0)
+				{
+					for(int i = 0; i<array1.size(); i++)
+					{
+						ProductDataBean pbean = array1.get(i);
+						int prodID = pbean.getProdId();
+						if(prodID == prodId)
+						{
+							img_favourite
+							.setImageResource(R.drawable.fav_filled_heart_icon);
+							isFav = true;
+						}
+					}
+				}
+			
+			
 			/*if (gen_addCart) {
 				gen_addCart = false;
 				genAddCartWebService();
@@ -1151,5 +1207,158 @@ public class AlloMedsActivity extends BaseActivity {
             super.onBackPressed();
         }
     }
+	
+	// funtion for add to favourites
+	
+	private void addToFavourites()
+	{	
+		UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(AlloMedsActivity.this);
+		userId = ubean.getId();
+		String addToFav1, addToFav2, addToFavUrl;
+		addToFav1 = getString(R.string.AddToFavouriteUrlPart1);
+		addToFav2 = getString(R.string.AddToFavouriteUrlPart2);
+		addToFavUrl = addToFav1 + userId + addToFav2 + prodId;
+		// Toast.makeText(getApplicationContext(), "fun",
+		// Toast.LENGTH_LONG).show();
+		
+					WebJsonObjectRequest json = new WebJsonObjectRequest(
+							Method.GET, addToFavUrl, new JSONObject(),
+							new Response.Listener<JSONObject>() {
+
+								@Override
+								public void onResponse(JSONObject response) {
+
+									JSONObject jobj = (JSONObject) response;
+									String msg = jobj.optString("message");
+									if (msg.equals("Product Successfully Added To Your Favorites")) {
+										Toast.makeText(
+												getApplicationContext(),
+												"Added to your favourites successfully",
+												Toast.LENGTH_SHORT).show();
+										for (int i = 0; i < pArrList2.size(); i++) {
+											int id = pArrList2.get(i)
+													.getProdId();
+											if (id == prodId) {
+												ProductDataBean pbean = pArrList2
+														.get(i);
+												ArrayList<ProductDataBean> favList = Okler
+														.getInstance()
+														.getFavourites();
+												favList.add(pbean);
+												Okler.getInstance()
+														.setFavourites(favList);
+												img_favourite
+														.setImageResource(R.drawable.fav_filled_heart_icon);
+												isFav = true;
+												break;
+											}
+										}
+									}
+									else
+									{
+										Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+									}
+
+								}
+							}, new Response.ErrorListener() {
+
+								@Override
+								public void onErrorResponse(VolleyError error) {
+
+									// Toast.makeText(getApplicationContext(),
+									// String.valueOf(error),
+									// Toast.LENGTH_LONG).show();
+								}
+							});
+
+					VolleyRequest.addJsonObjectRequest(getApplicationContext(),
+							json);
+				} 
+	
+	private void removeFromFavourites()
+	{				
+		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+		alertDialog.setTitle("Alert");
+		alertDialog.setMessage("Are you sure, you want to remove this product from your favourites?");
+		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+						
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+		// TODO Auto-generated method stub         
+			
+			final String delete_fav = getString(R.string.delete_fav_url) +userId+getString(R.string.getMedsUrlProdId3)+prodId;
+			
+		WebJsonObjectRequest webjson=new WebJsonObjectRequest(Method.GET, delete_fav, new JSONObject(),new Listener<JSONObject>() 
+													{
+														@Override
+														public void onResponse(JSONObject response) 
+														{
+															// TODO Auto-generated method stub
+															
+															try
+															{
+															JSONObject responseObj =(JSONObject)response;
+															String result = responseObj.getString("result");
+															String message = responseObj.getString("message"); 
+												//			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+															
+													//		Toast.makeText(getApplicationContext(), "result" + result, Toast.LENGTH_LONG).show();
+															
+															if(message != "deleted failed from favourites")
+															{
+																array1 = Okler.getInstance().getFavourites();
+																for(int i = 0; i<array1.size(); i++)
+																{
+																	ProductDataBean pbean = array1.get(i);
+																	int prodID = pbean.getProdId();
+																	if(prodID == prodId)
+																	{
+																		array1.remove(i);
+																		img_favourite
+																		.setImageResource(R.drawable.favourites);
+																		Okler.getInstance().setFavourites(array1);
+																		isFav = false;
+																	}
+																}
+															}
+															
+															}catch(JSONException jsonEx)
+															{
+																Log.e("Exception json", jsonEx.getStackTrace().toString());
+															}
+													
+														}}, 
+														new Response.ErrorListener() 
+														{
+
+															@Override
+															public void onErrorResponse(VolleyError error) 
+															{
+																Log.i("error", String.valueOf(error));
+																// TODO Auto-generated method stub
+													
+															}
+														}
+											);
+										
+									VolleyRequest.addJsonObjectRequest(AlloMedsActivity.this,webjson);
+							
+						}
+					});
+					
+					alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							
+							dialog.dismiss();
+							
+						}
+					});
+					
+					alertDialog.show();
+				}
+
 
 }
