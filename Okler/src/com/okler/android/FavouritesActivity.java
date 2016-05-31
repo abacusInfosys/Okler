@@ -383,6 +383,7 @@ public class FavouritesActivity extends BaseActivity {
  									Toast toast =Toast.makeText(FavouritesActivity.this, "No Favourites items to show", Toast.LENGTH_LONG);
 
  									toast.show();
+ 									clearButton.setEnabled(false);
  								}
  								else
  								{
