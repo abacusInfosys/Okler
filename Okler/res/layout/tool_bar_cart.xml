@@ -13,7 +13,8 @@
     <RelativeLayout 
         android:id="@+id/back_layout"
         android:layout_width="60dp"
-    	android:layout_height="match_parent"    	
+    	android:layout_height="match_parent"
+    	android:background="@color/Black"
      	android:layout_gravity="left|center"
         >
         <ImageView
