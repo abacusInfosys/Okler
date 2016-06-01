@@ -92,6 +92,8 @@ public class AlloMedsActivity extends BaseActivity {
 	ProductDataBean hsBean;
 	ArrayList<ProductDataBean> array1 = new ArrayList<ProductDataBean>();
 	boolean isFav = false;
+
+/* change by chetan */
 	
 
 	@Override
