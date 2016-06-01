@@ -24,7 +24,7 @@ public class AlloSubstituesAdapter extends BaseAdapter{
 		this.context = context2;
 		this.subList = subList2;
 		inflater = LayoutInflater.from(context2);
-		
+		/*Added for testing*/
 	}
 	
 	@Override
