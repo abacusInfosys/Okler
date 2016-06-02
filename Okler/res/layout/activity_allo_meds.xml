@@ -261,6 +261,15 @@
    	    android:src="@drawable/medicine_info_icon"
    	    android:layout_toRightOf="@+id/tv_med_info"
    	    />
+   	<ImageView 
+   	    android:id="@+id/down_arrow"
+   	    android:layout_width="20dp"
+   	    android:layout_height="20dp"
+   	    android:layout_alignParentBottom="true"
+   	    android:src="@drawable/medicine_info_icon_down"
+   	    android:layout_toRightOf="@+id/tv_med_info"
+   	    android:visibility="gone"
+   	    />
    	</RelativeLayout>
     <LinearLayout
         android:id="@+id/med_info_linLay"
