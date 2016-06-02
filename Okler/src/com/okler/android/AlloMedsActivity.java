@@ -61,7 +61,8 @@ public class AlloMedsActivity extends BaseActivity {
 	private View bottomBarLayout;
 	private Toolbar toolBar;
 	ImageView imgBack,minus_units,plus_units,edit_pincode,add_Button_indi,minusButton_indi,
-				buyIV,shareBtn,addToCart,sliderIndicatorRight,sliderIndicatorDown;
+				buyIV,shareBtn,addToCart,sliderIndicatorRight,sliderIndicatorDown,down_arrow,
+				right_arrow;
 	Activity ack;
 	String medId,serverUrl,constituentsUrl,getProdGenSubsUrl,pincode,pincodeUrl,pinurlpart1,
 			pinurlpart2,unit;
@@ -114,7 +115,7 @@ public class AlloMedsActivity extends BaseActivity {
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgloader = VolleyRequest.getInstance(getApplicationContext())
 				.getImageLoader();
-	img_favourite = (ImageView) findViewById(R.id.image_favourite);
+		img_favourite = (ImageView) findViewById(R.id.image_favourite);
 		serverUrl = getString(R.string.serverUrl);
 		pArrList2 = new ArrayList<ProductDataBean>();
 		pArrList2 = Okler.getInstance().getProdList();
@@ -171,6 +172,9 @@ public class AlloMedsActivity extends BaseActivity {
 		notifCount = (Button) toolBar.findViewById(R.id.notif_count);
 		addToCart = (ImageView) findViewById(R.id.cartIV);
 		med_info_heading_layout = (RelativeLayout)findViewById(R.id.med_info_heading_layout);
+		down_arrow = (ImageView)findViewById(R.id.down_arrow);
+		right_arrow = (ImageView)findViewById(R.id.right_arrow);
+		
 		
 		try {
 			JSONObject medobj = new JSONObject(medId);
@@ -253,8 +257,12 @@ public class AlloMedsActivity extends BaseActivity {
 				int a = med_info_linLay.getVisibility();
 				if(med_info_linLay.getVisibility()==8){
 					med_info_linLay.setVisibility(View.VISIBLE);
+					down_arrow.setVisibility(View.VISIBLE);
+					right_arrow.setVisibility(View.GONE);
 				}else{
 					med_info_linLay.setVisibility(View.GONE);
+					down_arrow.setVisibility(View.GONE);
+					right_arrow.setVisibility(View.VISIBLE);
 				}
 				
 			}
@@ -812,7 +820,7 @@ public class AlloMedsActivity extends BaseActivity {
 		}
 
 		String addToCartUrl, add1, add2, add3;
-		add1 = "https://www.okler.com/api/products/usercart/savecart?product=";
+		add1 = "http://183.82.110.105:8081/oklerapi/products/usercart/savecart?product=";
 		add2 = "&cust_id=";
 		add3 = "&quantity=";
 		int userId = ubean.getId();
