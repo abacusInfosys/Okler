@@ -2,7 +2,6 @@ package com.okler.android;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.SpannableString;
@@ -22,7 +21,6 @@ import org.json.JSONObject;
 
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
-import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -46,7 +44,6 @@ import com.okleruser.R;
 import android.R.color;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -158,10 +155,7 @@ public class ProductDetailsActivity extends BaseActivity {
 	CartDataBean mainbean;
 	String prod_id_recent_prod = "", prod_id_similar_prod = "";
 	JustViewedProdsDataBean jbean;
-	
-	ArrayList<ProductDataBean> array1 = new ArrayList<ProductDataBean>();
-	
-	boolean isFav;
+	RelativeLayout back_layout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -194,7 +188,7 @@ public class ProductDetailsActivity extends BaseActivity {
 		ActionBar ab = getSupportActionBar();
 		// ab.setDisplayHomeAsUpEnabled(true);
 		image_favourite = (ImageView) findViewById(R.id.image_favourite);
-	//	image_favourite.setVisibility(View.INVISIBLE);
+		image_favourite.setVisibility(View.INVISIBLE);
 		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
 		back_layout.setOnClickListener(new OnClickListener() {
 			
@@ -261,42 +255,10 @@ public class ProductDetailsActivity extends BaseActivity {
 		addToCart();
 		share(prodId);
 
-		//addFavourite();
+		addFavourite();
 		// horScrView =
 		// (HorizontalScrollView)findViewById(R.id.prodsHprScrView);
 		// setTouchListenerScrViews();
-		
-
-		
-		image_favourite.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-				if (Utilities.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN
-						|| (Utilities.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN_FB)
-						|| (Utilities.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN_GOOGLE)) 
-				{
-					
-					if(isFav == true)
-					{
-						removeProductFromFavourites();
-					}
-					else
-					{
-						addFavourite();
-					}
-				}
-				else 
-				{
-					Intent in = new Intent(activity, NewSignIn.class);
-					startActivity(in);
-				}
-			}
-		});
-		
-		
 	}
 
 	private void mainProductHsUI() {
@@ -456,7 +418,6 @@ public class ProductDetailsActivity extends BaseActivity {
 											availableTv.setText("Available");
 											shipstoTv
 													.setVisibility(View.VISIBLE);
-											buyIV.setEnabled(true);
 										}
 									} catch (JSONException e) {
 										// TODO Auto-generated catch block
@@ -2912,9 +2873,9 @@ public class ProductDetailsActivity extends BaseActivity {
 		View black_separator_item = genView
 				.findViewById(R.id.black_separator_item);
 		black_separator_item.setVisibility(View.GONE);
-		/*ImageView image_favourite = (ImageView) genView
-				.findViewById(R.id.image_favourite);*/
-		//image_favourite.setVisibility(View.GONE);
+		ImageView image_favourite = (ImageView) genView
+				.findViewById(R.id.image_favourite);
+		image_favourite.setVisibility(View.GONE);
 		TextView gen_change = (TextView) genView.findViewById(R.id.changeTv);
 		gen_change.setText(change_pin);
 		RelativeLayout top_gen_heading_RL, gre_separator_RL, red_separator_RL, avail_subs_heading_RL;
@@ -4104,17 +4065,15 @@ public class ProductDetailsActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Utilities.writeToLogFIle("Clicked on buy now");
+
 				// ubean.setId(2);
 				// ubean.getId();
 				if (availableTv.getText().toString().equals("Available")
 						&& available_LL.getVisibility() == View.VISIBLE) {
-					Utilities.writeToLogFIle("Clicked on buy now. In if");
 					String unit = unitValue.getText().toString();
-					Utilities.writeToLogFIle("Clicked on buy now.. Unit"+unit);
 					if (unit.equals(""))
 						unit = "00";
-					if (unit.length() > 2) {						
+					if (unit.length() > 2) {
 						unitValue.setText("");
 						unitValue.requestFocus();
 						Toast.makeText(activity, "Maximum limit is 99",
@@ -4129,7 +4088,6 @@ public class ProductDetailsActivity extends BaseActivity {
 						}
 
 						else {
-							Utilities.writeToLogFIle("Checking login status");
 							UserStatusEnum u = Utilities
 									.getUserStatusFromSharedPref(activity);
 							if (Utilities.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN
@@ -4137,16 +4095,12 @@ public class ProductDetailsActivity extends BaseActivity {
 											.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN_FB)
 									|| (Utilities
 											.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN_GOOGLE)) {
-								Utilities.writeToLogFIle("Before buy() method");
 								buy();
-								Utilities.writeToLogFIle("After buy() method");
 							} else {
-								Utilities.writeToLogFIle("Before new sign in");
 								Intent intent = new Intent(activity,
 										NewSignIn.class);
 								buy = true;
 								startActivity(intent);
-								Utilities.writeToLogFIle("After new sign in");
 							}
 
 						}
@@ -4298,72 +4252,78 @@ public class ProductDetailsActivity extends BaseActivity {
 		startActivity(Intent.createChooser(shareIntent, "Share Okler Via"));
 	}
 
-	public void addFavourite() { 
-		
-		UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(ProductDetailsActivity.this);
-		userId = ubean.getId();
-		
+	public void addFavourite() {
 		addToFav1 = getString(R.string.AddToFavouriteUrlPart1);
 		addToFav2 = getString(R.string.AddToFavouriteUrlPart2);
 		addToFavUrl = addToFav1 + userId + addToFav2 + prodId;
 		// Toast.makeText(getApplicationContext(), "fun",
 		// Toast.LENGTH_LONG).show();
-		
-						WebJsonObjectRequest json = new WebJsonObjectRequest(
-								Method.GET, addToFavUrl, new JSONObject(),
-								new Response.Listener<JSONObject>() {
+		image_favourite.setOnClickListener(new OnClickListener() {
 
-									@Override
-									public void onResponse(JSONObject response) {
+			@Override
+			public void onClick(View v) {
+				// Toast.makeText(getApplicationContext(), "onClick",
+				// Toast.LENGTH_LONG).show();
+				if (Utilities.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN
+						|| (Utilities.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN_FB)
+						|| (Utilities.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN_GOOGLE)) {
+					WebJsonObjectRequest json = new WebJsonObjectRequest(
+							Method.GET, addToFavUrl, new JSONObject(),
+							new Response.Listener<JSONObject>() {
 
-										JSONObject jobj = (JSONObject) response;
-										String msg = jobj.optString("message");
-										if (msg.equals("Product Successfully Added To Your Favorites")) {
-											Toast.makeText(
-													getApplicationContext(),
-													"Added to your favourites successfully",
-													Toast.LENGTH_SHORT).show();
-											for (int i = 0; i < pArrList2.size(); i++) {
-												int id = pArrList2.get(i)
-														.getProdId();
-												if (id == prodId) {
-													ProductDataBean pbean = pArrList2
-															.get(i);
-													ArrayList<ProductDataBean> favList = Okler
-															.getInstance()
-															.getFavourites();
-													favList.add(pbean);
-													Okler.getInstance()
-															.setFavourites(favList);
-													image_favourite
-															.setImageResource(R.drawable.fav_filled_heart_icon);
-													isFav = true;
-													break;
-												}
+								@Override
+								public void onResponse(JSONObject response) {
+
+									JSONObject jobj = (JSONObject) response;
+									String msg = jobj.optString("message");
+									if (msg.equals("Added success from favourites")) {
+										Toast.makeText(
+												getApplicationContext(),
+												"Added to your favourites successfully",
+												Toast.LENGTH_SHORT).show();
+										for (int i = 0; i < pArrList2.size(); i++) {
+											int id = pArrList2.get(i)
+													.getProdId();
+											if (id == prodId) {
+												ProductDataBean pbean = pArrList2
+														.get(i);
+												ArrayList<ProductDataBean> favList = Okler
+														.getInstance()
+														.getFavourites();
+												favList.add(pbean);
+												Okler.getInstance()
+														.setFavourites(favList);
+												image_favourite
+														.setImageResource(R.drawable.fav_filled_heart_icon);
+												break;
 											}
 										}
-										else
-										{
-											Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-										}
-
 									}
-								}, new Response.ErrorListener() {
 
-									@Override
-									public void onErrorResponse(VolleyError error) {
+								}
+							}, new Response.ErrorListener() {
 
-										 Toast.makeText(getApplicationContext(),
-										 String.valueOf(error),
-										 Toast.LENGTH_LONG).show();
-									}
-								});
+								@Override
+								public void onErrorResponse(VolleyError error) {
 
-						VolleyRequest.addJsonObjectRequest(getApplicationContext(),
-								json);
-					}
-				
-			
+									// Toast.makeText(getApplicationContext(),
+									// String.valueOf(error),
+									// Toast.LENGTH_LONG).show();
+								}
+							});
+
+					VolleyRequest.addJsonObjectRequest(getApplicationContext(),
+							json);
+				} else {
+					// Toast.makeText(getApplicationContext(), "else",
+					// Toast.LENGTH_LONG).show();
+					Intent in = new Intent(activity, NewSignIn.class);
+					startActivity(in);
+				}
+			}
+		});
+	}
+
 	public void addCartWebService() {
 		addCart = false;
 		UsersDataBean ubean = new UsersDataBean();
@@ -4435,15 +4395,9 @@ public class ProductDetailsActivity extends BaseActivity {
 		// temp code for id
 		UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(activity);
 		odBean.setCurUBean(ubean);
-		Utilities.writeToLogFIle("In method buy() : Before for loop");
 		for (int i = 0; i < pArrList2.size(); i++) {
-			Utilities.writeToLogFIle("PArrList2.Id="+pArrList2.get(i).getProdId());
-			Utilities.writeToLogFIle("PArrList2.Name="+pArrList2.get(i).getProdName());
 			int id = pArrList2.get(i).getProdId();
-			Utilities.writeToLogFIle("PArrList2.Id="+pArrList2.get(i).getProdId());
-			Utilities.writeToLogFIle("PArrList2.Name="+pArrList2.get(i).getProdName());
-			if (id == prodId) {				
-				Utilities.writeToLogFIle("Product id matching");
+			if (id == prodId) {
 				pArrList2.get(i).setUnits(
 						Integer.parseInt(unitValue.getText().toString()));
 				odBean.getProdList().add(pArrList2.get(i));
@@ -4451,19 +4405,9 @@ public class ProductDetailsActivity extends BaseActivity {
 				break;
 			}
 		}
-		
-		/***************Temporary code - Remove this later after Crash issue************/
-		ArrayList<ProductDataBean> thisIsTempList = Okler.getInstance().getSingleCart().getProdList();
-		for(int counter = 0 ; counter < thisIsTempList.size(); counter++)
-		{
-			Utilities.writeToLogFIle("This is product from cart"+thisIsTempList.get(counter).getProdName());
-		}
-		/***************Temporary code - Remove this later after Crash issue************/
-		
 		Intent intent = new Intent(getApplicationContext(),
 				ProductCheckoutListView.class);
 		intent.putExtra("Check", 1);
-		Utilities.writeToLogFIle("Check value in prod det is: 1");
 		startActivity(intent);
 	}
 
@@ -4493,24 +4437,6 @@ public class ProductDetailsActivity extends BaseActivity {
 				gen_buy = false;
 				genBuy();
 			}
-			array1 = Okler.getInstance().getFavourites();
-			
-			if(array1.size() != 0)
-			{
-				for(int i = 0; i<array1.size(); i++)
-				{
-					ProductDataBean pbean = array1.get(i);
-					int prodID = pbean.getProdId();
-					if(prodID == prodId)
-					{
-						image_favourite
-						.setImageResource(R.drawable.fav_filled_heart_icon);
-						isFav = true;
-					}
-				}
-			}
-			
-			
 		} else {
 			/*
 			 * Intent intent = new Intent(activity,NewSignIn.class); buy=true;
@@ -4610,112 +4536,4 @@ public class ProductDetailsActivity extends BaseActivity {
 		VolleyRequest.addJsonObjectRequest(activity, prodjson);
 		// return hsBean;
 	}
-	
-	// function for add products to favourites
-	
-/*	private void addToFavorites()
-	{
-		UserStatusEnum u = Utilities
-				.getUserStatusFromSharedPref(activity);
-		if (Utilities.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN
-				|| (Utilities
-						.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN_FB)
-				|| (Utilities
-						.getUserStatusFromSharedPref(activity) == UserStatusEnum.LOGGED_IN_GOOGLE)) 
-		{
-			buy();
-		} 
-		else 
-		{
-			Intent intent = new Intent(activity,
-					NewSignIn.class);
-			buy = true;
-			startActivity(intent);
-		}
-	}*/
-	
-	private void removeProductFromFavourites()
-	{				
-		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-		alertDialog.setTitle("Alert");
-		alertDialog.setMessage("Are you sure, you want to remove this product from your favourites?");
-		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
-						
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-		// TODO Auto-generated method stub         
-			
-			final String delete_fav = getString(R.string.delete_fav_url) +userId+getString(R.string.getMedsUrlProdId3)+prodId;
-			
-		WebJsonObjectRequest webjson=new WebJsonObjectRequest(Method.GET, delete_fav, new JSONObject(),new Listener<JSONObject>() 
-													{
-														@Override
-														public void onResponse(JSONObject response) 
-														{
-															// TODO Auto-generated method stub
-															
-															try
-															{
-															JSONObject responseObj =(JSONObject)response;
-															String result = responseObj.getString("result");
-															String message = responseObj.getString("message"); 
-												//			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-															
-													//		Toast.makeText(getApplicationContext(), "result" + result, Toast.LENGTH_LONG).show();
-															
-															if(message != "deleted failed from favourites")
-															{
-																array1 = Okler.getInstance().getFavourites();
-																for(int i = 0; i<array1.size(); i++)
-																{
-																	ProductDataBean pbean = array1.get(i);
-																	int prodID = pbean.getProdId();
-																	if(prodID == prodId)
-																	{
-																		array1.remove(i);
-																		image_favourite
-																		.setImageResource(R.drawable.favourites);
-																		Okler.getInstance().setFavourites(array1);
-																		isFav = false;
-																	}
-																}
-															}
-															
-															}catch(JSONException jsonEx)
-															{
-																Log.e("Exception json", jsonEx.getStackTrace().toString());
-															}
-													
-														}}, 
-														new Response.ErrorListener() 
-														{
-
-															@Override
-															public void onErrorResponse(VolleyError error) 
-															{
-																Log.i("error", String.valueOf(error));
-																// TODO Auto-generated method stub
-													
-															}
-														}
-											);
-										
-									VolleyRequest.addJsonObjectRequest(context,webjson);
-							
-						}
-					});
-					
-					alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-						
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO Auto-generated method stub
-							
-							dialog.dismiss();
-							
-						}
-					});
-					
-					alertDialog.show();
-				}				
 }

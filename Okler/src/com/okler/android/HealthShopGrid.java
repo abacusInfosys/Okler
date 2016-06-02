@@ -270,7 +270,6 @@ public class HealthShopGrid extends BaseActivity  implements Response.Listener,R
 				grid.setVisibility(View.GONE);
 				gridView.setVisibility(View.VISIBLE);
 				listView.setVisibility(View.GONE);
-				adapter.notifyDataSetChanged();
 				
 			}
 		});

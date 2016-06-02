@@ -266,7 +266,9 @@
                  android:layout_width="wrap_content"
                  android:layout_height="1dp"
                  android:layout_marginLeft="3dp"
-                 android:layout_marginRight="3dp" />
+                 android:layout_marginRight="3dp" 
+                 android:visibility="gone"
+                 />
 
              <LinearLayout
                  android:layout_width="match_parent"
@@ -362,7 +364,8 @@
              <LinearLayout
                  android:layout_width="match_parent"
                  android:layout_height="40dp"
-                 android:background="@color/LightGreyWhite" >
+                 android:background="@color/LightGreyWhite"
+                 android:visibility="gone" >
                 
                  <ImageView 
                     android:id="@+id/image9"
@@ -386,7 +389,8 @@
                  android:layout_width="wrap_content"
                  android:layout_height="1dp"
                  android:layout_marginLeft="3dp"
-                 android:layout_marginRight="3dp" />
+                 android:layout_marginRight="3dp" 
+                 android:visibility="gone"/>
 
              <RelativeLayout
                  android:layout_width="match_parent"

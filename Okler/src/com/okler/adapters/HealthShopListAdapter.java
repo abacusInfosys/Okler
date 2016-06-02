@@ -7,9 +7,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,10 +48,6 @@ public class HealthShopListAdapter extends BaseAdapter {
       ArrayList<ProductDataBean> array = new ArrayList<ProductDataBean>();
       Button toolBarCnt;
       ImageLoader imgLoader;
-      ArrayList<ProductDataBean> array1 = new ArrayList<ProductDataBean>();
-      int pid = 0;
-      int id;
-
       
       public HealthShopListAdapter(Activity con, ArrayList<ProductDataBean> prodDataBean,Button tbCount)
       {
@@ -107,25 +101,8 @@ public class HealthShopListAdapter extends BaseAdapter {
         holder.image_favourite = (ImageView) rowView.findViewById(R.id.image_favourite);
         holder.image_favourite.setVisibility(View.INVISIBLE);
         holder.image_favourite_filled = (ImageView) rowView.findViewById(R.id.image_favourite_filled);
-		
-        array1 = Okler.getInstance().getFavourites();
-		
-		if(array1.size() != 0)
-		{
-			for(int i = 0; i<array1.size(); i++)
-			{
-				ProductDataBean pbean = array1.get(i);
-				int prodID = pbean.getProdId();
-				if(prodID == prods.get(position).getProdId())
-				{
-					holder.image_favourite_filled.setVisibility(View.VISIBLE);
-				}
-			}
-		}
-        
-        holder.image_favourite.setVisibility(View.VISIBLE);
+       // holder.image_favourite.setVisibility(View.VISIBLE);
         holder.image_favourite.setTag(prods.get(position).getProdId());
-        holder.image_favourite_filled.setTag(prods.get(position).getProdId());
         holder.image_cart = (Button)rowView.findViewById(R.id.image_cart);
         holder.image_cart.setTag(prods.get(position).getProdId());
         holder.image_cart.setVisibility(View.GONE);
@@ -160,7 +137,8 @@ public class HealthShopListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				int pid = 0;
-				
+				holder.image_favourite.setVisibility(View.GONE);
+ 				holder.image_favourite_filled.setVisibility(View.VISIBLE);
 				
 			//ProductDataBean pbean = Okler.getInstance().getProdList();
 				
@@ -168,20 +146,29 @@ public class HealthShopListAdapter extends BaseAdapter {
 				int id = ubean.getId();
 				
 				int viewid = (int) v.getTag();
-			
+				for(int i = 0; i<prods.size(); i++)
+				{
+					if(prods.get(i).getProdId() == viewid)
+ 					{
+ 						
+ 						array.add(prods.get(i));
+ 						Okler.getInstance().setFavourites(array);
  						pid = viewid;
- 				
+ 					}
+				}
 				
 				
 				//Utilities.writeFavouritesToSharedPref(context, Okler.getInstance().getFavourites());
 				
+				ArrayList<ProductDataBean> array1 = new ArrayList<ProductDataBean>();
 				
-				/*for(int j = 0; j<array.size();j++)
+				array1 = Okler.getInstance().getFavourites();
+				for(int j = 0; j<array.size();j++)
 				{
 					pid = array1.get(j).getProdId();
-				String proName = array1.get(j).getProdName();
-				Toast.makeText(context, proName, Toast.LENGTH_LONG).show();
-				}*/
+				/*String proName = array1.get(j).getProdName();
+				Toast.makeText(context, proName, Toast.LENGTH_LONG).show();*/
+				}
 		//		Toast.makeText(context, "okler" + Okler.getInstance().getFavourites(), Toast.LENGTH_LONG).show();
 				
 				if (Utilities.getUserStatusFromSharedPref(context) == UserStatusEnum.LOGGED_IN ||
@@ -189,8 +176,7 @@ public class HealthShopListAdapter extends BaseAdapter {
 						(Utilities.getUserStatusFromSharedPref(context) == UserStatusEnum.LOGGED_IN_GOOGLE))
  				{
  					
-					String add_fav = context.getString(R.string.add_fav_url)
-							+ context.getString(R.string.cust_id) + id + context.getString(R.string.getMedsUrlProdId3)+pid;
+ 					String add_fav = context.getString(R.string.add_fav_url)+context.getString(R.string.cust_id)+id+context.getString(R.string.product_id)+pid;
  	 		    	
  	 		    	
  	 		    	WebJsonObjectRequest webjson=new WebJsonObjectRequest(Method.GET, add_fav, new JSONObject(),new Listener<JSONObject>() 
@@ -207,12 +193,8 @@ public class HealthShopListAdapter extends BaseAdapter {
  	 								Toast.makeText(context, message, Toast.LENGTH_LONG).show();	
  	 								if(message.equals("Product Successfully Added To Your Favorites"))
  	 								{
-	array1.add(prods.get(position));
-											Okler.getInstance().setFavourites(array1);
- 	 									holder.image_favourite.setVisibility(View.GONE);
- 	 									holder.image_favourite.setEnabled(false);
- 	 									holder.image_favourite_filled.setVisibility(View.VISIBLE);
- 	 									holder.image_favourite_filled.setEnabled(true);
+ 	 									Intent intent = new Intent(context, FavouritesActivity.class);
+ 	 									context.startActivity(intent);
  	 								}				
  	 								}catch(JSONException jsonEx)
  	 								{
@@ -238,122 +220,11 @@ public class HealthShopListAdapter extends BaseAdapter {
  				}
 				else
 				{
-					//Okler.getInstance().setFavourites(array);
+					Okler.getInstance().setFavourites(array);
 					Intent in = new Intent(context, NewSignIn.class);
 					context.startActivity(in);
 				}
 			}
-		});
-	
-	holder.image_favourite_filled.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			
-
-			// TODO Auto-generated method stub
-
-			pid = 0;
-			
-
-			// ProductDataBean pbean = Okler.getInstance().getProdList();
-
-			UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(context);
-			id = ubean.getId();
-
-			int viewid = (int) v.getTag();
-		
-	pid = viewid;
-			
-	AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-				alertDialog.setTitle("Alert");
-				alertDialog.setMessage("Are you sure, you want to remove this product from your favourites?");
-				alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						
-						final String delete_fav = context.getString(R.string.delete_fav_url) +id+context.getString(R.string.getMedsUrlProdId3)+pid;
-						//	Toast.makeText(getApplicationContext(), "id"+ viewid, Toast.LENGTH_LONG).show();
-											         
-						        	 WebJsonObjectRequest webjson=new WebJsonObjectRequest(Method.GET, delete_fav, new JSONObject(),new Listener<JSONObject>() 
-												{
-													@Override
-													public void onResponse(JSONObject response) 
-													{
-														// TODO Auto-generated method stub
-														
-														try
-														{
-														JSONObject responseObj =(JSONObject)response;
-														String result = responseObj.getString("result");
-														String message = responseObj.getString("message"); 
-											//			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-														
-												//		Toast.makeText(getApplicationContext(), "result" + result, Toast.LENGTH_LONG).show();
-														
-														if(message != "deleted failed from favourites")
-														{
-															array1 = Okler.getInstance().getFavourites();
-															for(int i = 0; i<array1.size(); i++)
-															{
-																ProductDataBean pbean = array1.get(i);
-																int prodID = pbean.getProdId();
-																if(prodID == prods.get(position).getProdId())
-																{
-																	array1.remove(i);
-																	holder.image_favourite_filled.setVisibility(View.GONE);
-																	holder.image_favourite_filled.setEnabled(false);
-																	holder.image_favourite.setVisibility(View.VISIBLE);
-																	holder.image_favourite.setEnabled(true);
-																	Okler.getInstance().setFavourites(array1);
-																	break;
-																}
-															}
-														}
-														
-														}catch(JSONException jsonEx)
-														{
-															Log.e("Exception json", jsonEx.getStackTrace().toString());
-														}
-												
-													}}, 
-													new Response.ErrorListener() 
-													{
-
-														@Override
-														public void onErrorResponse(VolleyError error) 
-														{
-															Log.i("error", String.valueOf(error));
-															// TODO Auto-generated method stub
-												
-														}
-													}
-										);
-									
-								VolleyRequest.addJsonObjectRequest(context,webjson);
-						
-					}
-				});
-				
-				alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						
-						dialog.dismiss();
-						
-					}
-				});
-				
-				alertDialog.show();
-			         }     
-
-		
-			
 		});
 	
 	

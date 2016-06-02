@@ -117,12 +117,12 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 		ubean = Utilities.getCurrentUserFromSharedPref(this);
 		cust_id = ubean.getId();
 		// myPhysioUrl =
-		// "https://www.okler.com/api//nurse/GetAllservicesByuser?user_id="+cust_id+"&service_type=";
+		// "http://183.82.110.105:8081/oklerapi//nurse/GetAllservicesByuser?user_id="+cust_id+"&service_type=";
 		// myMedUrl =
-		// "https://www.okler.com/api/order/getorders?cust_id="+cust_id+"&order_id="+"&page=";
+		// "http://183.82.110.105:8081/oklerapi/order/getorders?cust_id="+cust_id+"&order_id="+"&page=";
 		myMedUrl = setMedUrl(cust_id, order_id, pageNo);
 		// digno_url =
-		// "https://www.okler.com/api/lab/retrivelabbook?cust_id="+cust_id;
+		// "http://183.82.110.105:8081/oklerapi/lab/retrivelabbook?cust_id="+cust_id;
 		digno_url = setDiagnoUrl(cust_id, order_id, pageNo);
 
 		myOrderUrl = "";

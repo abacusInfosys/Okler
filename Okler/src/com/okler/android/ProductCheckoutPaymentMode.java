@@ -349,10 +349,6 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				String s3[] = s2.split(":");
 				orderId = s3[1];
 
-				String s4 = s1[1];
-				String s5[] = s4.split(":");
-				String order_num = s5[1];
-				order_num = order_num.substring(1, order_num.length()-1);
 				if (check == 1) {
 					CartDataBean c = new CartDataBean();
 					Okler.getInstance().setSingleCart(c);
@@ -362,13 +358,12 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				}
 
 				isDialog = true;
-				String part1, part2, part3, part4, Url, part5,part6;
+				String part1, part2, part3, part4, Url, part5;
 				part1 = getString(R.string.orderConfirmCallBackUrl);
 				part2 = "&cust_id=";
 				part3 = "&customer_name=";
 				part4 = "&email=";
 				part5 = "&order_id=";
-				part6 = "&order_number=";
 				try {
 					fname = URLEncoder.encode(fname, "UTF-8");
 				} catch (UnsupportedEncodingException e) {
@@ -377,7 +372,7 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				}
 
 				Url = part1 + salutation1 + part2 + userId + part3 + fname
-						+ part4 + emailId + part5 + orderId+part6+order_num;
+						+ part4 + emailId + part5 + orderId;
 				WebJsonObjectRequest mailjson = new WebJsonObjectRequest(
 						Method.GET, Url, new JSONObject(),
 						new Response.Listener<JSONObject>() {

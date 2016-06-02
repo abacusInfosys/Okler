@@ -137,7 +137,15 @@ public class GroupByMedsActivity extends BaseActivity implements
 				 
 		
 		
-		
+		if (Okler.getInstance().getBookingType() == 0) {
+			brandsData = Okler.getInstance().getAlloBrands();
+			populateBrands();
+		} else if (Okler.getInstance().getBookingType() == 4) {
+			brandsData = Okler.getInstance().getHomeoBrands();
+			populateBrands();
+		}
+		if (Okler.getInstance().getBookingType() == 3)
+			overflow.setVisibility(View.INVISIBLE);
 
 		medListExp.setOnScrollListener(this);
 
@@ -243,23 +251,6 @@ public class GroupByMedsActivity extends BaseActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
-		String bookingType = getIntent().getStringExtra("bookingType");
-		
-		Okler.getInstance().setBookingType(UIUtils.getBookingType(bookingType));
-		
-		//int type = Okler.getInstance().getBookingType();
-		
-		if (Okler.getInstance().getBookingType() == 0) {
-			brandsData = Okler.getInstance().getAlloBrands();
-			populateBrands();
-		} else if (Okler.getInstance().getBookingType() == 4) {
-			brandsData = Okler.getInstance().getHomeoBrands();
-			populateBrands();
-		}
-		if (Okler.getInstance().getBookingType() == 3)
-			overflow.setVisibility(View.INVISIBLE);
-		
 		pageNo= 0;
 		cur_pageNo=0;
 		totalrecordsfromwebservice=0;

@@ -39,7 +39,6 @@ public class AlloPrescActivity extends BaseActivity {
 		setSupportActionBar(toolBar);
 		ack = this;
 		check = getIntent().getIntExtra("Check", 11);
-		Utilities.writeToLogFIle("Value of check in on create allo presc act is:"+check);
 		ActionBar ab = getSupportActionBar();
 		checkout_Tv = (TextView)findViewById(R.id.checkout_Tv);
 		//ab.setDisplayHomeAsUpEnabled(true);
@@ -96,7 +95,6 @@ public class AlloPrescActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		Utilities.writeToLogFIle("In AlloPrescActi. OnActivityresult");
 		Intent newIntent = new Intent(this,AlloUpPrescActivity.class);
-		boolean flag = false;
 		if(data == null){ Utilities.writeToLogFIle("Data is null");}
 		else{
 			Utilities.writeToLogFIle("Data is not null");
@@ -113,7 +111,7 @@ public class AlloPrescActivity extends BaseActivity {
 	    			newIntent.putExtra("imageFilePath", imgInfo.getFilePath());
 	    			newIntent.putExtra("imgFileName",imgInfo.getFileName());
 	    			newIntent.putExtra("Check", check);
-	    			Utilities.writeToLogFIle("Value of check in allo presc acr is:"+check);
+	    			
 	        		Utilities.writeToLogFIle("Bitmap is not null");
 					  String base64string = Utilities.convertImageToBase64(bmpt); //Base64.encodeToString(byte_arr,Base64.DEFAULT);
 			    Utilities.writeToLogFIle("In AlloPrescActi. OnActivityresult . base 64 encrupted key is"+base64string);
@@ -125,7 +123,6 @@ public class AlloPrescActivity extends BaseActivity {
 		/*	    String imgPa = imgInfo.getUri();
 			    Utilities.writeToLogFIle("String imagpA"+imgPa);
 			    presImgs.setImgUri(imgPa);*/
-			    flag = true;
 			    Utilities.writeToLogFIle("After set image uri");
 				Okler.getInstance().getPrescriptionsDataBeans().getPresImages().add(presImgs);
 				//newIntent.putExtra("flag",flag);//******* 24112015
@@ -136,7 +133,7 @@ public class AlloPrescActivity extends BaseActivity {
 	        }
 		}
 		
-		if(resultCode == RESULT_OK && flag == false)
+		if(resultCode == RESULT_OK)
 		{
 			Utilities.writeToLogFIle("In AlloPrescActi. OnActivityresult . result ok");
 			
