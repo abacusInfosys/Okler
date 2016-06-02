@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   tools:context="com.okler.diagnostics.SelectPatientInfoActivity" >
+
+    <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar"            
+            android:layout_alignParentTop="true"
+             />
+    <!-- <TextView 
+        android:id="@+id/schedule_pickup"
+        android:layout_width="fill_parent"
+        android:layout_height="?actionBarSize"
+    	android:minHeight="?actionBarSize"
+    	android:background="@color/ModerateMagenta"
+    	android:textSize="16sp"
+    	android:textColor="@color/White"
+    	android:gravity="center"
+    	android:text="@string/schedule_pickup"
+    	android:layout_below="@+id/toolbar"
+        /> -->
+<TextView 
+        android:id="@+id/select_p_info_addr"
+        android:layout_width="fill_parent"
+        android:layout_height="?actionBarSize"
+    	android:background="@color/LightGrey"
+    	android:textSize="18sp"
+    	android:textColor="@color/Black"
+    	android:textStyle="bold"
+    	android:gravity="center|center_horizontal"
+    	android:text="@string/select_p_info_addr"
+    	android:layout_below="@+id/toolbar"
+        />
+     <ScrollView
+         android:id="@+id/scrollView1"
+         android:layout_below="@id/select_p_info_addr"
+         android:layout_above="@+id/btn_sced_pickup"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" >
+	<RelativeLayout 
+	    android:id="@+id/RL_for_scroll"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    
+	    >
+	<LinearLayout
+	    android:id="@+id/LL_for_custom_addr"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    >
+		<!-- <include layout="@layout/custom_view_addr_diagno"/>	    --> 
+	</LinearLayout>
+	<include 
+	    android:id="@+id/include_for_add"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/LL_for_custom_addr"
+	    layout="@layout/custom_view_prod_info_layout"
+	    />
+	</RelativeLayout>
+        </ScrollView>
+     
+     <Button
+         android:id="@+id/btn_sced_pickup"
+         android:layout_above="@id/bottombar"
+         android:layout_width="match_parent"
+         android:background="@color/ModerateMagenta"
+         android:layout_height="?actionBarSize"
+         android:text="@string/schedule_pickup"
+         android:textColor="@color/White"
+         android:textSize="20sp" />
+     
+     
+     <include
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/layout_bottom_bar" />
+
+
+</RelativeLayout>

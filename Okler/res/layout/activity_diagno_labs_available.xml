@@ -1,0 +1,98 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.okler.diagnostics.DiagnoLabsAvailable" >
+
+ <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar_count"
+            
+            android:layout_alignParentTop="true"/>
+<RelativeLayout android:layout_height="56dp"
+    android:layout_width="fill_parent"
+    android:id="@+id/titleLayout"
+    android:layout_below="@id/toolbar"          
+    android:background="@color/darkPurple">
+     <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LAB'S AVAILABLE"
+        android:layout_centerInParent="true"
+        android:textColor="@color/White"
+        android:textSize="20dp"
+        />
+</RelativeLayout>
+
+<ScrollView android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+  	android:layout_below="@+id/titleLayout"
+    android:layout_above="@+id/bottombar">
+    <RelativeLayout
+        android:id="@+id/labCustViewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:background="@color/LightGreyWhite"
+        >
+        <LinearLayout
+            android:id="@+id/labLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" 
+        android:background="@color/White"
+       >
+        <TextView 
+            android:id="@+id/Nodata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:textColor="@color/Black"
+            />"
+   <!--     <TextView 
+            android:id="@+id/labId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+       <include layout="@layout/row_lab_info"
+           android:id="@+id/lab_name_RL"/>
+           <LinearLayout
+       	 android:id="@+id/labName_Log"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+       	
+        
+        </LinearLayout>
+           
+         <LinearLayout
+        android:id="@+id/labtestOrpckgCustViewLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/labName_Log"> -->
+       	
+        
+        </LinearLayout>
+    </RelativeLayout>
+   
+   
+</ScrollView>
+<!-- <Button
+    android:id="@+id/schedule_pickBtn"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"    
+    android:layout_above="@+id/bottombar"  
+    android:background="@color/darkPurple"
+    android:textColor="@color/White"
+    android:text="@string/schedule_pickup" /> -->
+<include
+    	android:layout_alignParentBottom="true"
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_bottom_bar"
+         />
+    
+</RelativeLayout>
