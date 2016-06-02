@@ -206,8 +206,6 @@ public class AlloMedsActivity extends BaseActivity {
 			item_image.setImageUrl(photo_url, imgloader);
 			prodId = medobj.optInt("prodId");
 			
-			
-			
 			constituentsUrl = serverUrl+getString(R.string.getProdsConstituents)+prodId;
 			
 			
