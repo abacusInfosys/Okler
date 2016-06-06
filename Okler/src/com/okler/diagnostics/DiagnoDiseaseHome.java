@@ -492,14 +492,14 @@ public class DiagnoDiseaseHome extends BaseActivity implements Response.Listener
 					currPageNo=0;
 					lastPage=0;
 					totaldiseaseCount=0;
-					finallist.clear();
+					
 					Log.e("less than two", currPageNo+" times search "+searchText);
 					dieseasesAdap.notifyDataSetChanged();
 					//listAdapter.notifyDataSetChanged();
 					//singleAdapter.notifyDataSetChanged();
 					//Okler.getInstance().setProdList(finallist);
-					/*if(nodata.getVisibility()==0){*/
-					//nodata.setVisibility(View.INVISIBLE);
+					if(no_items.getVisibility()==0)
+					no_items.setVisibility(View.INVISIBLE);
 					//gridView.setVisibility(View.VISIBLE);
 					//}
 				}

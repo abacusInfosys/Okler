@@ -75,7 +75,7 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 	LinearLayout progressLinLayout;
 	SearchView searchView;
 	private String[] alpha = {"#","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"};
-	boolean onScrollinProg = false;
+	boolean isScrolling = false,isSearching=false;
 	boolean flagNoPckFound=false;
 	ImageView overflowIcon;
 	RelativeLayout back_layout;
@@ -125,7 +125,8 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 	    flag=true;
 	    getAllDiagnoPackageUrl = getString(R.string.getDiagnoPackageSearch)+getString(R.string.getDiagnoPackagePage)+
 	    		getString(R.string.getDiagnoPackageOrderBy)+getString(R.string.getDiagnoPackagePkgId);
-		getPackageWebCall(getAllDiagnoPackageUrl);
+	    Log.e("Web service called", currPageNo+" times onCreate");
+	    getPackageWebCall(getAllDiagnoPackageUrl);
 	     adapter = new ArrayAdapter<String>(this,
 		              android.R.layout.simple_list_item_1, android.R.id.text1, alpha){
 	    	 @Override
@@ -205,6 +206,7 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 
 	public void getPackageWebCall(String url) {
 		// TODO Auto-generated method stub
+		Log.e("URL", url);
 		WebJsonObjectRequest wjson = new WebJsonObjectRequest(Method.GET, url, new JSONObject(), this, this);
 		if(VolleyRequest.addJsonObjectRequest(getApplicationContext(), wjson))
 		{
@@ -271,8 +273,10 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 		DiagnoPackageDataBean pckbean = new DiagnoPackageDataBean();
 		TestDataBean testBean=new TestDataBean();
 		ArrayList<TestDataBean> testList=new ArrayList<TestDataBean>();
-		if(onScrollinProg)
-			onScrollinProg = false;
+		if(isScrolling)
+			isScrolling = false;
+		if(isSearching)
+			isSearching=false;
 		try {
 			totalPkgCount = jobj.getInt("packages_count");
 			
@@ -296,6 +300,7 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 				pckbean=new DiagnoPackageDataBean();
 				pckbean.setPacakageId(Integer.parseInt(pck_jobj.getString("package_id")));
 				pckbean.setPackage_name(pck_jobj.getString("package_name"));
+				String a = pck_jobj.getString("package_name");
 				pckbean.setDescription(pck_jobj.getString("package_description"));
 				pckbean.setMandatoryInfo(pck_jobj.getString("mandatory_information"));
 				
@@ -350,17 +355,22 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 			int visibleItemCount, int totalItemCount) {
 		Log.d("In on scrol"," executed onscroll");
 			//if((lastPage+1) == currPageNo || currPageNo == 0)
-		if(!onScrollinProg || currPageNo <3 )
-			{			
+		
 				int lastItemInScreen=firstVisibleItem+visibleItemCount;
 				if((lastItemInScreen==totalItemCount)&&(totalPkgCount!=finallist.size())){
-					currPageNo++;
-					Log.e("Web service called", currPageNo+" times");
-				//	String str = searchURL+getString(R.string.getdiseasePagePart)+(pagecount);
 					
+					if(totalPkgCount<finallist.size())
+						return;
+					if(!isScrolling){
+						isScrolling=true;
+					currPageNo++;
+					Log.e("Web service called", currPageNo+" times onScoll");
+				
 					getAllDiagnoPackageUrl =  getString(R.string.getDiagnoPackageSearch)+searchText+getString(R.string.getDiagnoPackagePage)+currPageNo+
 				    		getString(R.string.getDiagnoPackageOrderBy)+getString(R.string.getDiagnoPackagePkgId);
-					if(!flagNoPckFound){
+					getPackageWebCall(getAllDiagnoPackageUrl);
+					}
+					/*if(!flagNoPckFound){
 					WebJsonObjectRequest webjson = new WebJsonObjectRequest(Method.GET, getAllDiagnoPackageUrl, new JSONObject(), new Listener<JSONObject>() {			
 						@Override
 						public void onResponse(JSONObject response) {
@@ -383,8 +393,8 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 						//	isOngoingSearch=false;
 						}
 					});
-				/*	if(!loadingInProgress)
-					{*/
+					if(!loadingInProgress)
+					{
 						if(VolleyRequest.addJsonObjectRequest(getApplicationContext(), webjson))
 						{
 							
@@ -395,8 +405,8 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 						{
 							showProgress(false);
 						}
-					}
-			}
+					}*/
+			
 			}
 		
 	}
@@ -412,26 +422,72 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 	@Override
 	public boolean onQueryTextChange(String newText) {
 		try {
-			totalPkgCount=0;
+			
 		searchText = URLEncoder.encode(newText, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	//	pagecount=0;
 		//tests.clear();
+		/*totalPkgCount=0;
 		finallist.clear();	
-		currPageNo=0;
+		currPageNo=0;*/
 	//	lastPage=0;
-	} catch (UnsupportedEncodingException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-//	searchURL = setSearchURL(searchText)+getString(R.string.getdiseasePagePart)+(pagecount);	
+	
 		
+		if(!isSearching){
+			if(searchText.length()>2){
+				finallist.clear();	
+				currPageNo=0;
+				totalPkgCount=0;
+				isSearching=true;
+				Log.e("Web service called", currPageNo+" times search "+searchText);
+				getAllDiagnoPackageUrl = getString(R.string.getDiagnoPackageSearch)+searchText+ getString(R.string.getDiagnoPackagePage)+currPageNo+
+						getString(R.string.getDiagnoPackageOrderBy)+getString(R.string.getDiagnoPackagePkgId);
+				getPackageWebCall(getAllDiagnoPackageUrl);
+				//callSearchWebService();
+			}
+			else if(searchText.length()==0){
+				searchText="";
+				finallist.clear();	
+				currPageNo=0;
+				
+				totalPkgCount=0;
+				isSearching=true;
+				Log.e("Web service called", currPageNo+" times search "+searchText);
+				getAllDiagnoPackageUrl = getString(R.string.getDiagnoPackageSearch)+searchText+ getString(R.string.getDiagnoPackagePage)+currPageNo+
+						getString(R.string.getDiagnoPackageOrderBy)+getString(R.string.getDiagnoPackagePkgId);
+				getPackageWebCall(getAllDiagnoPackageUrl);
+				
+				//callSearchWebService();
+			}else{
+				finallist.clear();	
+				currPageNo=0;
+				
+				totalPkgCount=0;
+				
+				Log.e("less than two", currPageNo+" times search "+searchText);
+				dpadap.notifyDataSetChanged();
+				//listAdapter.notifyDataSetChanged();
+				//singleAdapter.notifyDataSetChanged();
+				//Okler.getInstance().setProdList(finallist);
+				if(no_items.getVisibility()==0)
+				no_items.setVisibility(View.INVISIBLE);
+				//gridView.setVisibility(View.VISIBLE);
+				//}
+			}
+		}
+//	searchURL = setSearchURL(searchText)+getString(R.string.getdiseasePagePart)+(pagecount);	
+		/*Log.e("Web service called", currPageNo+" times search "+searchText);
 		getAllDiagnoPackageUrl = getString(R.string.getDiagnoPackageSearch)+searchText+ getString(R.string.getDiagnoPackagePage)+currPageNo+
 				getString(R.string.getDiagnoPackageOrderBy)+getString(R.string.getDiagnoPackagePkgId);
+		getPackageWebCall(getAllDiagnoPackageUrl);*/
 	//	getTestWebCall(getAllDiagnoTest);
 		
  //	isOngoingSearch = true;
 
-	WebJsonObjectRequest getPkgJson = new WebJsonObjectRequest(Method.GET, getAllDiagnoPackageUrl, new JSONObject(), new Listener<JSONObject>() {			
+	/*WebJsonObjectRequest getPkgJson = new WebJsonObjectRequest(Method.GET, getAllDiagnoPackageUrl, new JSONObject(), new Listener<JSONObject>() {			
 		@Override
 		public void onResponse(JSONObject response) {
 			
@@ -459,7 +515,7 @@ public class DiagnoPackageHome extends BaseActivity implements Response.Listener
 		showProgress(true);
 	}
 	else
-		showProgress(false);
+		showProgress(false);*/
 	
 	return true;
 	}

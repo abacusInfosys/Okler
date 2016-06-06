@@ -76,7 +76,7 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 	private ListView lv1, testList;
 	TextView lastClick, text;
 	SearchView searchView;
-	private Boolean flagCallfromDiagnoDisease = false;
+	private Boolean flagCallfromDiagnoDisease = false,isScrolling=false,isSearching=false;
 	LinearLayout progressLinLayout;
 	private String getAllDiagnoTest, getAlphabeticallyTest;
 	private ArrayList<TestDataBean> arrayListObj = new ArrayList<TestDataBean>();
@@ -87,6 +87,7 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 	ImageView overflowIcon;
 	RelativeLayout back_layout;
 	Activity ack;
+	TextView no_data;
 	private String[] alpha = { "#", "A", "B", "C", "D", "E", "F", "G", "H",
 			"I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
 			"V", "W", "X", "Y", "Z" };
@@ -153,6 +154,7 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 					+ getString(R.string.getDiagnoTestPage) + pagecount
 					+ getString(R.string.getDiagnoTestOrderBy)
 					+ getString(R.string.getDiagnoTestTestId);
+			Log.e("Web service called", currPageNo+" times onCreate "+diseaseIdReceived);
 			getTestWebCall(getAllDiagnoTest);
 		} else {
 			// only when intent received from Diagnostic Disease
@@ -160,6 +162,7 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 					+ diseaseIdReceived
 					+ getString(R.string.getDiagnoTestforD2)
 					+ getString(R.string.getDiagnoTestforD3) + pagecount;
+			Log.e("Web service called", currPageNo+" times onCreate "+diseaseIdReceived);
 			getTestWebCall(getAllDiagnoTest);
 			flagCallfromDiagnoDisease = true;
 		}
@@ -262,6 +265,7 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 
 	protected void getTestWebCall(String url) {
 		// TODO Auto-generated method stub
+		Log.e("URL", url);
 		WebJsonObjectRequest wjson = new WebJsonObjectRequest(Method.GET, url,
 				new JSONObject(), this, this);
 		if (VolleyRequest.addJsonObjectRequest(getApplicationContext(), wjson)) {
@@ -309,18 +313,25 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 		 * Toast.LENGTH_LONG).show();
 		 */
 		getTest(response);
+		Log.e("Response", String.valueOf(response));
 		showProgress(false);
 		loadingInProgress = false;
 	}
 
 	private void getTest(Object response) {
+		
+		if(isScrolling)
+			isScrolling=false;
+		if(isSearching)
+			isSearching=false;
+		
 		if (!flagCallfromDiagnoDisease) {
 			// TODO Auto-generated method stub
 			JSONObject jobj = (JSONObject) response;
 			JSONObject jobj2 = new JSONObject();
 			JSONObject resultObj = new JSONObject();
 			TestDataBean testbean = null;
-			TextView no_data = (TextView) findViewById(R.id.no_data_found);
+			no_data = (TextView) findViewById(R.id.no_data_found);
 			try {
 				lastPage = jobj.getInt("cur_page");
 				resultObj = jobj.getJSONObject("result");
@@ -409,25 +420,39 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 		/*
 		 * if((lastPage+1) == currPageNo || currPageNo == 0) {
 		 */
+		
 		int lastItemInScreen = firstVisibleItem + visibleItemCount;
+		Log.e("TP", " lastItemInScreen = "+lastItemInScreen+" totalItemCount = "+totalItemCount+" totaldiseaseCount = "+totalTestsCount+" finallist.size() = "+finallist.size());
 		if ((lastItemInScreen == totalItemCount)
 				&& (totalTestsCount != finallist.size())) {
-			currPageNo++;
+			
 			Log.e("Web service called", currPageNo + " times");
 			// String str =
 			// searchURL+getString(R.string.getdiseasePagePart)+(pagecount);
-			if (flagCallfromDiagnoDisease == false)
+			if(totalTestsCount<finallist.size())
+				return;
+			
+			if(!isScrolling){
+			isScrolling=true;
+			
+			
+			if (flagCallfromDiagnoDisease == false){
+				currPageNo++;
 				searchURL = getString(R.string.getDiagnoTestSearch)
 						+ searchText + getString(R.string.getDiagnoTestPage)
 						+ currPageNo + getString(R.string.getDiagnoTestOrderBy)
 						+ getString(R.string.getDiagnoTestTestId);
-			else
+		}else{
+				currPageNo++;
 				searchURL = getString(R.string.getDiagnoTestforD1)
 						+ diseaseIdReceived
 						+ getString(R.string.getDiagnoTestforD2) + searchText
 						+ getString(R.string.getDiagnoTestforD3) + currPageNo;
-
-			WebJsonObjectRequest webjson = new WebJsonObjectRequest(Method.GET,
+		}
+			Log.e("Web service called", currPageNo+" times scroll "+searchText);
+			getTestWebCall(searchURL);
+			}
+			/*WebJsonObjectRequest webjson = new WebJsonObjectRequest(Method.GET,
 					searchURL, new JSONObject(), new Listener<JSONObject>() {
 						@Override
 						public void onResponse(JSONObject response) {
@@ -450,9 +475,9 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 							// isOngoingSearch=false;
 						}
 					});
-			/*
+			
 			 * if(!loadingInProgress) {
-			 */
+			 
 			if (VolleyRequest.addJsonObjectRequest(getApplicationContext(),
 					webjson)) {
 
@@ -460,7 +485,7 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 				// pagecount++;
 			} else {
 				showProgress(false);
-			}
+			}*/
 		}
 		// }
 		// }
@@ -480,18 +505,91 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 		try {
 
 			searchText = URLEncoder.encode(newText, "utf-8");
+			
 			pagecount = 0;
 			// tests.clear();
 			finallist.clear();
 			currPageNo = 0;
 			lastPage = 0;
+			totalTestsCount=0;
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		if(!isSearching){
+			if(searchText.length()>2){
+				pagecount = 0;
+				// tests.clear();
+				finallist.clear();
+				currPageNo = 0;
+				lastPage = 0;
+				totalTestsCount=0;
+				isSearching=true;
+				Log.e("Web service called", currPageNo+" times search "+searchText);
+				if (flagCallfromDiagnoDisease == false) {
+					searchURL = getString(R.string.getDiagnoTestSearch) + searchText
+							+ getString(R.string.getDiagnoTestPage) + "0"
+							+ getString(R.string.getDiagnoTestOrderBy)
+							+ getString(R.string.getDiagnoTestTestId);
+					// getTestWebCall(getAllDiagnoTest);
+				} else {
+					// only when intent received from Diagnostic Disease
+					searchURL =getString(R.string.getDiagnoTestforD1)
+							+ diseaseIdReceived
+							+ getString(R.string.getDiagnoTestforD2)+searchText
+							+ getString(R.string.getDiagnoTestforD3) + pagecount;
+					// getTestWebCall(getAllDiagnoTestForDisease);
+				}
+				//searchURL = getString(R.string.getDiagnoDisease)+getString(R.string.getDiagnoDisease1)+searchText+getString(R.string.getDiagnoDisease2)+currPageNo;
+				Log.e("Web service called", currPageNo+" times search "+searchText);
+				getTestWebCall(searchURL);
+				//callSearchWebService();
+			}
+			else if(searchText.length()==0){
+				searchText="";
+				pagecount = 0;
+				// tests.clear();
+				finallist.clear();
+				currPageNo = 0;
+				lastPage = 0;
+				totalTestsCount=0;
+				isSearching=true;
+				Log.e("Web service called", currPageNo+" times search "+searchText);
+				if (flagCallfromDiagnoDisease == false) {
+					searchURL = getString(R.string.getDiagnoTestSearch) + searchText
+							+ getString(R.string.getDiagnoTestPage) + "0"
+							+ getString(R.string.getDiagnoTestOrderBy)
+							+ getString(R.string.getDiagnoTestTestId);
+					// getTestWebCall(getAllDiagnoTest);
+				} else {
+					// only when intent received from Diagnostic Disease
+					searchURL = getString(R.string.getDiagnoTestforD1)
+							+ diseaseIdReceived
+							+ getString(R.string.getDiagnoTestforD2)+searchText
+							+ getString(R.string.getDiagnoTestforD3) + pagecount;
+					// getTestWebCall(getAllDiagnoTestForDisease);
+				}
+				//searchURL = getString(R.string.getDiagnoDisease)+getString(R.string.getDiagnoDisease1)+searchText+getString(R.string.getDiagnoDisease2)+currPageNo;
+				Log.e("Web service called", currPageNo+" times search "+searchText);
+				getTestWebCall(searchURL);
+				//callSearchWebService();
+			}else{
+				pagecount = 0;
+				// tests.clear();
+				finallist.clear();
+				currPageNo = 0;
+				lastPage = 0;
+				totalTestsCount=0;
+				
+				Log.e("less than two", currPageNo+" times search "+searchText);
+				testAdp.notifyDataSetChanged();
+				if(no_data.getVisibility()==0)
+				no_data.setVisibility(View.INVISIBLE);
+			}
 		// searchURL =
 		// setSearchURL(searchText)+getString(R.string.getdiseasePagePart)+(pagecount);
-		if (flagCallfromDiagnoDisease == false) {
+		/*if (flagCallfromDiagnoDisease == false) {
 			searchURL = getString(R.string.getDiagnoTestSearch) + searchText
 					+ getString(R.string.getDiagnoTestPage) + "0"
 					+ getString(R.string.getDiagnoTestOrderBy)
@@ -504,9 +602,11 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 					+ getString(R.string.getDiagnoTestforD2) + searchText;
 			// getTestWebCall(getAllDiagnoTestForDisease);
 		}
+		Log.e("Web service called", currPageNo+" times search "+searchText);
+		getTestWebCall(searchURL);*/
 		// isOngoingSearch = true;
 
-		WebJsonObjectRequest getTestsJson = new WebJsonObjectRequest(
+		/*WebJsonObjectRequest getTestsJson = new WebJsonObjectRequest(
 				Method.GET, searchURL, new JSONObject(),
 				new Listener<JSONObject>() {
 					@Override
@@ -535,8 +635,8 @@ public class DiagnoTestsHome extends BaseActivity implements Response.Listener,
 			loadingInProgress = true;
 			showProgress(true);
 		} else
-			showProgress(false);
-
+			showProgress(false);*/
+		}
 		return true;
 	}
 
