@@ -1,0 +1,281 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.okler.android.DiagnoLabTestPkgActivity" >
+	
+    <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar"
+            
+            android:layout_alignParentTop="true"
+            />
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"    
+    android:orientation="vertical"
+    android:layout_alignParentBottom="true"
+    android:id="@+id/bottomLayout">
+<Button
+    android:id="@+id/schedule_pickBtn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"    
+    android:background="@color/darkPurple"
+    android:textColor="@color/White"
+    android:text="@string/schedule_pickup" />
+ <include
+    	
+        android:id="@id/bottombar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_bottom_bar" />
+</LinearLayout>    
+   <ScrollView
+       android:id="@+id/mainScrollview" 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/toolbar"
+    android:layout_above="@id/bottomLayout">
+
+<RelativeLayout 
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    >
+    <RelativeLayout android:id="@+id/labInfo"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:background="@color/White"
+        
+        >
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/labLogo"
+            android:layout_height="200dp"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/no_image_found"/>
+
+ <!--         <RatingBar
+            android:id="@+id/labRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labLogo"
+             />-->
+       <!--  <RelativeLayout 
+            android:id="@+id/greybar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/labRate"
+            >
+            <include layout="@layout/separator_grey_1dp"
+                />
+        </RelativeLayout>   
+                   -->
+    </RelativeLayout>
+   
+        
+    <RelativeLayout android:id="@+id/testInfo"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/labInfo"
+        >
+
+        <TextView
+            android:id="@+id/testPkgName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"                   
+            android:text=""
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp" />
+ 		 <TextView
+            android:id="@+id/testPkgDesc"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minLines="2"
+            android:layout_below="@id/testPkgName"
+            android:text=""
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:id="@+id/mandatoryInfo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/testPkgDesc"
+            android:text="@string/mandatory_info" 
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"/>
+        
+        <TextView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/mandateValue"
+            android:minLines="1"
+            android:layout_below="@+id/testPkgDesc"
+            android:layout_toRightOf="@+id/mandatoryInfo"
+            />
+
+        <!-- <include layout="@layout/separator_grey_1dp" /> -->
+        
+        <LinearLayout android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:id="@+id/testPriceInfo"
+        android:layout_below="@id/mandatoryInfo"
+        android:orientation="vertical"
+        >
+                
+        <RelativeLayout android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:id="@+id/valuesLL"
+            android:layout_marginTop="10dp"
+            >
+        	<TextView
+	                android:id="@+id/tv_MrpTag"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:textSize="15sp"
+	                android:text="MRP:"/>
+					<TextView
+					    android:id="@+id/tv_MrpValue"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:text=""
+					    android:textSize="15sp"
+					    android:layout_toRightOf="@id/tv_MrpTag"
+					    />            		
+					
+				 <LinearLayout android:layout_width="wrap_content"
+				     android:layout_height="wrap_content"
+				     android:orientation="horizontal"
+				     android:layout_alignParentRight="true"
+				     >
+		            <TextView
+		                android:id="@+id/tv_youSave"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                
+		                android:text="You Save:"
+		                android:textSize="15dp" />
+		               <TextView
+		                android:id="@+id/tv_youSaveValue"
+		                android:layout_width="wrap_content"
+		                android:layout_height="wrap_content"
+		                
+		                android:textColor="@color/Red"
+		                android:layout_marginRight="20dp"
+		                android:textSize="15dp"
+		                android:text=" 25%"/>
+		               </LinearLayout>
+		            </RelativeLayout>
+		            <Button 
+				    android:id="@+id/okler_Amount"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:background="@drawable/item_amount_background"
+		            android:text="Okler Price "
+		            android:textSize="13sp"
+		            android:layout_marginTop="10dp"
+		             android:layout_marginBottom="10dp"/>
+		            
+	 <RelativeLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:id="@+id/accreditesImages"
+        android:background="@color/LightGrey"
+        >
+         <com.android.volley.toolbox.NetworkImageView
+             android:id="@+id/accredition"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+           	android:layout_centerInParent="true"
+            android:src="@drawable/no_image_found"/>
+    </RelativeLayout>  
+    
+      <RelativeLayout android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:id="@+id/briefAbtLab"
+        >
+        <TextView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/briefAbtLabTxt"
+            android:text="Brief About Us"
+            android:textStyle="bold"
+                        />
+        <TextView 
+            android:id="@+id/info_abt_lab"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:layout_below="@+id/briefAbtLabTxt"
+            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+           android:visibility="gone" />
+        <TextView 
+            android:id="@+id/info_abt_lab2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minLines="2"
+            android:layout_below="@+id/briefAbtLabTxt"
+            android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+            
+            />
+        
+        <!-- need to check later read more --> 
+       <!--  <TextView 
+            android:id="@+id/read_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/info_abt_lab"
+            android:text="READ MORE..."
+            android:textColor="@color/ModerateMagenta"
+            /> -->
+    </RelativeLayout>
+    	
+    <LinearLayout 
+            android:id="@+id/horiScrollayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+           	android:layout_below="@id/briefAbtLab" >
+            	<TextView
+            	    android:id="@+id/titleGallery"
+                	android:layout_width="match_parent"
+                	android:layout_height="wrap_content"
+                	android:textColor="@color/Black"
+                	android:text="Gallery"
+                	android:textStyle="bold"
+                	android:layout_marginTop="10dp"
+                	android:layout_marginBottom="5dp"/>
+            	<TextView
+            	    android:id="@+id/noImagetv"
+                	android:layout_width="match_parent"
+                	android:layout_height="wrap_content"
+                	android:textColor="@color/Black"
+                	android:layout_marginTop="5dp"
+                	android:layout_marginBottom="5dp"
+                	android:visibility="gone"/>
+            	
+            	
+          		<HorizontalScrollView
+				   android:id="@+id/galleryHSScrView"
+				   android:layout_width="match_parent"
+				   android:layout_height="wrap_content"
+				   android:background="@color/White">
+						<LinearLayout
+					    	android:id="@+id/innerLayout1"
+					    	android:layout_width="match_parent"
+					    	android:layout_height="wrap_content"
+					    	android:orientation="horizontal"
+					    	android:layout_marginBottom="10dp">
+						</LinearLayout>
+		   		    	
+		  		</HorizontalScrollView>
+		</LinearLayout>     		            
+		            
+    </LinearLayout>
+     
+    </RelativeLayout>
+
+     </RelativeLayout>
+
+</ScrollView>
+
+</RelativeLayout>

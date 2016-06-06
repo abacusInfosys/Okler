@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar_cart"
+    android:layout_width="match_parent"
+    android:layout_height="115dp"
+    android:minHeight="115dp"
+     android:elevation="4dp"
+    android:paddingBottom="10dp"
+    app:contentInsetLeft="0dp"
+	app:contentInsetStart="0dp"
+    android:background="@color/actionBarBackground"> 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/frame_layout">  
+        <LinearLayout 
+             android:id="@+id/main_lin"
+        android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+		android:orientation="vertical"    
+            > 
+           <RelativeLayout 
+                android:id="@+id/top_rl"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+         android:layout_weight="1"
+         
+                >
+        <RelativeLayout 
+                android:id="@+id/back_layout"
+        android:layout_width="60dp"
+    	android:layout_height="57dp"
+        
+                >   
+               <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"        
+        android:layout_centerInParent="true"
+        android:id="@+id/toolbar_back" 
+        android:src="@drawable/back_arrow_white"/>
+        </RelativeLayout>
+     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Toolbar Title"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/toolbar_title" 
+        android:textColor="@color/White"
+         android:layout_marginTop="15dp"
+        android:textSize="20sp"/>
+     <Button
+	        android:id="@+id/toolBarCount"
+	        android:layout_width="57dp"
+	        android:layout_height="40dp"
+	        android:text="00"
+	        android:layout_alignParentRight="true"
+	        android:textColor="@color/White"	 
+	        android:layout_marginTop="15dp"    
+	        android:gravity="top|center_horizontal"   
+	        android:background="@drawable/ahopping_cart_top_5dp"
+	        />
+               
+           </RelativeLayout>
+           
+           
+           <RelativeLayout 
+               android:id="@+id/parentSearchLayout"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+         android:layout_weight="1"
+               >
+               
+              <!--  <RelativeLayout   android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+               android:layout_gravity="left|bottom"> -->
+           <SearchView
+            android:id="@+id/menu_search"         
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"    
+            android:layout_toLeftOf="@+id/overflowIcon"   
+            android:background="@color/White"    
+            android:focusable="false"   
+android:visibility="visible"
+            />
+        
+                 <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/white_vertical_dots_icon"            
+            android:id="@+id/overflowIcon"
+            android:layout_alignParentRight="true"/> 
+       
+            </RelativeLayout>
+           <!-- </RelativeLayout>       -->   
+        
+      <!-- <Button
+	        android:id="@+id/toolBarCount"
+	        android:layout_width="32dp"
+	        android:layout_height="32dp"
+	        android:text="03"
+	        android:textColor="@color/Red"
+	        android:background="@drawable/white_dot"
+	          android:layout_gravity="right"/> -->
+      
+          
+       </LinearLayout>         
+    </FrameLayout>
+</android.support.v7.widget.Toolbar>
