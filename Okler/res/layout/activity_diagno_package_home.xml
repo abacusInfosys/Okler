@@ -17,8 +17,10 @@
 <TextView 
     android:id="@+id/select_package_activity_heading"
     android:layout_width="fill_parent"
-    android:layout_height="?actionBarSize"
-    android:minHeight="?actionBarSize"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+	android:paddingBottom="5dp"
+			    
     android:background="@color/ModerateMagenta"
     android:layout_below="@+id/toolbar"
     android:textColor="@color/White"

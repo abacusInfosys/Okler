@@ -117,12 +117,12 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 		ubean = Utilities.getCurrentUserFromSharedPref(this);
 		cust_id = ubean.getId();
 		// myPhysioUrl =
-		// "http://183.82.110.105:8081/oklerapi//nurse/GetAllservicesByuser?user_id="+cust_id+"&service_type=";
+		// "https://www.okler.com/api//nurse/GetAllservicesByuser?user_id="+cust_id+"&service_type=";
 		// myMedUrl =
-		// "http://183.82.110.105:8081/oklerapi/order/getorders?cust_id="+cust_id+"&order_id="+"&page=";
+		// "https://www.okler.com/api/order/getorders?cust_id="+cust_id+"&order_id="+"&page=";
 		myMedUrl = setMedUrl(cust_id, order_id, pageNo);
 		// digno_url =
-		// "http://183.82.110.105:8081/oklerapi/lab/retrivelabbook?cust_id="+cust_id;
+		// "https://www.okler.com/api/lab/retrivelabbook?cust_id="+cust_id;
 		digno_url = setDiagnoUrl(cust_id, order_id, pageNo);
 
 		myOrderUrl = "";
@@ -326,6 +326,11 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 				service_type = 2;
 				nursepgno = 0;
 				attpgno = 0;
+				nurseTotal=0;
+				attendantTotal=0;
+				isCalledOnce=false;
+				isAllNurse = false;
+				isAllAtt = false;
 				mURL = setMedPhysioUrl(cust_id, order_id, nursepgno,
 						service_type);
 				webService(mURL);
@@ -372,6 +377,7 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 	public void webService(String myOrderUr) {
 		showProgress(false);
 		mURL = myOrderUr;
+		Log.e("URL", mURL);
 		Utilities.writeToLogFIle("in web service. Order URL" + myOrderUr);
 		WebJsonObjectRequest alJson = new WebJsonObjectRequest(Method.GET,
 				mURL, new JSONObject(), new Response.Listener<JSONObject>() {
@@ -567,7 +573,7 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 				physio.add(pnmBean);
 			}
 		} catch (Exception ex) {
-
+			Log.e("ERROR", ex.toString());
 		}
 	}
 
@@ -1030,6 +1036,9 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 								return;
 							} else {
 								// nursepgno++;
+								if(odtBeanArr.size()>=(nurseTotal+attendantTotal))
+									return;
+								
 								attpgno++;
 								service_type = 4;
 								myOrderUrl = setMedPhysioUrl(cust_id, order_id,

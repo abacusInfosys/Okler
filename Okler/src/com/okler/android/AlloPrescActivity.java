@@ -2,7 +2,12 @@ package com.okler.android;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+
+import java.util.ArrayList;
+
+import com.okler.databeans.CartDataBean;
 import com.okler.databeans.PrescriptionImagesDataBean;
+import com.okler.databeans.ProductDataBean;
 import com.okler.utils.CameraGalleryImageInfo;
 import com.okler.utils.Okler;
 import com.okler.utils.UIUtils;
@@ -24,12 +29,14 @@ import android.widget.TextView;
 public class AlloPrescActivity extends BaseActivity {
 	View bottomBarLayout;
 	Toolbar toolBar;
-	Button notifCount;
-	TextView checkout_Tv,upload_later,choose_from_existing;
+	Button notifCount,choose_from_existing,upload_later;
+	TextView checkout_Tv;
 	ImageView imgBack;
 	int check;
 	PrescriptionImagesDataBean presImgs;
 	Activity ack;
+	CartDataBean cdbean;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,6 +46,7 @@ public class AlloPrescActivity extends BaseActivity {
 		setSupportActionBar(toolBar);
 		ack = this;
 		check = getIntent().getIntExtra("Check", 11);
+		Utilities.writeToLogFIle("Value of check in on create allo presc act is:"+check);
 		ActionBar ab = getSupportActionBar();
 		checkout_Tv = (TextView)findViewById(R.id.checkout_Tv);
 		//ab.setDisplayHomeAsUpEnabled(true);
@@ -51,9 +59,22 @@ public class AlloPrescActivity extends BaseActivity {
 			checkout_Tv.setBackgroundColor(Color.BLUE);
 			Utilities.setTitleText(toolBar, "Cart");
 		}
+		
+		if (check == 1) {
+			cdbean = Okler.getInstance().getSingleCart();
+		} else {
+			cdbean = Okler.getInstance().getMainCart();
+		}
+		ArrayList<ProductDataBean> thisIsTempList = cdbean.getProdList();
+		Utilities.writeToLogFIle("IN allopresc activity On create. Size of cdbean"+thisIsTempList.size());
+		for(int counter = 0 ; counter < thisIsTempList.size(); counter++)
+		{
+			Utilities.writeToLogFIle("In allpresc activity On create.This is product from cart"+thisIsTempList.get(counter).getProdName());
+		}
+		
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
-		choose_from_existing = (TextView)findViewById(R.id.choose_from_existing);
+		choose_from_existing = (Button)findViewById(R.id.choose_from_existing);
 		
 		choose_from_existing.setOnClickListener(new OnClickListener() {
 			
@@ -68,7 +89,7 @@ public class AlloPrescActivity extends BaseActivity {
 			}
 		});
 		presImgs = new PrescriptionImagesDataBean();
-		upload_later = (TextView)findViewById(R.id.upload_later);
+		upload_later = (Button)findViewById(R.id.upload_later);
 		
 		upload_later.setOnClickListener(new OnClickListener() {
 			
@@ -95,6 +116,7 @@ public class AlloPrescActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		Utilities.writeToLogFIle("In AlloPrescActi. OnActivityresult");
 		Intent newIntent = new Intent(this,AlloUpPrescActivity.class);
+		boolean flag = false;
 		if(data == null){ Utilities.writeToLogFIle("Data is null");}
 		else{
 			Utilities.writeToLogFIle("Data is not null");
@@ -111,7 +133,7 @@ public class AlloPrescActivity extends BaseActivity {
 	    			newIntent.putExtra("imageFilePath", imgInfo.getFilePath());
 	    			newIntent.putExtra("imgFileName",imgInfo.getFileName());
 	    			newIntent.putExtra("Check", check);
-	    			
+	    			Utilities.writeToLogFIle("Value of check in allo presc acr is:"+check);
 	        		Utilities.writeToLogFIle("Bitmap is not null");
 					  String base64string = Utilities.convertImageToBase64(bmpt); //Base64.encodeToString(byte_arr,Base64.DEFAULT);
 			    Utilities.writeToLogFIle("In AlloPrescActi. OnActivityresult . base 64 encrupted key is"+base64string);
@@ -123,9 +145,16 @@ public class AlloPrescActivity extends BaseActivity {
 		/*	    String imgPa = imgInfo.getUri();
 			    Utilities.writeToLogFIle("String imagpA"+imgPa);
 			    presImgs.setImgUri(imgPa);*/
+			    flag = true;
 			    Utilities.writeToLogFIle("After set image uri");
 				Okler.getInstance().getPrescriptionsDataBeans().getPresImages().add(presImgs);
 				//newIntent.putExtra("flag",flag);//******* 24112015
+				ArrayList<ProductDataBean> thisIsTempList = cdbean.getProdList();
+				Utilities.writeToLogFIle("IN allopresc activity On onActresult. Size of cdbean"+thisIsTempList.size());
+				for(int counter = 0 ; counter < thisIsTempList.size(); counter++)
+				{
+					Utilities.writeToLogFIle("In allpresc activity On onActresult.This is product from cart"+thisIsTempList.get(counter).getProdName());
+				}
 				startActivity(newIntent);
 				}
 	        	else
@@ -133,7 +162,7 @@ public class AlloPrescActivity extends BaseActivity {
 	        }
 		}
 		
-		if(resultCode == RESULT_OK)
+		if(resultCode == RESULT_OK && flag == false)
 		{
 			Utilities.writeToLogFIle("In AlloPrescActi. OnActivityresult . result ok");
 			

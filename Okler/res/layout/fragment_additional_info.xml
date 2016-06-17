@@ -21,38 +21,65 @@
              />
 
     </LinearLayout>
-
+<RelativeLayout 
+	    android:id="@+id/addrLL"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginTop="20dp"
+	    android:layout_marginBottom="20dp"
+	    >
     <EditText
         android:id="@+id/edtTxt_address"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         android:hint="Address"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:inputType="textPostalAddress" 
-        android:drawableRight="@drawable/target_icon"
-           android:imeOptions="actionNext"
+        android:imeOptions="actionNext"
         >
-
-        <requestFocus />
-    </EditText>
+        <requestFocus /> </EditText>
+<ImageView 
+       android:id="@+id/addrIcon"
+       android:layout_width="20dp"
+       android:layout_height="20dp"
+       android:layout_marginRight="10dp"
+       android:src="@drawable/target_icon"
+       android:layout_alignParentRight="true"
+       android:layout_centerVertical="true"
+       />
+</RelativeLayout> 
+        
+   <RelativeLayout 
+	    android:id="@+id/pincodeLL"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginBottom="10dp"
+	    >
     
     <EditText
         android:id="@+id/edtTxt_pincode"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-           android:imeOptions="actionNext"
-        android:layout_marginBottom="10dp"
+        android:imeOptions="actionNext"
         android:hint="Pincode"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:inputType="number" 
-        android:drawableRight="@drawable/more_info_info"
+        
         />
+    <ImageView 
+       android:id="@+id/pincodeIcon"
+       android:layout_width="20dp"
+       android:layout_height="20dp"
+       android:layout_marginRight="10dp"
+       android:src="@drawable/more_info_info"
+       android:layout_alignParentRight="true"
+       android:layout_centerVertical="true"
+       />
+</RelativeLayout> 
     <Spinner
         android:id="@+id/relation_spinner"
         android:layout_width="match_parent"
@@ -67,21 +94,34 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         />
-
+ <RelativeLayout 
+	    android:id="@+id/weightLL"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginBottom="20dp"
+	    >
+    
     <EditText
         android:id="@+id/edtTxt_weight"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-           android:imeOptions="actionDone"
+        android:imeOptions="actionDone"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="20dp"
         android:hint="Weight of patient(in kgs)"
         android:inputType="number"
-       android:drawableRight="@drawable/weight_info"
          />
-
+<ImageView 
+       android:id="@+id/weightIcon"
+       android:layout_width="20dp"
+       android:layout_height="20dp"
+       android:layout_marginRight="10dp"
+       android:src="@drawable/weight_info"
+       android:layout_alignParentRight="true"
+       android:layout_centerVertical="true"
+       />
+</RelativeLayout> 
     <TextView
         android:id="@+id/txt_relationid"
         android:layout_width="wrap_content"

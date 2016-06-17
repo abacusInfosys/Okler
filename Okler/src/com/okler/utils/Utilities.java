@@ -328,8 +328,8 @@ public class Utilities {
 			        	Utilities.writeToLogFIle("New URI is:"+newUri);
 			        	/*Temporary commenting put extra.. to cross check*/
 			        	Utilities.writeToLogFIle("Commented extra_output to check culprit");
-			        	/*takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-			            		newUri);*/
+			        	takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+			            		newUri);
 			            Utilities.writeToLogFIle("captureImageFromCamera putextra");
 			           context.startActivityForResult(takePictureIntent, CAMERA_PICTURE);
 			           Utilities.writeToLogFIle("captureImageFromCamera startactivity"+takePictureIntent.toString());

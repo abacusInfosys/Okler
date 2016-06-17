@@ -45,7 +45,7 @@ import android.widget.Toast;
 public class ProductCheckoutSummary extends BaseActivity {
 	View bottomBarLayout;
 	Toolbar toolBar;
-	Button notifCount;
+	Button next,notifCount;
 	RelativeLayout customViewRL1, billing_RL, delivery_RL, customViewRL2,
 			customViewRL3, coupon_disc_RL, checkout_quant_RL;
 	LinearLayout parentForCustomView;
@@ -54,7 +54,7 @@ public class ProductCheckoutSummary extends BaseActivity {
 	TextView coupon_appl_text, net_pay_value_tv, amount_value_tv,
 			okler_disc_value_tv, coupon_disc_value_tv, shipping_charg_value_tv,
 			tax_value_tv;
-	TextView next, baddr_title_tv, baddr_tv, addr_title_tv, addr_tv,
+	TextView baddr_title_tv, baddr_tv, addr_title_tv, addr_tv,
 			firstnameValueTv, surnameValueTv, mobileValueTv, emailValueTv;
 	ImageView checkout_progress_summary_Iv;
 	ImageView imgBack, bedit_red_pencil, edit_red_pencil;
@@ -62,7 +62,7 @@ public class ProductCheckoutSummary extends BaseActivity {
 	ArrayList<ProductDataBean> pdList;
 	float redAmt = 0.00f, amount = 0.00f, okler_disc = 0.00f,
 			shipping_charg = 0.00f, taxes = 0.00f, net_pay = 0.00f,
-			coupon_disc = 0.00f;
+			coupon_disc = 0.00f, subTotal = 0.00f;
 	boolean flagbill = false, flagship = false;
 	int check;
 	EditText coupon_code;
@@ -92,6 +92,13 @@ public class ProductCheckoutSummary extends BaseActivity {
 			odbean = Okler.getInstance().getSingleCart();
 		} else {
 			odbean = Okler.getInstance().getMainCart();
+		}
+		
+		ArrayList<ProductDataBean> thisIsTempList = odbean.getProdList();
+		Utilities.writeToLogFIle("IN prodChkSummary onCreate. Size of cdbean"+thisIsTempList.size());
+		for(int counter = 0 ; counter < thisIsTempList.size(); counter++)
+		{
+			Utilities.writeToLogFIle("In prodChkSummary onCreate.This is product from cart"+thisIsTempList.get(counter).getProdName());
 		}
 		pdList = new ArrayList<ProductDataBean>();
 		checkout_quant_RL = (RelativeLayout) findViewById(R.id.checkout_quant_RL);
@@ -166,24 +173,36 @@ public class ProductCheckoutSummary extends BaseActivity {
 
 		imgloader = VolleyRequest.getInstance(getApplicationContext())
 				.getImageLoader();
-		next = (TextView) findViewById(R.id.proceed_to_pay);
+		next = (Button) findViewById(R.id.proceed_to_pay);
 		next.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				if (check == 1) {
+					odbean = Okler.getInstance().getSingleCart();
+				} else {
+					odbean = Okler.getInstance().getMainCart();
+				}
+				ArrayList<ProductDataBean> thisIsTempList = odbean.getProdList();
+				Utilities.writeToLogFIle("IN prodChkSummary next click. Size of cdbean"+thisIsTempList.size());
+				for(int counter = 0 ; counter < thisIsTempList.size(); counter++)
+				{
+					Utilities.writeToLogFIle("In prodChkSummary nextClick.This is product from cart"+thisIsTempList.get(counter).getProdName());
+				}
 				if (bluetick.getVisibility() == View.GONE) {
 					Toast.makeText(getApplicationContext(),
-							"Please accept Terms and Conditions",
+							"Please accept Terms and Conditions at the bottom",
 							Toast.LENGTH_LONG).show();
 				} else {
-					if (amount >= 0 || net_pay >= 0) {
+					if (amount > 0 || net_pay > 0) {
 						odbean.setProdList(pdList);
 						odbean.setTotalPrice(net_pay);
 						odbean.setShip_charge("" + shipping_charg);
 						odbean.setCoupon_disc(redAmt);
 						odbean.setTax(taxes);
 						odbean.setcCode(ccCode);
+						odbean.setSubTotal(subTotal);
 						if (check == 1) {
 							Okler.getInstance().setSingleCart(odbean);
 						} else {
@@ -197,6 +216,7 @@ public class ProductCheckoutSummary extends BaseActivity {
 						Toast.makeText(getApplicationContext(),
 								"Unable to proceed with your order",
 								Toast.LENGTH_LONG).show();
+						Utilities.writeToLogFIle("prodCheckoutSummary price is 0 redirecting to Home screen");
 						Intent intent = new Intent(ProductCheckoutSummary.this,
 								ServiceCategoryActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -349,6 +369,18 @@ public class ProductCheckoutSummary extends BaseActivity {
 				 */
 			}
 		});
+		if (check == 1) {
+			odbean = Okler.getInstance().getSingleCart();
+		} else {
+			odbean = Okler.getInstance().getMainCart();
+		}
+		ArrayList<ProductDataBean> thisIsTempList1 = odbean.getProdList();
+		Utilities.writeToLogFIle("IN prodChkSummary onCreate before amount calc. Size of cdbean"+thisIsTempList1.size());
+		for(int counter = 0 ; counter < thisIsTempList1.size(); counter++)
+		{
+			Utilities.writeToLogFIle("In prodChkSummary onCreate before amount calc.This is product from cart"+thisIsTempList1.get(counter).getProdName());
+		}
+		
 		pdList = odbean.getProdList();
 		int size = pdList.size();
 		if (size > 9) {
@@ -423,7 +455,7 @@ public class ProductCheckoutSummary extends BaseActivity {
 		if (net_pay < 500 && net_pay > 0) {
 			shipping_charg = 50;
 		}
-
+		subTotal = net_pay;
 		net_pay = net_pay + shipping_charg;
 		amount_value_tv.setText("Rs." + amount);
 		okler_disc_value_tv.setText("Rs." + okler_disc);
@@ -509,5 +541,16 @@ public class ProductCheckoutSummary extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onResume();
 		UIUtils.setCartCount(notifCount, ack);
+		if (check == 1) {
+			odbean = Okler.getInstance().getSingleCart();
+		} else {
+			odbean = Okler.getInstance().getMainCart();
+		}
+		ArrayList<ProductDataBean> thisIsTempList1 = odbean.getProdList();
+		Utilities.writeToLogFIle("IN prodChkSummary onResume. Size of cdbean"+thisIsTempList1.size());
+		for(int counter = 0 ; counter < thisIsTempList1.size(); counter++)
+		{
+			Utilities.writeToLogFIle("In prodChkSummary onResume.This is product from cart"+thisIsTempList1.get(counter).getProdName());
+		}
 	}
 }

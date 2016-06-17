@@ -45,7 +45,7 @@ public class UploadPrescription extends BaseActivity {
 	Toolbar toolBar;
 	Button notifCount;	
 	static int mNotifCount = 0;
-	ImageButton btnUpload;
+	ImageView btnUpload;
 	RelativeLayout relUpDisable;
 	ImageView imgBack;
 	PrescriptionImagesDataBean presImgs;
@@ -98,7 +98,7 @@ public class UploadPrescription extends BaseActivity {
 	      Utilities.writeToLogFIle(" In Upload Prescription 2");
 		
 		RelativeLayout rl = (RelativeLayout)bottomBarLayout.findViewById(R.id.uploadPresRL);
-		btnUpload =(ImageButton) rl.findViewById(R.id.btnUploadPres);
+		btnUpload =(ImageView) rl.findViewById(R.id.btnUploadPres);
 		LinearLayout active_upload = (LinearLayout) rl.findViewById(R.id.active_upload);
 		active_upload.setVisibility(View.VISIBLE);
 		btnUpload.setEnabled(false);

@@ -11,24 +11,27 @@
 	<RelativeLayout 
 	    android:id="@+id/checkoutCount"
 	    android:layout_width="match_parent"
-	    android:layout_height="?actionBarSize"
+	    android:layout_height="wrap_content"
 	    android:background="#FCAB12"
+	    android:paddingTop="5dp"
+	    android:paddingBottom="5dp"
 	    android:layout_below="@id/toolbar">
 	    <TextView 
 	        android:id="@+id/tv_checkout"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="Checkout"
-	        android:textSize="17dp"
+	        android:textSize="16sp"
 	        android:textColor="@color/Black"
 	        android:layout_centerInParent="true"/>
 	    <Button
 	        android:id="@+id/count"
-	        android:layout_width="40dp"
-	        android:layout_height="40dp"
+	        android:layout_width="30dp"
+	        android:layout_height="30dp"
 	        android:text=""
 	        android:textColor="@color/Red"
 	        android:textSize="15sp"
+	        android:layout_marginRight="4dp"
 	        android:background="@drawable/white_dot"
 	        android:layout_centerVertical="true"
 	        android:layout_alignParentRight="true"/>
@@ -92,14 +95,16 @@
         	    android:layout_centerVertical="true"/>
             
         </RelativeLayout>
-	<TextView 
+	<Button 
 	    android:id="@+id/next"
-	    android:layout_width="match_parent"
-	    android:layout_height="?actionBarSize"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
 	    android:text="@string/next_text"
 	    android:textColor="@color/White"
 	    android:background="@color/Blue"
-	    android:textSize="20dp"
+	    android:textSize="16sp"
+	    android:paddingTop="6dp"
+	    android:paddingBottom="6dp"
 	    android:gravity="center"
 	    android:enabled="false"/>
     <include

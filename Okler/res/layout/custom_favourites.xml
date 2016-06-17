@@ -66,8 +66,12 @@
 				        android:textSize="16sp"
 				        android:textStyle="bold"
 				        android:text="1Kg Weight Cuff" 
+				       android:layout_toLeftOf="@+id/deleteImage"
 				        android:textColor="@color/Black"
 				        android:layout_marginBottom="5dp"/>
+				    
+				     <!-- android:layout_toLeftOf="@+id/deleteImage" -->
+				    
 				    <!-- <ImageView
 				        android:id="@+id/image_favourite"
 				        android:layout_width="20dp"

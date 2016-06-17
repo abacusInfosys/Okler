@@ -303,9 +303,11 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 						currPresc.setDocSirname(curPrescrJSon.getString("doctorlname"));
 						currPresc.setPatientName(curPrescrJSon.getString("patient_name"));
 						currPresc.setPrescStatus(curPrescrJSon.getString("status"));
-						
+						String str="";
 						String prescrImages = curPrescrJSon.getString("prescription_name");
-						String str = prescrImages.substring(1,prescrImages.length()-1);
+						if(prescrImages.equals(""))
+						continue;	
+						str = prescrImages.substring(1,prescrImages.length()-1);
 						if(str.equals("0"))
 							continue;
 						String[] imgs = str.split(",");

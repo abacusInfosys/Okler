@@ -12,10 +12,11 @@
     <TextView 
         android:id="@+id/confirm_order"
         android:layout_width="fill_parent"
-        android:layout_height="?actionBarSize"
-    	android:minHeight="?actionBarSize"
+        android:layout_height="wrap_content"
+    	android:paddingTop="5dp"
+    	android:paddingBottom="5dp"
     	android:background="@color/ModerateMagenta"
-    	android:textSize="20sp"
+    	android:textSize="16sp"
     	android:textColor="@color/White"
     	android:gravity="center"
     	android:text="@string/confirm_order"
@@ -429,15 +430,16 @@
         </RelativeLayout>
         
     </ScrollView>
-        <TextView 
+        <Button 
         android:id="@+id/sched_appoint"
         android:layout_width="fill_parent"
-        android:layout_height="?actionBarSize"
-    	android:minHeight="?actionBarSize"
+        android:layout_height="wrap_content"
     	android:background="@color/ModerateMagenta"
-    	android:textSize="20sp"
+    	android:textSize="16sp"
     	android:textColor="@color/White"
     	android:gravity="center"
+    	android:paddingTop="6dp"
+    	android:paddingBottom="6dp"
     	android:text="@string/sched_appoint"
     	android:layout_above="@+id/bottombar"
         />

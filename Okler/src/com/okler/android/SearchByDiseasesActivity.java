@@ -92,7 +92,7 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 	String searchTxt = "";
 	String abc = "#";
 	RelativeLayout back_layout;
-	
+	String bookingtype="";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +133,7 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 			normalURL = getAllDiseasesHome;
 			callWebService(getAllDiseasesHome);
 		}
-
+		bookingtype = getIntent().getStringExtra("bookingType");
 		currentPosition = (TextView) findViewById(R.id.currentPosition);
 		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
 		back_layout.setOnClickListener(new OnClickListener() {
@@ -210,6 +210,7 @@ public class SearchByDiseasesActivity extends BaseActivity implements
 
 				Intent intent = new Intent(getApplicationContext(),
 						GroupByMedsActivity.class);
+				intent.putExtra("bookingType", bookingtype);
 				intent.putExtra("DiseaseId", did);
 				intent.putExtra("FromWhere", "searchByDiseases");
 				startActivity(intent);

@@ -149,12 +149,32 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 		} else {
 			cdbean = Okler.getInstance().getMainCart();
 		}
+		
+		ArrayList<ProductDataBean> thisIsTempList = cdbean.getProdList();
+		Utilities.writeToLogFIle("IN prodPayMode onCreate. Size of cdbean"+thisIsTempList.size());
+		for(int counter = 0 ; counter < thisIsTempList.size(); counter++)
+		{
+			Utilities.writeToLogFIle("In prodPayMode onCreate.This is product from cart"+thisIsTempList.get(counter).getProdName());
+		}
 		pdList = cdbean.getProdList();
 		processButton = (Button) findViewById(R.id.payment_placeorder);
 		processButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+				if (check == 1) {
+					cdbean = Okler.getInstance().getSingleCart();
+				} else {
+					cdbean = Okler.getInstance().getMainCart();
+				}
+				ArrayList<ProductDataBean> thisIsTempList = cdbean.getProdList();
+				Utilities.writeToLogFIle("IN prodPayMode processbutton click. Size of cdbean"+thisIsTempList.size());
+				for(int counter = 0 ; counter < thisIsTempList.size(); counter++)
+				{
+					Utilities.writeToLogFIle("In prodPayMode processbutton click.This is product from cart"+thisIsTempList.get(counter).getProdName());
+				}
+				
+				
 				processButton.setEnabled(false);
 				// TODO Auto-generated method stub
 				int[] prodid = new int[50];
@@ -200,13 +220,14 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				fname = ubean.getFname();
 				emailId = ubean.getEmail();
 				salutation1 = ubean.getSalutation();
-				String subtotal = "";
+				float subTotal = cdbean.getSubTotal();
 
 				nvPair.add(new BasicNameValuePair("total", ""
 						+ cdbean.getTotalPrice()));//
+				Utilities.writeToLogFIle("in ProdPayMode Total= "+cdbean.getTotalPrice());
 				nvPair.add(new BasicNameValuePair("payment_info", payment_info));//
 				nvPair.add(new BasicNameValuePair("ccode", cdbean.getcCode()));
-				nvPair.add(new BasicNameValuePair("subtotal", subtotal));//
+				nvPair.add(new BasicNameValuePair("subtotal", ""+subTotal));//
 				nvPair.add(new BasicNameValuePair("tax", "" + cdbean.getTax()));//
 				nvPair.add(new BasicNameValuePair("city_select", shipCity));
 				nvPair.add(new BasicNameValuePair("ship_salutation",
@@ -281,6 +302,18 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				nvPair.add(new BasicNameValuePair("cart_id", cart_id));
 
 				String str = "";// gson.toJson(postParams);
+				if (check == 1) {
+					cdbean = Okler.getInstance().getSingleCart();
+				} else {
+					cdbean = Okler.getInstance().getMainCart();
+				}
+				ArrayList<ProductDataBean> thisIsTempList1 = cdbean.getProdList();
+				Utilities.writeToLogFIle("IN prodPayMode processbutton click before async. Size of cdbean"+thisIsTempList1.size());
+				for(int counter = 0 ; counter < thisIsTempList1.size(); counter++)
+				{
+					Utilities.writeToLogFIle("In prodPayMode processbutton click before async.This is product from cart"+thisIsTempList1.get(counter).getProdName());
+				}
+				
 				new PlaceOrderAsyncTask().execute(str);
 
 			}
@@ -339,6 +372,18 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 		protected void onPostExecute(Object result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
+			if (check == 1) {
+				cdbean = Okler.getInstance().getSingleCart();
+			} else {
+				cdbean = Okler.getInstance().getMainCart();
+			}
+			ArrayList<ProductDataBean> thisIsTempList1 = cdbean.getProdList();
+			Utilities.writeToLogFIle("IN prodPayMode async onPostExecute. Size of cdbean"+thisIsTempList1.size());
+			for(int counter = 0 ; counter < thisIsTempList1.size(); counter++)
+			{
+				Utilities.writeToLogFIle("In prodPayMode async  onPostExecute.This is product from cart"+thisIsTempList1.get(counter).getProdName());
+			}
+			
 			if(result!=null){
 			String resu = result.toString();
 			if(resu==null)
@@ -349,6 +394,10 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				String s3[] = s2.split(":");
 				orderId = s3[1];
 
+				String s4 = s1[1];
+				String s5[] = s4.split(":");
+				String order_num = s5[1];
+				order_num = order_num.substring(1, order_num.length()-1);
 				if (check == 1) {
 					CartDataBean c = new CartDataBean();
 					Okler.getInstance().setSingleCart(c);
@@ -358,12 +407,13 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				}
 
 				isDialog = true;
-				String part1, part2, part3, part4, Url, part5;
+				String part1, part2, part3, part4, Url, part5,part6;
 				part1 = getString(R.string.orderConfirmCallBackUrl);
 				part2 = "&cust_id=";
 				part3 = "&customer_name=";
 				part4 = "&email=";
 				part5 = "&order_id=";
+				part6 = "&order_number=";
 				try {
 					fname = URLEncoder.encode(fname, "UTF-8");
 				} catch (UnsupportedEncodingException e) {
@@ -372,7 +422,7 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				}
 
 				Url = part1 + salutation1 + part2 + userId + part3 + fname
-						+ part4 + emailId + part5 + orderId;
+						+ part4 + emailId + part5 + orderId+part6+order_num;
 				WebJsonObjectRequest mailjson = new WebJsonObjectRequest(
 						Method.GET, Url, new JSONObject(),
 						new Response.Listener<JSONObject>() {
@@ -402,6 +452,17 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 						MyOrderHome.class);
 				in.putExtra("value", 1);
 				in.putExtra("fromOrder", true);
+				if (check == 1) {
+					cdbean = Okler.getInstance().getSingleCart();
+				} else {
+					cdbean = Okler.getInstance().getMainCart();
+				}
+				ArrayList<ProductDataBean> thisIsTempList2 = cdbean.getProdList();
+				Utilities.writeToLogFIle("IN prodPayMode async onPostExecute before intent. Size of cdbean"+thisIsTempList2.size());
+				for(int counter = 0 ; counter < thisIsTempList2.size(); counter++)
+				{
+					Utilities.writeToLogFIle("In prodPayMode async  onPostExecute before intent.This is product from cart"+thisIsTempList2.get(counter).getProdName());
+				}
 				startActivity(in);
 				finish();
 			} else {

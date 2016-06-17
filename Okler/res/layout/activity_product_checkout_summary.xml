@@ -11,8 +11,9 @@
 <RelativeLayout 
     android:id="@+id/checkout_quant_RL"
     android:layout_width="fill_parent"
-    android:layout_height="?actionBarSize"
-    android:minHeight="?actionBarSize"
+    android:layout_height="wrap_content"
+    android:paddingTop="5dp"
+        android:paddingBottom="5dp"
     android:layout_below="@+id/toolbar"
     >
     <TextView 
@@ -20,19 +21,21 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_alignParentLeft="true"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:text="@string/checkout"
         android:layout_centerInParent="true"
         
         />
     <Button 
         android:id="@+id/checkout_count"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/white_dot"
         android:text="00"
         android:textSize="15sp"
+        android:layout_centerVertical="true"
         android:textColor="@color/Red"
+        android:layout_marginRight="3dp"
         android:layout_alignParentRight="true"
         />
 </RelativeLayout>
@@ -418,15 +421,16 @@
 		
 		
     </ScrollView>
-    <TextView 
+    <Button 
 	        android:id="@+id/proceed_to_pay"
 	        android:layout_width="fill_parent"
-	        android:layout_height="?actionBarSize"
-    		android:minHeight="?actionBarSize"
-	        android:background="@color/Blue"
+	        android:layout_height="wrap_content"
+    		android:background="@color/Blue"
 	        android:text="@string/proceed_to_pay"
-	        android:textSize="20sp"
+	        android:textSize="16sp"
 	        android:gravity="center"
+	        android:paddingTop="6dp"
+	        android:paddingBottom="6dp"
 	        android:textColor="@color/White"
 	        android:layout_above="@+id/bottombar"
 	        android:layout_marginTop="10dp"

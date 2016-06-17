@@ -12,10 +12,11 @@
     <TextView 
         android:id="@+id/order_details"
         android:layout_width="fill_parent"
-        android:layout_height="?actionBarSize"
-    	android:minHeight="?actionBarSize"
+        android:layout_height="wrap_content"
+    	android:paddingTop="5dp"
+    	android:paddingBottom="5dp"
     	android:background="@color/ModerateMagenta"
-    	android:textSize="20sp"
+    	android:textSize="16sp"
     	android:textColor="@color/White"
     	android:gravity="center"
     	android:text="@string/diagno_order_details"
@@ -293,8 +294,7 @@
     <LinearLayout
         android:id="@+id/bottom_button_LL"
         android:layout_width="fill_parent"
-        android:layout_height="?actionBarSize"
-    	android:minHeight="?actionBarSize"
+        android:layout_height="wrap_content"
     	android:layout_above="@+id/bottombar"
         android:orientation="horizontal"
         >
@@ -304,7 +304,7 @@
             android:layout_weight="1"
             android:layout_height="fill_parent"
             android:textColor="@color/White"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:background="@color/Gray"
             android:text="@string/check_order_status"
             />
@@ -314,7 +314,7 @@
             android:layout_weight="1"
             android:layout_height="fill_parent"
             android:textColor="@color/White"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:background="@color/ModerateMagenta"
             android:text="@string/place_new_order"
             />

@@ -188,10 +188,13 @@
          android:layout_above="@id/bottombar"
          android:layout_width="match_parent"
          android:background="@color/ModerateMagenta"
-         android:layout_height="?actionBarSize"
+         android:layout_height="wrap_content"
          android:text="@string/schedule_pickup"
          android:textColor="@color/White"
-         android:textSize="20sp" />
+         android:gravity="center"
+         android:paddingTop="6dp"
+         android:paddingBottom="6dp"
+          />
      
      
      <include

@@ -29,7 +29,7 @@ public class NotificationActivity extends BaseActivity{
 	View bottomBarLayout;
     Toolbar toolBar;
     ImageView imgBack;
-    ImageButton btnNotif;
+    ImageView btnNotif;
     LinearLayout active_notif;
     Activity ack;
 	
@@ -45,7 +45,7 @@ public class NotificationActivity extends BaseActivity{
    		toolBar.setBackgroundColor(getResources().getColor(R.color.Blue));
    		
    		RelativeLayout rl = (RelativeLayout)bottomBarLayout.findViewById(R.id.notifRL);
-		btnNotif =(ImageButton) rl.findViewById(R.id.btnNotif);
+		btnNotif =(ImageView) rl.findViewById(R.id.btnNotif);
 		LinearLayout active_notif = (LinearLayout) rl.findViewById(R.id.active_notification);
 		active_notif.setVisibility(View.VISIBLE);
 		btnNotif.setEnabled(false);

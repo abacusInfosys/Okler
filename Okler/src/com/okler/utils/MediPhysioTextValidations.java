@@ -2,6 +2,7 @@ package com.okler.utils;
 
 import com.okleruser.R;
 
+import android.app.Activity;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -10,8 +11,8 @@ import android.widget.Toast;
 
 public class MediPhysioTextValidations {
 
-	EditText edt_firstname, edt_surname, edt_email, edt_phoneno, edt_state,
-			edt_city, edt_address, edt_pincode, edt_weight;
+	EditText edt_firstname, edt_surname, edt_email, edt_phoneno, edt_address, edt_pincode, edt_weight;
+	AutoCompleteTextView edt_state, edt_city;
 	TextView edt_From, edt_To;
 
 	public MediPhysioTextValidations(View view) {
@@ -22,15 +23,16 @@ public class MediPhysioTextValidations {
 		edt_phoneno = (EditText) view.findViewById(R.id.edtTxt_phonenumber);
 		edt_From = (TextView) view.findViewById(R.id.txtFrom);
 		edt_To = (TextView) view.findViewById(R.id.txtTo);
-
-		edt_state = (EditText) view.findViewById(R.id.edtTxt_state);
-		edt_city = (EditText) view.findViewById(R.id.edtTxt_city);
+		edt_state = (AutoCompleteTextView) view.findViewById(R.id.edtTxt_state);
+		edt_city = (AutoCompleteTextView) view.findViewById(R.id.edtTxt_city);
 	}
 
 	private EditText editTextToValidate;
 	private TextView textToValidate;
+	private AutoCompleteTextView autoTextToValidate;
 
 	TextValidations text;
+	UIUtils autoText;
 
 	public boolean validateFirstName() {
 		this.editTextToValidate = edt_firstname;
@@ -80,16 +82,16 @@ public class MediPhysioTextValidations {
 		}
 	}
 
-	public boolean validateState() {
-		this.editTextToValidate = edt_state;
-		text = new TextValidations(editTextToValidate);
-		return text.validateText("Please Enter State");
+	public boolean validateState(String state,Activity activity) {
+		this.autoTextToValidate = edt_state;
+		autoText = new UIUtils(autoTextToValidate);
+		return autoText.validateState("Enter Valid State", state, activity);
 	}
 
-	public boolean validateCity() {
-		this.editTextToValidate = edt_city;
-		text = new TextValidations(editTextToValidate);
-		return text.validateText("Please Enter City");
+	public boolean validateCity(String city,Activity activity) {
+		this.autoTextToValidate = edt_city;
+		autoText = new UIUtils(autoTextToValidate);
+		return autoText.validateCity("Enter Valid City", city, activity);
 	}
 
 	/*

@@ -124,7 +124,8 @@ public class MedicineHomeActivity extends BaseActivity {
 			public void onClick(View v) {
 				Intent intent =new Intent(getApplicationContext(),AllopathyActivity.class);
 				uiutils = new UIUtils();
-				Okler.getInstance().setBookingType(uiutils.getBookingType("Allopathy"));
+				Okler.getInstance().setBookingType(UIUtils.getBookingType("Allopathy"));
+				intent.putExtra("bookingType", "Allopathy");
 				startActivity(intent);
 			}
 		});
@@ -135,7 +136,8 @@ public class MedicineHomeActivity extends BaseActivity {
 			public void onClick(View v) {
 				Intent intent =new Intent(getApplicationContext(),AllopathyActivity.class);
 				uiutils = new UIUtils();
-				Okler.getInstance().setBookingType(uiutils.getBookingType("Ayurvedic"));
+				Okler.getInstance().setBookingType(UIUtils.getBookingType("Ayurvedic"));
+				intent.putExtra("bookingType", "Ayurvedic");
 				startActivity(intent);
 				}
 		});
@@ -146,7 +148,8 @@ public class MedicineHomeActivity extends BaseActivity {
 			public void onClick(View v) {
 				Intent intent =new Intent(getApplicationContext(),AllopathyActivity.class);
 				uiutils = new UIUtils();
-				Okler.getInstance().setBookingType(uiutils.getBookingType("Homeopathy"));
+				Okler.getInstance().setBookingType(UIUtils.getBookingType("Homeopathy"));
+				intent.putExtra("bookingType", "Homeopathy");
 				startActivity(intent);
 			}
 		});

@@ -73,6 +73,7 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 	Activity activity;
 	boolean isCalled;
 	RelativeLayout back_layout;
+	LinearLayout progressLinLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,7 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 		final ActionBar ab = getSupportActionBar();
 		// ab.setDisplayHomeAsUpEnabled(true);
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
+		progressLinLayout = (LinearLayout)findViewById(R.id.progressLinLayout);
 		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
 		back_layout.setOnClickListener(new OnClickListener() {
 			
@@ -143,7 +145,10 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 		// TODO Auto-generated method stub
 		WebJsonObjectRequest webobj = new WebJsonObjectRequest(Method.GET, url,
 				new JSONObject(), this, this);
-		VolleyRequest.addJsonObjectRequest(context, webobj);
+		if(VolleyRequest.addJsonObjectRequest(context, webobj))
+			showProgress(true);
+		else
+			showProgress(false);
 	}
 
 	@Override
@@ -185,6 +190,7 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 		// TODO Auto-generated method stub
 		String err = String.valueOf(error);
 		System.out.println("Error" + err);
+		showProgress(false);
 	}
 
 	@Override
@@ -196,6 +202,7 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				showProgress(false);
 			}
 		} else {
 			displayLabsForPck(response);
@@ -393,10 +400,13 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				showProgress(false);
 			}
 			if (finallist.size() > 0) {
 				addLabsTestCustView(finallist);
+				showProgress(false);
 			} else {
+				showProgress(false);
 				Toast.makeText(context,
 						"Please select test to get related Lab info",
 						Toast.LENGTH_LONG).show();
@@ -657,6 +667,7 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 					R.layout.separator_1dp, null);
 			labLinearlayout.addView(seperatorViews[i]);
 		}
+		showProgress(false);
 	}
 
 	private void displayLabsForPck(Object response) {
@@ -743,10 +754,12 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			showProgress(false);
 		}
 		if (finallist.size() > 0) {
 			addLabsPckCustView(finallist);
 		} else {
+			showProgress(false);
 			Toast.makeText(context,
 					"Please select test to get related Lab info",
 					Toast.LENGTH_LONG).show();
@@ -894,7 +907,7 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 			labLinearlayout.addView(custViewPackage[i]);
 
 		}
-
+		showProgress(false);
 	}
 
 	public void getPatAdresses() {
@@ -976,4 +989,13 @@ public class DiagnoLabsAvailable extends BaseActivity implements
 		// patient address call ends here
 	}
 
+	private void showProgress(boolean paramBoolean)
+	 {
+	   if (paramBoolean)
+	   {
+	     this.progressLinLayout.setVisibility(View.VISIBLE);
+	     return;
+	   }
+	   this.progressLinLayout.setVisibility(View.INVISIBLE);
+	 }
 }

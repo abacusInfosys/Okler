@@ -35,7 +35,7 @@
         <item>Contact Us</item>
     </string-array>
     <!-- Web services -->
-    <string name="serverUrl">http://183.82.110.105:8081/oklerapi/</string>
+    <string name="serverUrl">https://www.okler.com/api/</string>
     <string name="getServiceRequiredForPhysio">api/nurse/getservicerequired_for?required_type=2</string>
 
     <!-- Medicines Screen Related -->
@@ -55,11 +55,11 @@
     <string name="title_activity_diagnostics"></string>
     <string name="title_activity_product_details"></string>
     <string name="side_effect">SIDE EFFECT</string>
-    <string name="serviceUrl">http://183.82.110.105:8081/oklerapi/nurse/getservicerequired_for?required_type=</string>
-    <string name="relationUrl">http://183.82.110.105:8081/oklerapi/nurse/getrelations</string>
-    <string name="cityUrl">http://183.82.110.105:8081/oklerapi/nurse/getcities?</string>
-    <string name="stateUrl">http://183.82.110.105:8081/oklerapi/nurse/getstates</string>
-    <string name="bookAppointment">http://183.82.110.105:8081/oklerapi/nurse/addNurseAttendbook?</string>
+    <string name="serviceUrl">https://www.okler.com/api/nurse/getservicerequired_for?required_type=</string>
+    <string name="relationUrl">https://www.okler.com/api/nurse/getrelations</string>
+    <string name="cityUrl">https://www.okler.com/api/nurse/getcities?</string>
+    <string name="stateUrl">https://www.okler.com/api/nurse/getstates</string>
+    <string name="bookAppointment">https://www.okler.com/api/nurse/addNurseAttendbook?</string>
 
     <!-- <string name="title_activity_product_checkout_list_view">ProductCheckoutListView</string> -->
     <!-- 14_01_2016 Gitesh -->
@@ -139,11 +139,11 @@
     <string name="upload_later">UPLOAD LATER</string>
     <string name="choose_from_existing">CHOOSE FROM EXISTING PRESCRIPTIONS</string>
     <string name="up_your_presc">Upload Your Prescription</string>
-    <string name="getDiseasesUrlAllo">http://183.82.110.105:8081/oklerapi/diseasemapping/getAllDiseasesMapping?mapping_typeid=4</string>
-    <string name="getMedFordiseaseUrlPart1">http://183.82.110.105:8081/oklerapi/diseasemapping/getrecordsbydiseases?mapping_typeid=4&amp;disease_id=</string>
-    <string name="getDiseasesUrlDiagno">http://183.82.110.105:8081/oklerapi/diseasemapping/getAllDiseasesMapping?mapping_typeid=2</string>
-    <string name="getDiseasesUrlHome">http://183.82.110.105:8081/oklerapi/diseasemapping/getAllDiseasesMapping?mapping_typeid=5</string>
-    <string name="getDiseasesUrlAyur">http://183.82.110.105:8081/oklerapi/diseasemapping/getAllDiseasesMapping?mapping_typeid=3</string>
+    <string name="getDiseasesUrlAllo">https://www.okler.com/api/diseasemapping/getAllDiseasesMapping?mapping_typeid=4</string>
+    <string name="getMedFordiseaseUrlPart1">https://www.okler.com/api/diseasemapping/getrecordsbydiseases?mapping_typeid=4&amp;disease_id=</string>
+    <string name="getDiseasesUrlDiagno">https://www.okler.com/api/diseasemapping/getAllDiseasesMapping?mapping_typeid=2</string>
+    <string name="getDiseasesUrlHome">https://www.okler.com/api/diseasemapping/getAllDiseasesMapping?mapping_typeid=5</string>
+    <string name="getDiseasesUrlAyur">https://www.okler.com/api/diseasemapping/getAllDiseasesMapping?mapping_typeid=3</string>
     <string name="getdiseaseSearchPart">&amp;search=</string>
     <string name="getdiseasePagePart">&amp;page=</string>
     <string name="title_activity_new_sign_in">Sign In</string>
@@ -235,19 +235,19 @@
     <string name="security_code">Security Code</string>
     <string name="send_msg">SEND MESSAGE</string>
     <string name="title_activity_my_account"></string>
-    <string name="get_user_details">http://183.82.110.105:8081/oklerapi/users/profile?</string>
-    <!-- <string name="get_user_address">http://183.82.110.105:8081/oklerapi/users/GetuserPatientAddress?customer_id=2</string> -->
-    <string name="upload_pres">http://183.82.110.105:8081/oklerapi/prescription/addprescription</string>
-    <string name="get_otp_for_phoneNum1">http://183.82.110.105:8081/oklerapi/otp/send_otp?mobileNumber=</string>
+    <string name="get_user_details">https://www.okler.com/api/users/profile?</string>
+    <!-- <string name="get_user_address">https://www.okler.com/api/users/GetuserPatientAddress?customer_id=2</string> -->
+    <string name="upload_pres">https://www.okler.com/api/prescription/addprescription</string>
+    <string name="get_otp_for_phoneNum1">https://www.okler.com/api/otp/send_otp?mobileNumber=</string>
     <string name="get_otp_for_phoneNum2">&amp;reason_type=send otp</string>
-    <string name="registerUser">http://183.82.110.105:8081/oklerapi/users/saveuser</string>
+    <string name="registerUser">https://www.okler.com/api/users/saveuser</string>
 
     <!-- 27 jan 2016 -->
     <string name="interactions">INTERACTIONS</string>
     <string name="diet_restriction">DIET RESTRICTION</string>
     <string name="composition">COMPOSITION</string>
     <string name="packing_size">PACKING SIZE</string>
-    <string name="getMedsUrlPageNo1">http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=</string>
+    <string name="getMedsUrlPageNo1">https://www.okler.com/api/products/products/productsbyprotype?page=</string>
     <string name="getMedsUrlStartWith2">&amp;search=</string>
     <string name="getMedsUrlProdId3">&amp;prod_id=</string>
     <string name="getMedsUrlProdType4">&amp;pro_type=</string>
@@ -259,7 +259,7 @@
     <string name="getMedsUrlsortprice8">&amp;sort_price=</string>
     <string name="getMedsUrlPinCode">&amp;pincode=</string>
     <string name="getMedsUrlCityId">&amp;city_id=</string>
-    <string name="getMedsForDiease">http://183.82.110.105:8081/oklerapi/diseasemapping/getDetailsBymedOrTestid_disease?disease_id=</string>
+    <string name="getMedsForDiease">https://www.okler.com/api/diseasemapping/getDetailsBymedOrTestid_disease?disease_id=</string>
     <string name="getMedsDiseaseMappingType">&amp;mapping_typeid=</string>
     <string name="getMedsDiseaseRec">&amp;rec_id=</string>
     <string name="getMedsDiseaseBrand">&amp;brand_id=</string>
@@ -268,37 +268,37 @@
     <string name="getMedsDiseaseSearch">&amp;search=</string>
 
     <!--
-    <string name="getAllMedsAyurUrl">http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=&amp;search=&amp;prod_id=&amp;pro_type=3&amp;order_by=asc&amp;price_range=&amp;brand_id=</string>
-    <string name="getAllMedsHomeoUrl">http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=&amp;search=&amp;prod_id=&amp;pro_type=4&amp;order_by=asc&amp;price_range=&amp;brand_id=</string>
+    <string name="getAllMedsAyurUrl">https://www.okler.com/api/products/products/productsbyprotype?page=&amp;search=&amp;prod_id=&amp;pro_type=3&amp;order_by=asc&amp;price_range=&amp;brand_id=</string>
+    <string name="getAllMedsHomeoUrl">https://www.okler.com/api/products/products/productsbyprotype?page=&amp;search=&amp;prod_id=&amp;pro_type=4&amp;order_by=asc&amp;price_range=&amp;brand_id=</string>
     -->
-    <string name="getMedsForDisMappingId">http://183.82.110.105:8081/oklerapi/diseasemapping/getrecordsbydiseases?mapping_typeid=</string>
+    <string name="getMedsForDisMappingId">https://www.okler.com/api/diseasemapping/getrecordsbydiseases?mapping_typeid=</string>
     <string name="getMedsForDisDiD">&amp;disease_id=</string>
     <string name="getMedsForDisPage">&amp;page=</string>
     <string name="getMedsForDisLastPart">&amp;order_by=asc</string>
-    <string name="getPinUrlPart1">http://183.82.110.105:8081/oklerapi/products/products/check_product_availability?prod_id=</string>
+    <string name="getPinUrlPart1">https://www.okler.com/api/products/products/check_product_availability?prod_id=</string>
     <string name="getPinUrlPart2">&amp;pincode=</string>
-    <string name="getMedSubUrl">http://183.82.110.105:8081/oklerapi/products/products/getproductrelated_constituent?pid=</string>
+    <string name="getMedSubUrl">https://www.okler.com/api/products/products/getproductrelated_constituent?pid=</string>
     <string name="title_activity_med">MedActivity</string>
     <!--
-    <string name="getMedByAlphaPageNo1">http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=</string>
+    <string name="getMedByAlphaPageNo1">https://www.okler.com/api/products/products/productsbyprotype?page=</string>
 	<string name="getMedByAlphaStartWith2">&amp;search=&amp;prod_id=&amp;pro_type=0&amp;order_by=&amp;price_range=&amp;brand_id=</string>
     -->
-    <string name="signinUser1">http://183.82.110.105:8081/oklerapi/users/authenticate</string>
-    <string name="get_user_address">http://183.82.110.105:8081/oklerapi/users/GetuserAddress?customer_id=</string>
-    <string name="delete_user_address">http://183.82.110.105:8081/oklerapi/users/deleteuserAddress?</string>
-    <string name="get_categories">http://183.82.110.105:8081/oklerapi/products/category/categories</string>
-    <string name="get_sub_categories">http://183.82.110.105:8081/oklerapi//products/subcategory/subcategories?id=</string>
-    <string name="get_brands_allo1">http://183.82.110.105:8081/oklerapi/products/products/AllBrands?medicine_type_id=0</string>
+    <string name="signinUser1">https://www.okler.com/api/users/authenticate</string>
+    <string name="get_user_address">https://www.okler.com/api/users/GetuserAddress?customer_id=</string>
+    <string name="delete_user_address">https://www.okler.com/api/users/deleteuserAddress?</string>
+    <string name="get_categories">https://www.okler.com/api/products/category/categories</string>
+    <string name="get_sub_categories">https://www.okler.com/api//products/subcategory/subcategories?id=</string>
+    <string name="get_brands_allo1">https://www.okler.com/api/products/products/AllBrands?medicine_type_id=0</string>
     <string name="get_brands_allo2">&amp;page=</string>
     <string name="get_brands_allo3">&amp;search=</string>
-    <string name="get_brands_homeo1">http://183.82.110.105:8081/oklerapi/products/products/AllBrands?medicine_type_id=4</string>
+    <string name="get_brands_homeo1">https://www.okler.com/api/products/products/AllBrands?medicine_type_id=4</string>
     <!-- <string name="get_categories_icons">http://183.82.110.105:8081/oklerdevv2/uploads/categories/</string> -->
-    <string name="resetPassword1">http://183.82.110.105:8081/oklerapi/otp/send_otp?mobileNumber=</string>
+    <string name="resetPassword1">https://www.okler.com/api/otp/send_otp?mobileNumber=</string>
     <string name="resetPassword2">&amp;reason_type=reset</string>
     <string name="user_login_status">UserLogInStatus</string>
     <string name="sign_in_up_activity">SignInUpStatus</string>
-    <string name="get_healthshop_brand">http://183.82.110.105:8081/oklerapi/products/products/AllBrands?medicine_type_id=1</string>
-    <string name="getHealthShopProds">http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=</string>
+    <string name="get_healthshop_brand">https://www.okler.com/api/products/products/AllBrands?medicine_type_id=1</string>
+    <string name="getHealthShopProds">https://www.okler.com/api/products/products/productsbyprotype?page=</string>
     <string name="getHealthShopProdsSearch">search=</string>
     <string name="getHealthShopProdsProdId">prod_id=</string>
     <string name="getHealthShopProdId">prod_id=</string>
@@ -311,83 +311,83 @@
     <string name="getHealthShoppincode">pincode=</string>
     <string name="getHealthShopcityid">city_id=</string>
     <!-- For Diagnostic Tests -->
-    <string name="getDiagnoTestSearch">http://183.82.110.105:8081/oklerapi/lab/gettests?search=</string>
+    <string name="getDiagnoTestSearch">https://www.okler.com/api/lab/gettests?search=</string>
     <string name="getDiagnoTestPage">&amp;page=</string>
     <string name="getDiagnoTestOrderBy">&amp;order_by=</string>
     <string name="getDiagnoTestTestId">&amp;test_id=</string>
-    <string name="searchCriteriaWise1">http://183.82.110.105:8081/oklerapi/lab/gettests?search=</string>
+    <string name="searchCriteriaWise1">https://www.okler.com/api/lab/gettests?search=</string>
     <string name="searchCriteriaWise2">&amp;page=0&amp;order_by=asc&amp;test_id=</string>
-    <string name="getDiagnoDisease">http://183.82.110.105:8081/oklerapi/diseasemapping/getAllDiseasesMapping?mapping_typeid=1</string>
+    <string name="getDiagnoDisease">https://www.okler.com/api/diseasemapping/getAllDiseasesMapping?mapping_typeid=1</string>
     <string name="getDiagnoDisease1">&amp;search=</string>
     <string name="getDiagnoDisease2">&amp;page=</string>
-    <string name="getDiagnoTestforD1">http://183.82.110.105:8081/oklerapi/diseasemapping/getrecordsbydiseases?mapping_typeid=1&amp;disease_id=</string>
+    <string name="getDiagnoTestforD1">https://www.okler.com/api/diseasemapping/getrecordsbydiseases?mapping_typeid=1&amp;disease_id=</string>
     <string name="getDiagnoTestforD2">&amp;order_by=asc&amp;search=</string>
     <string name="getDiagnoTestforD3">&amp;page=</string>
     <string name="title_activity_search_by_med1">SearchByMed1Activity</string>
-    <string name="get_prescriptions">http://183.82.110.105:8081/oklerapi/prescription/getpresc?user_id=</string>
+    <string name="get_prescriptions">https://www.okler.com/api/prescription/getpresc?user_id=</string>
 
     <!-- 2nd feb Gitesh -->
-    <string name="placeOrderUrl">http://183.82.110.105:8081/oklerapi/order/bookorder</string>
+    <string name="placeOrderUrl">https://www.okler.com/api/order/bookorder</string>
     <string name="title_activity_allo_up_presc"></string>
-    <string name="add_patient_address">http://183.82.110.105:8081/oklerapi/users/AdduserAddress?</string>
+    <string name="add_patient_address">https://www.okler.com/api/users/AdduserAddress?</string>
     <!-- Diagnostic Pacakage Screen -->
-    <string name="getDiagnoPackageSearch">http://183.82.110.105:8081/oklerapi/lab/getpackgs?search=</string>
+    <string name="getDiagnoPackageSearch">https://www.okler.com/api/lab/getpackgs?search=</string>
     <string name="getDiagnoPackagePage">&amp;page=</string>
     <string name="getDiagnoPackageOrderBy">&amp;order_by=</string>
     <string name="getDiagnoPackagePkgId">&amp;pkg_id=</string>
     <string name="title_activity_service_category"></string>
     <string name="title_activity_offers">OffersActivity</string>
     <!-- DiagnoLabsAvailabe -->
-    <string name="getLabsTest">http://183.82.110.105:8081/oklerapi/lab/getlabsbyEntites?test_id=</string>
-    <string name="getMyCartUrl">http://183.82.110.105:8081/oklerapi/products/usercart/cartitems?cust_id=</string>
+    <string name="getLabsTest">https://www.okler.com/api/lab/getlabsbyEntites?test_id=</string>
+    <string name="getMyCartUrl">https://www.okler.com/api/products/usercart/cartitems?cust_id=</string>
     <string name="str_confirm_logout">Are you sure you want to logout?</string>
-    <string name="couponCodeUrl">http://183.82.110.105:8081/oklerapi/coupons/couponcode?ccode=</string>
+    <string name="couponCodeUrl">https://www.okler.com/api/coupons/couponcode?ccode=</string>
     <!-- product-detail-hs -->
     <string name="prodHoriTitle">CUSTOMERS WHO BOUGHT THIS ITEM ALSO BOUGHT</string>
     <string name="justViewdProducts">YOU RECENTLY VIEW THIS PRODUCT</string>
-    <string name="relatedProductHs1">http://183.82.110.105:8081/oklerapi/products/products/getproductrelated_constituent?pid=</string>
+    <string name="relatedProductHs1">https://www.okler.com/api/products/products/getproductrelated_constituent?pid=</string>
     <string name="relatedProductHs2">&amp;spage=0&amp;apage=&amp;rpage=</string>
-    <string name="AddToFavouriteUrlPart1">http://183.82.110.105:8081/oklerapi/products/products/addfav?cust_id=</string>
-    <string name="AddToFavouriteUrlPart2">&amp;prod_id=195</string>
-    <string name="DeleteUserAddPart1">http://183.82.110.105:8081/oklerapi/users/deleteuserAddress?customer_id=</string>
+    <string name="AddToFavouriteUrlPart1">https://www.okler.com/api/products/products/addfav?cust_id=</string>
+    <string name="AddToFavouriteUrlPart2">&amp;prod_id=</string>
+    <string name="DeleteUserAddPart1">https://www.okler.com/api/users/deleteuserAddress?customer_id=</string>
     <string name="DeleteUserAddPart2">&amp;addr_id=</string>
-    <string name="DefaultBillShipPart1">http://183.82.110.105:8081/oklerapi/users/defaultBillingShippinguserAddress?cust_id=</string>
+    <string name="DefaultBillShipPart1">https://www.okler.com/api/users/defaultBillingShippinguserAddress?cust_id=</string>
     <string name="DefaultBillShipPart2">&amp;ship_id=</string>
     <string name="DefaultBillShipPart3">&amp;bill_id=</string>
-    <string name="getAlltymslotsForLab">http://183.82.110.105:8081/oklerapi/lab/getAllslots</string>
-    <string name="getLabsForPinPart1">http://183.82.110.105:8081/oklerapi/lab/getlabsfrompincodes?pincode=</string>
+    <string name="getAlltymslotsForLab">https://www.okler.com/api/lab/getAllslots</string>
+    <string name="getLabsForPinPart1">https://www.okler.com/api/lab/getlabsfrompincodes?pincode=</string>
     <string name="getLabsForPinPart2">&amp;labid=</string>
     <string name="getLabsForPinPart3">&amp;test_ids=</string>
     <string name="getLabsForPinPart4">&amp;pkg_ids=</string>
-    <string name="couponCodeUrlPart1">http://183.82.110.105:8081/oklerapi/coupons/couponcode?ccode=</string>
+    <string name="couponCodeUrlPart1">https://www.okler.com/api/coupons/couponcode?ccode=</string>
     <string name="couponCodeUrlPart2">&amp;coupon_type=</string>
     <string name="couponCodeUrlPart3">&amp;order_amt=</string>
     <string name="title_activity_otp_confirmation">OtpConfirmationActivity</string>
     <string name="labid">Lab_id</string>
     <string name="testid">test_id</string>
     <string name="pckid">package_id</string>
-    <!-- <string name="getLabsTest">http://183.82.110.105:8081/oklerapi/lab/getlabsbyEntites?test_id=</string> -->
-    <string name="getLabsTest1">http://183.82.110.105:8081/oklerapi/lab/getlabsbyEntites?test_id=</string>
+    <!-- <string name="getLabsTest">https://www.okler.com/api/lab/getlabsbyEntites?test_id=</string> -->
+    <string name="getLabsTest1">https://www.okler.com/api/lab/getlabsbyEntites?test_id=</string>
     <string name="getLabsTest2">&amp;lab_id=&amp;city_id=</string>
-    <string name="PlaceOrderDiagnoUrl">http://183.82.110.105:8081/oklerapi/lab/addlabbook?cust_id=</string>
-    <string name="GetPatientsAllAddr">http://183.82.110.105:8081/oklerapi/users/GetuserPatientAddress?user_id=</string>
+    <string name="PlaceOrderDiagnoUrl">https://www.okler.com/api/lab/addlabbook?cust_id=</string>
+    <string name="GetPatientsAllAddr">https://www.okler.com/api/users/GetuserPatientAddress?user_id=</string>
     <!-- Gitesh 14 feb -->
-    <string name="AddNewPatientUrl">http://183.82.110.105:8081/oklerapi/users/AdduserPatientAddress?user_id=</string>
-    <string name="DeletePatientUrlPart1">http://183.82.110.105:8081/oklerapi/users/deleteuserPatientAddress?user_id=</string>
+    <string name="AddNewPatientUrl">https://www.okler.com/api/users/AdduserPatientAddress?user_id=</string>
+    <string name="DeletePatientUrlPart1">https://www.okler.com/api/users/deleteuserPatientAddress?user_id=</string>
     <string name="DeletePatientUrlPart2">&amp;patient_id=</string>
-    <string name="getLabsForPackage1">http://183.82.110.105:8081/oklerapi/lab/getlabsbyEntites?pkg_id=</string>
+    <string name="getLabsForPackage1">https://www.okler.com/api/lab/getlabsbyEntites?pkg_id=</string>
     <string name="getLabsForPackage2">&amp;lab_id=&amp;city_id=</string>
-    <string name="orderConfirmCallBackUrl">http://183.82.110.105:8081/oklerapi/emailtemplateservice/order_submitted_confirmation_callback?cust_id=</string>
-    <string name="getUserCart">http://183.82.110.105:8081/oklerapi/products/usercart/cartitems?cust_id=</string>
+    <string name="orderConfirmCallBackUrl">https://www.okler.com/api/emailtemplateservice/order_submitted_confirmation_callback?cust_id=</string>
+    <string name="getUserCart">https://www.okler.com/api/products/usercart/cartitems?cust_id=</string>
     <string name="FlagRdImage">flag</string>
-    <string name="cancel_order_diagno_id">http://183.82.110.105:8081/oklerapi/lab/deletelabbook?book_order=</string>
+    <string name="cancel_order_diagno_id">https://www.okler.com/api/lab/deletelabbook?book_order=</string>
     <string name="cancel_order_diagno_custId">&amp;cust_id=</string>
     <string name="cancel_order_diagno_reason">&amp;reason=</string>
-    <string name="getProdInfoByIdUrlPart1">http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=&amp;search=&amp;prod_id=</string>
+    <string name="getProdInfoByIdUrlPart1">https://www.okler.com/api/products/products/productsbyprotype?page=&amp;search=&amp;prod_id=</string>
     <string name="getProdInfoByIdUrlPart2">&amp;pro_type=</string>
     <string name="getProdInfoByIdUrlPart3">&amp;order_by=&amp;price_range=&amp;brand_id=&amp;subcat_id=&amp;sort_price=</string>
     <string name="diagnoOrdercancelDlgTitle">Are you sure you want to cancel this order ?</string>
-    <string name="get_faq_term_dynamic_url">http://183.82.110.105:8081/oklerapi/users/dynamic_urls</string>
+    <string name="get_faq_term_dynamic_url">https://www.okler.com/api/users/dynamic_urls</string>
     <string name="title_activity_notification"></string>
     <string name="send_email_order_url">emailtemplateservice/service_booking_callback?</string>
     <string name="support_reason">users/helpnsupport</string>
@@ -407,7 +407,7 @@
     <string name="diagno_order_cancel_url">emailtemplateservice/diagnostics_booking_cancel_callback?</string>
     <string name="diagno_booking_conform_url">emailtemplateservice/diagnostics_booking_callback?</string>
     <string name="social_login_callback">emailtemplateservice/user_registration_callback?</string>
-    <string name="getProdsByGroup1">http://183.82.110.105:8081/oklerapi/products/products/getproductsbygroup?pro_type=</string>
+    <string name="getProdsByGroup1">https://www.okler.com/api/products/products/getproductsbygroup?pro_type=</string>
     <string name="getProdsByGroup2">&amp;order_by=</string>
     <string name="getProdsByGroup3">&amp;page=</string>
     <string name="getProdsByGroup4">&amp;search=</string>
@@ -415,19 +415,19 @@
     <string name="forgotPasswordUrl">emailtemplateservice/forgot_password_callback?</string>
     <string name="call_me_to_discuss_url">emailtemplateservice/callme_to_discuss_callback?</string>
     <string name="user_registration_url">emailtemplateservice/user_registration_callback?</string>
-    <string name="relatedProdsHs">http://183.82.110.105:8081/oklerapi/products/products/getgenericproduct_related?p_id=</string>
+    <string name="relatedProdsHs">https://www.okler.com/api/products/products/getgenericproduct_related?p_id=</string>
     <string name="title_activity_group_by_meds"></string>
-    <string name="delete_cart_url">http://183.82.110.105:8081/oklerapi/products/usercart/deletecart?cust_id=</string>
+    <string name="delete_cart_url">https://www.okler.com/api/products/usercart/deletecart?cust_id=</string>
     <string name="product_id">&amp;product_id=</string>
-    <string name="add_fav_url">http://183.82.110.105:8081/oklerapi/products/products/addfav?</string>
+    <string name="add_fav_url">https://www.okler.com/api/products/products/addfav?</string>
     <string name="cust_id">cust_id=</string>
-    <string name="save_cart_url">http://183.82.110.105:8081/oklerapi/products/usercart/savecart?product=</string>
+    <string name="save_cart_url">https://www.okler.com/api/products/usercart/savecart?product=</string>
     <string name="quantity">&amp;quantity=</string>
-    <string name="is_user_exists_url">http://183.82.110.105:8081/oklerapi/users/getphonenumMail?phoneno=</string>
+    <string name="is_user_exists_url">https://www.okler.com/api/users/getphonenumMail?phoneno=</string>
     <string name="mail">&amp;mail=</string>
-    <string name="get_fav_url">http://183.82.110.105:8081/oklerapi/products/products/getfav?id=</string>
-    <string name="delete_fav_url">http://183.82.110.105:8081/oklerapi/products/products/deletefav?cust_id=</string>
-    <string name="clear_all_fav_url">http://183.82.110.105:8081/oklerapi/products/products/deleteAllfav?cust_id=</string>
+    <string name="get_fav_url">https://www.okler.com/api/products/products/getfav?id=</string>
+    <string name="delete_fav_url">https://www.okler.com/api/products/products/deletefav?cust_id=</string>
+    <string name="clear_all_fav_url">https://www.okler.com/api/products/products/deleteAllfav?cust_id=</string>
     <string name="orderId">&amp;order_id=</string>
     <string name="book_order_id">&amp;bookorder_id=</string>
     <string name="user_id_field">user_id=</string>
@@ -449,7 +449,7 @@
     <string name="addr2">&amp;addr2=</string>
     <string name="land_mark">&amp;land_mark=</string>
     <string name="pincode">&amp;pincode=</string>
-    <string name="change_password_url">http://183.82.110.105:8081/oklerapi/users/changepassword?user_id=</string>
+    <string name="change_password_url">https://www.okler.com/api/users/changepassword?user_id=</string>
     <string name="state_id">&amp;state_id=</string>
     <string name="country_code">+91</string>
     <string name="company">&amp;company=</string>

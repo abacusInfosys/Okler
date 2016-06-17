@@ -223,6 +223,7 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 								newDate.set(Calendar.MINUTE, 00);
 								newDate.set(Calendar.SECOND, 00);
 								newDate.set(Calendar.MILLISECOND, 00);
+								newDate.set(Calendar.AM_PM, 1);
 								int a = newDate.compareTo(now);
 								if ((newDate.compareTo(now) == 1)
 										|| (newDate.compareTo(now) == 0)) {
@@ -237,6 +238,11 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 								String date1 = edt_To.getText().toString();
 								try {
 									date.setTime(dateFormatter.parse(date1));
+									date.set(Calendar.HOUR, 00);
+									date.set(Calendar.MINUTE, 00);
+									date.set(Calendar.SECOND, 00);
+									date.set(Calendar.MILLISECOND, 00);
+									date.set(Calendar.AM_PM, 1);
 								} catch (ParseException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -247,6 +253,7 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 								newDate.set(Calendar.MINUTE, 00);
 								newDate.set(Calendar.SECOND, 00);
 								newDate.set(Calendar.MILLISECOND, 00);
+								newDate.set(Calendar.AM_PM, 1);
 								int a = newDate.compareTo(now);
 								if ((newDate.compareTo(now) == 1)
 										|| (newDate.compareTo(now) == 0)) {
@@ -256,11 +263,26 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 								} else {
 									edt_From.setText("");
 								}
+								Calendar nd = newDate;
+								int ndn = newDate.get(Calendar.DAY_OF_MONTH); 
+								Calendar dt = date;
+								int ndnt = date.get(Calendar.DAY_OF_MONTH);
+								int abc = newDate.compareTo(date);
 								if (newDate.compareTo(date) == 1) {
 									edt_From.setText("");
 									// edt_From.setText(dateFormatter.format(newDate.getTime()));
 								}
-
+								if (newDate.compareTo(date) == -1) {
+									edt_From.setText("");
+									// edt_From.setText(dateFormatter.format(newDate.getTime()));
+								}
+								if (newDate.compareTo(date) == 0) {
+									edt_From.setText(dateFormatter
+											.format(newDate.getTime()));
+									// edt_From.setText(dateFormatter.format(newDate.getTime()));
+								}
+								
+								
 							}
 						}
 					}, newCalendar.get(Calendar.YEAR),
@@ -284,6 +306,7 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 								newDate.set(Calendar.MINUTE, 00);
 								newDate.set(Calendar.SECOND, 00);
 								newDate.set(Calendar.MILLISECOND, 00);
+								newDate.set(Calendar.AM_PM, 1);
 								int a = newDate.compareTo(now);
 								if ((newDate.compareTo(now) == 1)
 										|| (newDate.compareTo(now) == 0)) {
@@ -298,6 +321,11 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 								String date1 = edt_From.getText().toString();
 								try {
 									date.setTime(dateFormatter.parse(date1));
+									date.set(Calendar.HOUR, 00);
+									date.set(Calendar.MINUTE, 00);
+									date.set(Calendar.SECOND, 00);
+									date.set(Calendar.MILLISECOND, 00);
+									date.set(Calendar.AM_PM, 1);
 								} catch (ParseException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
@@ -308,6 +336,7 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 								newDate.set(Calendar.MINUTE, 00);
 								newDate.set(Calendar.SECOND, 00);
 								newDate.set(Calendar.MILLISECOND, 00);
+								newDate.set(Calendar.AM_PM, 1);
 								int a = newDate.compareTo(now);
 								if ((newDate.compareTo(date) == 1)
 										|| (newDate.compareTo(date) == 0)) {

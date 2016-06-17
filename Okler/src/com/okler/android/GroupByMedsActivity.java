@@ -99,7 +99,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 	BrandsDataBean brndHS;
 	RelativeLayout back_layout;
 	
-
+	WebJsonObjectRequest wjson;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -137,15 +137,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 				 
 		
 		
-		if (Okler.getInstance().getBookingType() == 0) {
-			brandsData = Okler.getInstance().getAlloBrands();
-			populateBrands();
-		} else if (Okler.getInstance().getBookingType() == 4) {
-			brandsData = Okler.getInstance().getHomeoBrands();
-			populateBrands();
-		}
-		if (Okler.getInstance().getBookingType() == 3)
-			overflow.setVisibility(View.INVISIBLE);
+		
 
 		medListExp.setOnScrollListener(this);
 
@@ -251,6 +243,23 @@ public class GroupByMedsActivity extends BaseActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		
+		String bookingType = getIntent().getStringExtra("bookingType");
+		
+		Okler.getInstance().setBookingType(UIUtils.getBookingType(bookingType));
+		
+		//int type = Okler.getInstance().getBookingType();
+		
+		if (Okler.getInstance().getBookingType() == 0) {
+			brandsData = Okler.getInstance().getAlloBrands();
+			populateBrands();
+		} else if (Okler.getInstance().getBookingType() == 4) {
+			brandsData = Okler.getInstance().getHomeoBrands();
+			populateBrands();
+		}
+		if (Okler.getInstance().getBookingType() == 3)
+			overflow.setVisibility(View.INVISIBLE);
+		
 		pageNo= 0;
 		cur_pageNo=0;
 		totalrecordsfromwebservice=0;
@@ -260,7 +269,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 		ProdList.clear();
 		gAdap.notifyDataSetChanged();
 		setUrl();
-		callWebService(Url);
+		callWebService(Url,false);
 		currentPosition.setText("#");
 		UIUtils.setCartCount(btnCart, ack);
 
@@ -512,7 +521,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 							abc = "";
 							brand_id = brandsData.get(i).getBrandId();
 							setUrl();
-							callWebService(Url);
+							callWebService(Url,false);
 
 						}
 					}
@@ -595,7 +604,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 				brand_id = "";
 				gAdap.notifyDataSetChanged();
 				setUrl();
-				callWebService(Url);
+				callWebService(Url,false);
 
 			}
 		});
@@ -880,7 +889,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 				// Url = disUrl(serverUrl, 4, diseaseId, "asc", abc, pageNo);
 				pageNo++;
 				setUrl();
-				callWebService(Url);
+				callWebService(Url,false);
 
 				Log.e("TP", "" + pageNo);
 			}
@@ -897,8 +906,10 @@ public class GroupByMedsActivity extends BaseActivity implements
 		this.progressLinLayout.setVisibility(View.INVISIBLE);
 	}
 
-	public void callWebService(String Url) {
-		WebJsonObjectRequest wjson = new WebJsonObjectRequest(Method.GET, Url,
+	public void callWebService(String Url,boolean isSearch) {
+		if(wjson!=null)
+			wjson.cancel();
+		wjson = new WebJsonObjectRequest(Method.GET, Url,
 				new JSONObject(), new Response.Listener<JSONObject>() {
 
 					@Override
@@ -916,12 +927,18 @@ public class GroupByMedsActivity extends BaseActivity implements
 						setAlphaClick();
 					}
 				});
-
+		if(isSearch)
+		{
+			String str = "search";
+			wjson.setTag(str);
+			wjson.setSearch(true);
+		}
 		if (VolleyRequest.addJsonObjectRequest(ack, wjson)) {
 			showProgress(true);
 		} else {
 			showProgress(false);
 		}
+		
 	}
 
 	@Override
@@ -937,6 +954,8 @@ public class GroupByMedsActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 
 		try {
+			if(wjson!=null)
+				wjson.cancel();
 			abc = URLEncoder.encode(newText, "utf-8");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -953,11 +972,11 @@ public class GroupByMedsActivity extends BaseActivity implements
 		 */
 		setUrl();
 		isSearching = true;
-		callWebService(Url);
+		callWebService(Url,true);
 		}
 		else if(abc.length()==0){
 			setUrl();
-			callWebService(Url);
+			callWebService(Url,true);
 		}
 		else
 		{

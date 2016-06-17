@@ -239,7 +239,7 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 						userBean.setId(uid);
 						userBean.setUser_image(userimage);
 						Utilities.writeCurrentUserToSharedPref(actCntx,userBean);	
-						Utilities.writeUserStatusToSharedPref(actCntx.getApplicationContext(), UserStatusEnum.LOGGED_IN);
+						//Utilities.writeUserStatusToSharedPref(actCntx.getApplicationContext(), UserStatusEnum.LOGGED_IN);
 						//registrationCallbackMail();
 						//userBean=Okler.getInstance().getuDataBean();
 						//Utilities.writeCurrentUserToSharedPref(actCntx, userBean);

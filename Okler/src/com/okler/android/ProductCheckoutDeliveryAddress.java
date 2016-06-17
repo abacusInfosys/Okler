@@ -52,9 +52,9 @@ import android.widget.Toast;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 public class ProductCheckoutDeliveryAddress extends BaseActivity {
-	Button notifCount;
+	Button proceed,notifCount;
 	Toolbar toolBar;
-	TextView proceed,textView1,text_name,text_address,selectAddress;
+	TextView textView1,text_name,text_address,selectAddress;
 	RelativeLayout addAddressLayout;
 	CartDataBean cdbean;
 	View bottomBarLayout;
@@ -140,7 +140,7 @@ public class ProductCheckoutDeliveryAddress extends BaseActivity {
 			}
 		});
 
-		proceed =(TextView) findViewById(R.id.tv_proceed);
+		proceed =(Button)findViewById(R.id.tv_proceed);
 		//proceed.setEnabled(false);
 		proceed.setOnClickListener(new OnClickListener() {
 			

@@ -15,8 +15,11 @@
         <TextView
             android:id="@+id/textView1"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textSize="16sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:gravity="center"
             android:text="Checkout"
             android:background="#FCAB12" />
@@ -114,18 +117,19 @@
     	 </LinearLayout>
     	</RelativeLayout>
         </ScrollView>
-    	<TextView 
+    	<Button 
     	    android:id="@+id/tv_proceed"
-    	    android:layout_width="match_parent"
-    	    android:layout_height="?actionBarSize"
-    	    android:textSize="20dp"
+    	    android:layout_width="fill_parent"
+    	    android:layout_height="wrap_content"
+    	    android:textSize="16dp"
     	    android:text="@string/text_proceed"
     	    android:gravity="center"
     	    android:textStyle="bold"
     	    android:layout_above="@+id/bottombar"
     	    android:textColor="@color/White"
     	    android:background="@color/Blue"
-    	    
+    	    android:paddingTop="6dp"
+    	    android:paddingBottom="6dp"
     	    />
     	<include
         android:id="@+id/bottombar"

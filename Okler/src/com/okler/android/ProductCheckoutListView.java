@@ -51,7 +51,7 @@ import android.widget.Toast;
 public class ProductCheckoutListView extends BaseActivity {
 	Button notifCount;
 	Toolbar toolBar;
-	static TextView next;
+	static Button next;
 	static TextView totalAmountValue;
 	static TextView count;
 	static TextView emptyText;
@@ -154,7 +154,7 @@ public class ProductCheckoutListView extends BaseActivity {
 		
 		amountLayout_chList = (RelativeLayout) findViewById(R.id.amountLayout_chList);
 		emptyText = (TextView) findViewById(R.id.emptyText);
-		next = (TextView) findViewById(R.id.next);
+		next = (Button) findViewById(R.id.next);
 		next.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -456,7 +456,8 @@ WebJsonObjectRequest adjson = new WebJsonObjectRequest(Method.GET, get_addr, new
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
+			showProgress(false);
+			next.setEnabled(true);
 		}
 		
 		
@@ -467,6 +468,7 @@ WebJsonObjectRequest adjson = new WebJsonObjectRequest(Method.GET, get_addr, new
 	public void onErrorResponse(VolleyError error) {
 		Log.e("ERROR", ""+error.getStackTrace());
 		showProgress(false);
+		next.setEnabled(true);
 		//Utilities.handleVollyError(error, ack);
 	}
 });	

@@ -50,7 +50,16 @@ public class VolleyRequest {
 			WebJsonObjectRequest jsonObjRequest) {
 		try {
 			if (NetworkUtils.checkNetworkAvailable(paramContext)) {
+				
 				// getRequestQueue(paramContext).getCache().get("https://www.okler.com/api/products/usercart/cartitems?cust_id=1285").serverDate;
+				/*if(jsonObjRequest.isSearch)
+				{
+					synchronized (getRequestQueue(paramContext)) {
+						getRequestQueue(paramContext).wait(5000);
+					}					
+				String str = "search";
+					getRequestQueue(paramContext).cancelAll(str);
+				}	*/			
 				getRequestQueue(paramContext).add(jsonObjRequest);
 				return true;
 			} else
@@ -138,6 +147,7 @@ public class VolleyRequest {
 		if (mRequestQue == null) {
 			mRequestQue = Volley.newRequestQueue(paramContext
 					.getApplicationContext());
+			
 		}
 		
 		return mRequestQue;

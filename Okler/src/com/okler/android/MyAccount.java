@@ -58,8 +58,7 @@ public class MyAccount extends BaseActivity {
 	TextView text_name, text_addr;
 	RoundedImageView profile_image;
 	LinearLayout text_myprofile;
-
-	LinearLayout layout;
+	LinearLayout layout,favouritesLL;
 
 	UsersDataBean currentUser;
 
@@ -97,6 +96,7 @@ public class MyAccount extends BaseActivity {
 		txt_Uploaded_prescriptions = (TextView) findViewById(R.id.MyUploaded_prescriptions);
 		txt_favourites = (TextView) findViewById(R.id.text_favourites);
 		myOrderRl = (RelativeLayout) findViewById(R.id.myOrderRl);
+		favouritesLL = (LinearLayout)findViewById(R.id.favouritesLL);
 
 		layout = (LinearLayout) findViewById(R.id.layout_services);
 		myOrderRl.setOnClickListener(new OnClickListener() {
@@ -130,7 +130,16 @@ public class MyAccount extends BaseActivity {
 
 			}
 		});
-
+		favouritesLL.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent in = new Intent(MyAccount.this, FavouritesActivity.class);
+				startActivity(in);
+				
+			}
+		});
+		
 		text_myprofile = (LinearLayout) findViewById(R.id.linearMyProfile);
 		text_myprofile.setOnClickListener(new OnClickListener() {
 
@@ -316,7 +325,7 @@ public class MyAccount extends BaseActivity {
 
 		RelativeLayout rl = (RelativeLayout) bottomBarLayout
 				.findViewById(R.id.manageProfRL);
-		ImageButton btnprofile = (ImageButton) rl
+		ImageView btnprofile = (ImageView) rl
 				.findViewById(R.id.btnManageProfile);
 		LinearLayout active_profile = (LinearLayout) rl
 				.findViewById(R.id.active_profile);

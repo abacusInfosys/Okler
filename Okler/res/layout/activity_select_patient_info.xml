@@ -66,12 +66,17 @@
      <Button
          android:id="@+id/btn_sced_pickup"
          android:layout_above="@id/bottombar"
-         android:layout_width="match_parent"
+         android:layout_width="fill_parent"
          android:background="@color/ModerateMagenta"
-         android:layout_height="?actionBarSize"
+         android:layout_height="wrap_content"
+         android:paddingTop="6dp"
+         android:paddingBottom="6dp"
+         android:gravity="center"
          android:text="@string/schedule_pickup"
          android:textColor="@color/White"
-         android:textSize="20sp" />
+         android:textSize="16sp"
+         
+          />
      
      
      <include

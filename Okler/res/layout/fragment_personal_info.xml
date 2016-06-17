@@ -8,85 +8,164 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
+	<RelativeLayout 
+	    android:id="@+id/fnameLL"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginTop="20dp"
+	    android:layout_marginBottom="20dp"
+	    >
     <EditText
         android:id="@+id/edtTet_firstname"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"        
-           android:imeOptions="actionNext"
-        android:layout_marginBottom="20dp"
-        android:drawableRight="@drawable/user_icon"
+        android:imeOptions="actionNext"
         android:inputType="textPersonName"
-        android:hint="First Name" >      
-    </EditText>
-
+        android:hint="First Name" />
+   <ImageView 
+       android:id="@+id/fnameIcon"
+       android:layout_width="20dp"
+       android:layout_height="20dp"
+       android:layout_marginRight="10dp"
+       android:src="@drawable/user_icon"
+       android:layout_alignParentRight="true"
+       android:layout_centerVertical="true"
+       />
+</RelativeLayout>
+<RelativeLayout 
+	    android:id="@+id/lnameLL"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginBottom="20dp"
+	    >
     <EditText
         android:id="@+id/edtTxt_surname"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"       
-           android:imeOptions="actionNext"
+        android:imeOptions="actionNext"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:inputType="textPersonName"
-        android:drawableRight="@drawable/user_icon"
         android:hint="SurName" />
-
+<ImageView 
+       android:id="@+id/lnameIcon"
+       android:layout_width="20dp"
+       android:layout_height="20dp"
+       android:layout_marginRight="10dp"
+       android:src="@drawable/user_icon"
+       android:layout_alignParentRight="true"
+       android:layout_centerVertical="true"
+       />
+</RelativeLayout>
+<RelativeLayout 
+	    android:id="@+id/emailLL"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginBottom="20dp"
+	    >
     <EditText
         android:id="@+id/edtTxt_email"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
-           android:imeOptions="actionNext"
+        android:imeOptions="actionNext"
         android:hint="Email"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:drawableRight="@drawable/envelop"
         android:inputType="textEmailAddress" />
-
+<ImageView 
+       android:id="@+id/emailIcon"
+       android:layout_width="20dp"
+       android:layout_height="20dp"
+       android:layout_marginRight="10dp"
+       android:src="@drawable/envelop"
+       android:layout_alignParentRight="true"
+       android:layout_centerVertical="true"
+       />
+</RelativeLayout>
+<RelativeLayout 
+	    android:id="@+id/phoneLL"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginBottom="20dp"
+	    >
     <EditText
         android:id="@+id/edtTxt_phonenumber"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
-           android:imeOptions="actionNext"
+        android:imeOptions="actionNext"
         android:hint="Phone No"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:drawableRight="@drawable/mobile_icon"
         android:inputType="numberSigned" />
-    
+  <ImageView 
+       android:id="@+id/phoneIcon"
+       android:layout_width="20dp"
+       android:layout_height="20dp"
+       android:layout_marginRight="10dp"
+       android:src="@drawable/mobile_icon"
+       android:layout_alignParentRight="true"
+       android:layout_centerVertical="true"
+       />
+</RelativeLayout>  
+<RelativeLayout 
+	    android:id="@+id/stateLL"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginBottom="20dp"
+	    >
     <AutoCompleteTextView
         android:id="@+id/edtTxt_state"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
-           android:imeOptions="actionNext"
-           android:inputType="text"
+        android:imeOptions="actionNext"
+        android:inputType="text"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:drawableRight="@drawable/icon_info"
         android:hint="State" />
-
+ <ImageView 
+       android:id="@+id/stateIcon"
+       android:layout_width="20dp"
+       android:layout_height="20dp"
+       android:layout_marginRight="10dp"
+       android:src="@drawable/icon_info"
+       android:layout_alignParentRight="true"
+       android:layout_centerVertical="true"
+       />
+</RelativeLayout> 
+<RelativeLayout 
+	    android:id="@+id/cityLL"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="horizontal"
+	    android:layout_marginBottom="20dp"
+	    >
     <AutoCompleteTextView
         android:id="@+id/edtTxt_city"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:ems="10"
         android:inputType="text"
-           android:imeOptions="actionDone"
+        android:imeOptions="actionDone"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:drawableRight="@drawable/location_icon"
         android:hint="City" />
-
+       	
+ <ImageView 
+       android:id="@+id/cityIcon"
+       android:layout_width="20dp"
+       android:layout_height="20dp"
+       android:layout_marginRight="10dp"
+       android:src="@drawable/location_icon"
+       android:layout_alignParentRight="true"
+       android:layout_centerVertical="true"
+       />
+</RelativeLayout> 
 
 
     <LinearLayout

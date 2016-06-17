@@ -19,11 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 public class BaseActivity extends AppCompatActivity implements OnClickListener {
 
-	protected ImageButton btnHome,btnNotif,btnUploadPres,btnManageProfi,btnQues;
+	protected ImageView btnHome,btnNotif,btnUploadPres,btnManageProfi,btnQues;
 	protected RelativeLayout homeRL,notifRL,uploadPresRL,manageProfRL,questionsRL;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +35,11 @@ public class BaseActivity extends AppCompatActivity implements OnClickListener {
 
 	protected void handleMapping(View rootView)
 	{
-		btnHome = (ImageButton) rootView.findViewById(R.id.btnHome);
-		btnNotif = (ImageButton) rootView.findViewById(R.id.btnNotif);
-		btnUploadPres = (ImageButton)rootView.findViewById(R.id.btnUploadPres);
-		btnManageProfi = (ImageButton)rootView.findViewById(R.id.btnManageProfile);
-		btnQues = (ImageButton)rootView.findViewById(R.id.btnQuestions);
+		btnHome = (ImageView) rootView.findViewById(R.id.btnHome);
+		btnNotif = (ImageView) rootView.findViewById(R.id.btnNotif);
+		btnUploadPres = (ImageView)rootView.findViewById(R.id.btnUploadPres);
+		btnManageProfi = (ImageView)rootView.findViewById(R.id.btnManageProfile);
+		btnQues = (ImageView)rootView.findViewById(R.id.btnQuestions);
 		
 		homeRL = (RelativeLayout)rootView.findViewById(R.id.homeRL);
 		notifRL = (RelativeLayout)rootView.findViewById(R.id.notifRL);
@@ -130,7 +131,7 @@ public class BaseActivity extends AppCompatActivity implements OnClickListener {
 				}
 				break;
 	case R.id.btnManageProfile:	
-			case R.id.manageProfRL:Okler.getInstance().setBookingType(12);
+			case R.id.manageProfRL:Okler.getInstance().setBookingType(Okler.getInstance().getBookingType());
 	//		Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
 			checkInternet(curStatus);
 				

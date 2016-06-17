@@ -96,7 +96,7 @@ public class ServiceCategoryActivity extends BaseActivity {
 		 * 
 		 * float versioncode = info.versionCode;
 		 */
-		versiontext.setText("Version :19.4");
+		versiontext.setText("Version :20");
 
 		/*
 		 * final ActionBar ab=getSupportActionBar();
@@ -190,7 +190,7 @@ public class ServiceCategoryActivity extends BaseActivity {
 
 		RelativeLayout rl = (RelativeLayout) bottomBarLayout
 				.findViewById(R.id.homeRL);
-		ImageButton btnHome = (ImageButton) rl.findViewById(R.id.btnHome);
+		ImageView btnHome = (ImageView) rl.findViewById(R.id.btnHome);
 		LinearLayout active_home = (LinearLayout) rl
 				.findViewById(R.id.active_home);
 		active_home.setVisibility(View.VISIBLE);

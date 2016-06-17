@@ -81,7 +81,7 @@ public class SupportHelpActivity extends BaseActivity {
 
 		RelativeLayout rl = (RelativeLayout) bottomBarLayout
 				.findViewById(R.id.questionsRL);
-		ImageButton btnSupport = (ImageButton) rl
+		ImageView btnSupport = (ImageView) rl
 				.findViewById(R.id.btnQuestions);
 		LinearLayout active_support = (LinearLayout) rl
 				.findViewById(R.id.active_support);

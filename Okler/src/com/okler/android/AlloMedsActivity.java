@@ -102,7 +102,6 @@ public class AlloMedsActivity extends BaseActivity {
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		ack=this;
 		setSupportActionBar(toolBar);
-		ubean = Utilities.getCurrentUserFromSharedPref(ack);
 		medId = getIntent().getStringExtra("MedId");
 		toolBar.setBackgroundResource(UIUtils.getToolBarDrawable(
 				Okler.getInstance().getBookingType()));
@@ -110,7 +109,7 @@ public class AlloMedsActivity extends BaseActivity {
 		bottomBarLayout = findViewById(R.id.bottombar);
 		subProdList = new ArrayList<ProductDataBean>();
 		handleMapping(bottomBarLayout);
-		
+		ubean = Utilities.getCurrentUserFromSharedPref(ack);
 		userId = ubean.getId();
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgloader = VolleyRequest.getInstance(getApplicationContext())
@@ -820,7 +819,7 @@ public class AlloMedsActivity extends BaseActivity {
 		}
 
 		String addToCartUrl, add1, add2, add3;
-		add1 = "http://183.82.110.105:8081/oklerapi/products/usercart/savecart?product=";
+		add1 = "https://www.okler.com/api/products/usercart/savecart?product=";
 		add2 = "&cust_id=";
 		add3 = "&quantity=";
 		int userId = ubean.getId();
@@ -995,6 +994,12 @@ public class AlloMedsActivity extends BaseActivity {
 							isFav = true;
 						}
 					}
+				}
+				else
+				{
+					img_favourite
+					.setImageResource(R.drawable.favourites);
+					isFav = false;
 				}
 			
 			

@@ -25,12 +25,12 @@
 
     </LinearLayout>
 
-    <ImageButton
+    <ImageView
         android:layout_centerInParent="true"
         android:id="@+id/btnHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/home" 
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:src="@drawable/home" 
         android:layout_weight="1"    
         android:layout_marginRight="10dp"
          android:layout_marginLeft="10dp"
@@ -53,12 +53,12 @@
 
     </LinearLayout>
     
-    <ImageButton
+    <ImageView
         android:layout_centerInParent="true"
         android:id="@+id/btnNotif"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/notification" 
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:src="@drawable/notification" 
         android:layout_weight="1"
          android:layout_marginRight="10dp"
        />
@@ -79,12 +79,12 @@
         android:visibility="gone" >
 
     </LinearLayout>
-    <ImageButton
+    <ImageView
         android:layout_centerInParent="true"
         android:id="@+id/btnUploadPres"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/upload_presc" 
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:src="@drawable/upload_presc" 
         android:layout_weight="1"
          android:layout_marginRight="10dp"
       />
@@ -106,12 +106,12 @@
 
     </LinearLayout>
     
-       <ImageButton
+       <ImageView
            android:layout_centerInParent="true"
         android:id="@+id/btnManageProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/manage_profile" 
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:src="@drawable/manage_profile" 
         android:layout_weight="1"
          android:layout_marginRight="10dp"
       />
@@ -132,12 +132,12 @@
                android:visibility="gone" >
 
     </LinearLayout>
-         <ImageButton
+         <ImageView
              android:layout_centerInParent="true"
         android:id="@+id/btnQuestions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/questions" 
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:src="@drawable/questions" 
         android:layout_weight="1"
          android:layout_marginRight="10dp"
       />

@@ -95,7 +95,7 @@ public class DiagnoOrderSummary extends BaseActivity implements
 	boolean isFromOrder;
 	int pos = 0, pickup;
 	ArrayList<DiagnoOrderDataBean> usersDiagnoOrder;
-	static TextView sched_appoint;
+	static Button sched_appoint;
 	RelativeLayout coupon_code_inner_RL;
 
 	String lab_id;
@@ -179,7 +179,7 @@ public class DiagnoOrderSummary extends BaseActivity implements
 		shipping_charg_value_tv = (TextView) findViewById(R.id.shipping_charg_value_tv);
 		edit_red_pencil = (ImageView) findViewById(R.id.edit_red_pencil);
 		edit_red_pencil.setVisibility(View.GONE);
-		sched_appoint = (TextView) findViewById(R.id.sched_appoint);
+		sched_appoint = (Button) findViewById(R.id.sched_appoint);
 		tList = new ArrayList<TestDataBean>();
 		setSupportActionBar(toolBar);
 		final ActionBar ab = getSupportActionBar();

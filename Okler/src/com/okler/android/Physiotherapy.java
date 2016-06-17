@@ -235,11 +235,13 @@ static String city1;
 					if(yes)
 					{
 						//flag = false;
-						yes = medical.validateState();
+						String state = edt_state.getText().toString();
+						yes = medical.validateState(state,currActivity);
 						if(yes)
 						{
 							//flag = false;
-							yes = medical.validateCity();
+							String city = edt_city.getText().toString();
+							yes = medical.validateCity(city,currActivity);
 							if(yes)
 							{
 							String pin = edt_pincode.getText().toString();

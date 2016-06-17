@@ -14,11 +14,22 @@ import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 public class WebJsonObjectRequest extends JsonObjectRequest{
+	boolean isSearch=false;;
 	public WebJsonObjectRequest(int method, String url, JSONObject jsonRequest,
 			Listener<JSONObject> listener, ErrorListener errorListener) {
 		super(method, url+"&timestamp="+System.currentTimeMillis(), jsonRequest, listener, errorListener);
 		/*super(method, url, jsonRequest, listener, errorListener);*/
 		// TODO Auto-generated constructor stub
+	}
+
+
+	public boolean isSearch() {
+		return isSearch;
+	}
+
+
+	public void setSearch(boolean isSearch) {
+		this.isSearch = isSearch;
 	}
 
 
