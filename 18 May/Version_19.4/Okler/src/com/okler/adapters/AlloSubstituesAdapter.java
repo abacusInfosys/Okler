@@ -15,7 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class AlloSubstituesAdapter extends BaseAdapter{
-	
+	//c
 	Context context;
 	ArrayList<ProductDataBean> subList;
 	LayoutInflater inflater;
