@@ -1,12 +1,8 @@
 package com.okler.adapters;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
-
-import com.okler.adapters.DiseaseAdapter.viewHolder;
 import com.okler.databeans.ProductDataBean;
 import com.okleruser.R;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +11,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class AlloSubstituesAdapter extends BaseAdapter{
-	
 	Context context;
 	ArrayList<ProductDataBean> subList;
 	LayoutInflater inflater;
@@ -24,24 +19,20 @@ public class AlloSubstituesAdapter extends BaseAdapter{
 		this.context = context2;
 		this.subList = subList2;
 		inflater = LayoutInflater.from(context2);
-		
 	}
 	
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return subList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return subList.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
@@ -51,7 +42,6 @@ public class AlloSubstituesAdapter extends BaseAdapter{
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
 		ViewHolder holder;
 		if(convertView==null){
 			holder = new ViewHolder();
@@ -67,8 +57,6 @@ public class AlloSubstituesAdapter extends BaseAdapter{
 		holder.subtsName.setText(name);
 		holder.oklerPrValueSub.setText("Rs. "+subList.get(position).getOklerPrice());
 		holder.youSavePercSub.setText(subList.get(position).getDiscount()+"%");
-		
 		return convertView;
 	}
-
 }
