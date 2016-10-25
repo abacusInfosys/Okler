@@ -83,7 +83,7 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub . test
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_profile);
 		ack = this;
