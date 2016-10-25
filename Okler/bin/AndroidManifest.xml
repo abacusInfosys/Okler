@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.okleruser"
-    android:versionCode="9"
-    android:versionName="9.1" >
+    android:versionCode="12"
+    android:versionName="10" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -133,7 +133,7 @@
             android:name="com.okler.android.ProductDetailsActivity"
             android:label="@string/title_activity_product_details"
             android:parentActivityName=".AllopathyActivity"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden|adjustPan" >
         </activity>
         <activity
             android:name="com.okler.android.ProductCheckoutListView"
@@ -178,14 +178,7 @@
         <activity
             android:name="com.okler.android.SearchByDiseasesActivity"
             android:label="@string/title_activity_search_by_diseases"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:launchMode="singleTop" >
-            
-                <intent-filter>
-            <action android:name="android.intent.action.SEARCH" />
-        </intent-filter>
-        <meta-data android:name="android.app.searchable"
-                   android:resource="@xml/searchable"/>
+            android:windowSoftInputMode="stateHidden|adjustPan" >
         </activity>
         <activity
             android:name="com.okler.android.ProductCheckoutUserDetail"
@@ -372,8 +365,6 @@
             </intent-filter>
         </receiver>
 
-          <provider android:name="com.okler.utils.MySuggestionsProvider"
-              android:authorities="com.okler.utils.MySuggestionsProvider" />
         <activity
             android:name="com.okler.Profile.EditProfile"
             android:label="@string/title_activity_edit_profile"
@@ -396,8 +387,43 @@
         </activity>
         <activity
             android:name="com.okler.android.AlloMedsActivity"
-            android:label="@string/title_activity_allo_meds" 
-             android:windowSoftInputMode="stateHidden|adjustPan" >
+            android:label="@string/title_activity_allo_meds"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
+        </activity>
+        <activity
+            android:name="com.okler.android.SearchHistoryActivity"
+            android:label="@string/title_activity_search_history"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
+        </activity>
+        <activity
+            android:name="com.okler.diagno.DiagnoDiseaseHome"
+            android:label="@string/title_activity_diagno_disease_home"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
+        </activity>
+        <activity
+            android:name="com.okler.diagno.DiagnoLabAvailable"
+            android:label="@string/title_activity_diagno_lab_available" 
+            android:windowSoftInputMode="stateHidden|adjustPan">
+        </activity>
+        <activity
+            android:name="com.okler.diagno.DiagnoLabPickup"
+            android:label="@string/title_activity_diagno_lab_pickup"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
+        </activity>
+        <activity
+            android:name="com.okler.diagno.DiagnosticsActivityHome"
+            android:label="@string/title_activity_diagnostics_activity_home"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
+        </activity>
+        <activity
+          android:name="com.okler.diagno.DiagnoTestOrderList"
+            android:label="@string/title_activity_diagno_test_order_list"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
+        </activity>
+        <activity 
+            android:name="com.okler.diagno.DiagnoTestPkgHome"
+            android:label="@string/title_activity_diagno_test_pkg_home"
+            android:windowSoftInputMode="stateHidden|adjustPan" >
         </activity>
     </application>
 
