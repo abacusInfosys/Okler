@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+	<RelativeLayout
+	    android:id="@+id/RL_for_customView_labs"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" 
+	    >
+	<TextView 
+	    android:id="@+id/testNameTv"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:textColor="@color/Black"
+	    android:text=""
+	    />
+	
+	<!-- <ImageView
+	    android:id="@+id/deleteImage" 
+	    android:layout_alignParentRight="true"
+	    android:layout_height="wrap_content"
+	    android:layout_width="wrap_content"
+	    android:src="@drawable/delete_diagno_icon"
+	    />     -->
+</RelativeLayout>
+</RelativeLayout>

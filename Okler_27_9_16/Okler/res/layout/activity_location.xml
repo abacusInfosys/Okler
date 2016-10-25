@@ -1,0 +1,93 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.okler.android.LocationActivity" >
+	<include 
+	    android:id="@+id/toolbar"
+	    layout="@layout/tool_bar"
+	    android:layout_alignParentTop="true"
+	    />
+    <RelativeLayout 
+        android:id="@+id/location_main_rl"
+        android:layout_width="fill_parent"
+        android:layout_height="128dp"
+        android:background="@color/LightGreyWhite"
+        android:layout_below="@+id/toolbar"
+        >
+     <RelativeLayout 
+         android:id="@+id/auto_detect_rl"
+         android:layout_width="fill_parent"
+         android:layout_height="64dp"
+         android:layout_alignParentTop="true"
+         
+         >
+     <TextView 
+         android:id="@+id/auto_detect_tv"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerVertical="true"
+         android:layout_alignParentLeft="true"
+         android:text="Auto-detect current location"
+         android:layout_marginLeft="10dp"
+         /> 
+     <ImageView 
+         android:id="@+id/location_icon"
+         android:layout_width="33dp"
+         android:layout_height="33dp"
+         android:layout_centerVertical="true"
+         android:layout_alignParentRight="true"
+         android:src="@drawable/target_icon"
+         android:layout_marginRight="10dp"
+         />       
+     </RelativeLayout>   
+     <RelativeLayout 
+         android:id="@+id/search_location_rl"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/auto_detect_rl"
+         android:layout_marginLeft="10dp"
+         android:layout_marginRight="10dp"
+         android:layout_marginBottom="10dp"
+         android:background="@color/White"
+         >
+     <SearchView 
+         android:id="@+id/searchview_location"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         
+         ></SearchView>
+         
+         
+     </RelativeLayout>   
+        
+    </RelativeLayout>
+
+   <!--  <TextView 
+        android:id="@+id/location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/location_main_rl"
+        /> -->
+        
+        <ListView 
+            android:id="@+id/cityList"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/location_main_rl"
+            android:background="@color/White"
+            ></ListView>
+        <LinearLayout 
+        android:orientation="vertical" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" 
+        android:id="@+id/progressLinLayout" 
+        android:gravity="center" 
+        android:visibility="gone" 
+        android:layout_centerInParent="true">
+	<ProgressBar 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:indeterminate="true"/>
+    </LinearLayout>
+</RelativeLayout>

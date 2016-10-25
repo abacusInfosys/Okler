@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/testMain"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:descendantFocusability="blocksDescendants" >
+
+    <!--
+         <ImageView
+        android:id="@+id/imgSelection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/right_grey_tick" /
+    -->
+    <RelativeLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" >
+        
+        <TextView
+        android:id="@+id/tvName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/Black"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="20dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="5dp"
+        android:layout_marginRight="10dp"
+        android:textSize="14sp"
+        android:background="@drawable/test_list_bg" />
+        
+        <!-- <CheckBox
+        android:id="@+id/checkBox_diagno_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/emptylayout"
+        android:button="@drawable/checkbox_related" /> -->
+        
+    </RelativeLayout>
+    
+    <ImageView
+        android:id="@+id/checkBox_diagno_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/checkbox_unselected" />
+</RelativeLayout>

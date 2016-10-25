@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp" >
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_alignParentLeft="true" >
+
+   		<!--  <ImageView 
+        android:id="@+id/radioButtonImage"
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/grey_radio_btn"
+        android:layout_marginRight="10dp"
+        /> -->
+        <CheckBox 
+        android:id="@+id/chkbx_diagno_addr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:button="@drawable/checkbox_diagno_addr"
+        />
+   		 <!-- <ImageView 
+        android:id="@+id/radioButtonImage2"
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/purple_selected_radio_btn"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        />
+ -->
+ 		<LinearLayout
+ 		    android:id="@+id/deliveryAddress"
+ 		    android:layout_width="wrap_content"
+ 		    android:layout_height="wrap_content"
+ 		    android:layout_toRightOf="@id/chkbx_diagno_addr"
+ 		    android:orientation="vertical" >
+
+		<TextView
+		    android:id="@+id/titleDeliveryAddress"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Delivery Address"
+		    />
+ 
+		 <TextView 
+    	   android:id="@+id/multiLineText"
+     	   android:layout_width="200dp"
+		   android:layout_height="wrap_content"
+		   android:text="sggag gfgdfgfdgdf gdgdgdfgsdfg gsdgdfsgfgdf"
+		   android:inputType="textMultiLine"
+		   android:minLines="1"
+		   android:singleLine="false"/>
+	</LinearLayout>
+</RelativeLayout> 
+
+<RelativeLayout
+    android:id="@+id/imageLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_alignParentRight="true" >
+   
+	<ImageView 
+	    android:id="@+id/editImage"
+	    android:layout_width="30dp"
+	    android:layout_height="30dp"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="true"
+	    android:src="@drawable/red_edit_pencil"
+	    android:layout_marginRight="5dp"
+	    android:layout_marginTop="5dp"/>
+
+	<ImageView
+	    android:id="@+id/deleteImage"
+	    android:layout_width="30dp"
+	    android:layout_height="30dp"
+	    android:layout_alignParentRight="true"
+	    android:layout_below="@+id/editImage"
+	    android:layout_marginTop="21dp"
+	    android:layout_marginRight="5dp"
+	    android:src="@drawable/delete_address" />
+</RelativeLayout>
+</RelativeLayout>

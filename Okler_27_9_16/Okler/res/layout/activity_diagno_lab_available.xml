@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.okler.diagno.DiagnoLabAvailable" >
+<include
+        android:id="@+id/toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        layout="@layout/tool_bar" />
+
+    <TextView
+        android:id="@+id/txt_labs_available"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/ModerateMagenta"
+        android:gravity="center"
+        android:text="LABS AVAILABLE FOR ALL SELECTED TESTS"
+        android:textColor="@color/White"
+        android:textSize="14sp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"/>
+    
+    <android.support.v7.widget.RecyclerView 
+        android:id="@+id/rcView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_labs_available"
+        android:layout_above="@+id/bottombar"
+        />
+    <TextView
+        android:id="@+id/no_data"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt_labs_available"
+        android:layout_above="@+id/bottombar"
+        android:gravity="center"
+        android:text="No Labs Available."
+        android:visibility="gone"
+        android:textSize="16sp" />
+    <include
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/layout_bottom_bar" />
+    
+    
+</RelativeLayout>

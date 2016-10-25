@@ -1,0 +1,192 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/White"
+   
+    tools:context="com.okler.android.MedicalServices" >
+     <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar"            
+            android:layout_alignParentTop="true"
+             />
+<RelativeLayout 
+    android:id="@+id/chkboxRL"
+    android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/toolbar"
+    >
+     <CheckBox
+         android:id="@+id/checkBox_bill_addr"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Use this address as default billing address" />
+     
+     <CheckBox
+         android:id="@+id/checkBox_delivery_addr"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/checkBox_bill_addr"
+         android:text="Use this address as default shipping address" />
+</RelativeLayout>
+     <ScrollView
+         android:id="@+id/scrollView1"
+         android:layout_below="@id/chkboxRL"
+         android:layout_above="@+id/button_saveinfo"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content" >
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical" >
+
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="10dp" >
+
+                 <EditText
+                     android:id="@+id/nameTv"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="1"
+                     android:ems="10"
+                     android:hint="Name*"
+                     android:imeOptions="actionNext"
+                     android:inputType="textPersonName" >
+
+                     <requestFocus />
+                 </EditText>
+
+                 <EditText
+                     android:id="@+id/surnameTv"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="1"
+                     android:ems="10"
+                     android:hint="Surname"
+                     android:imeOptions="actionNext"
+                     android:inputType="textPersonName" />
+
+             </LinearLayout>
+
+             <TextView
+                 android:id="@+id/dobTv"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="10dp"
+                 android:layout_marginLeft="5dp"
+                 android:imeOptions="actionNext"
+                 android:ems="10"
+                 android:hint="Date of birth*"
+                 android:textSize="18sp" />             
+
+             <Spinner
+                 android:id="@+id/relationSpinner"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:imeOptions="actionNext"
+                 android:layout_marginTop="10dp" />
+
+             <Spinner
+                 android:id="@+id/genderSpinner"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:imeOptions="actionNext"
+                 android:layout_marginTop="10dp" />
+
+             <EditText
+                 android:id="@+id/addr1Tv"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="10dp"
+                 android:ems="10"
+                 android:hint="Address1*"
+                 android:imeOptions="actionNext"
+                 android:inputType="textPostalAddress" />
+
+             <EditText
+                 android:id="@+id/addr2Tv"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="10dp"
+                 android:ems="10"
+                 android:hint="Address2*"
+                 android:imeOptions="actionNext"
+                 android:inputType="textPostalAddress" />
+
+             <EditText
+                 android:id="@+id/landmarkTv"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="10dp"
+                 android:ems="10"
+                 android:hint="Landmark"
+                 android:inputType="text"
+                 
+                 android:imeOptions="actionNext" />
+
+             <EditText
+                 android:id="@+id/pincodeTv"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="10dp"
+                 android:ems="10"
+                 android:hint="Pincode*"
+                 android:imeOptions="actionNext"
+                 android:inputType="number" />
+
+             <EditText
+                 android:id="@+id/mobileNoTv"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="10dp"
+                 android:ems="10"
+                 android:hint="Mobile No*"
+                 android:imeOptions="actionNext"
+                 android:inputType="number" />
+             
+             <AutoCompleteTextView
+                android:id="@+id/stateTv"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="10dp"
+                 android:ems="10"
+                 android:hint="State*"
+                 android:inputType="textNoSuggestions"
+                 android:imeOptions="actionNext" />
+
+             <AutoCompleteTextView
+                android:id="@+id/cityTv"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginBottom="10dp"
+                 android:layout_marginTop="10dp"
+                 android:ems="10"
+                 android:hint="City*"
+                 android:inputType="textNoSuggestions"
+                 android:imeOptions="actionDone" />
+         </LinearLayout>
+     </ScrollView>
+     
+     <Button
+         android:id="@+id/button_saveinfo"
+         android:layout_above="@id/bottombar"
+         android:layout_width="fill_parent"
+         android:layout_height="?actionBarSize"
+         android:background="@color/Blue"
+         android:text="Save Information"
+         android:textColor="@color/White" />
+     
+     
+     <include
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/layout_bottom_bar" />
+
+     
+
+</RelativeLayout>

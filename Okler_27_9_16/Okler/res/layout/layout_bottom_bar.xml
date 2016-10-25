@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?actionBarSize"
+    android:minHeight="?actionBarSize"
+    android:background="@color/LightGreyWhite"
+    android:orientation="horizontal" 
+    
+    android:weightSum="5">
+<RelativeLayout 
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="50dp"
+    android:id="@+id/homeRL"
+ 
+    >
+
+    <LinearLayout
+        android:id="@+id/active_home"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/Blue"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_centerInParent="true"
+        android:id="@+id/btnHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/home" 
+        android:layout_weight="1"    
+        android:layout_marginRight="10dp"
+         android:layout_marginLeft="10dp"
+        />
+    </RelativeLayout>
+<RelativeLayout 
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="50dp"
+    android:id="@+id/notifRL"
+    >
+    
+    <LinearLayout
+        android:id="@+id/active_notification"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/Blue"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+    </LinearLayout>
+    
+    <ImageButton
+        android:layout_centerInParent="true"
+        android:id="@+id/btnNotif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/notification" 
+        android:layout_weight="1"
+         android:layout_marginRight="10dp"
+       />
+</RelativeLayout>
+<RelativeLayout 
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="50dp"
+    android:id="@+id/uploadPresRL"
+    >
+
+    <LinearLayout
+        android:id="@+id/active_upload"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/Blue"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+    </LinearLayout>
+    <ImageButton
+        android:layout_centerInParent="true"
+        android:id="@+id/btnUploadPres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/upload_presc" 
+        android:layout_weight="1"
+         android:layout_marginRight="10dp"
+      />
+</RelativeLayout>
+<RelativeLayout 
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="50dp"
+    android:id="@+id/manageProfRL"
+    >
+    
+    <LinearLayout
+        android:id="@+id/active_profile"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/Blue"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+    </LinearLayout>
+    
+       <ImageButton
+           android:layout_centerInParent="true"
+        android:id="@+id/btnManageProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/manage_profile" 
+        android:layout_weight="1"
+         android:layout_marginRight="10dp"
+      />
+       </RelativeLayout>
+       <RelativeLayout 
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="50dp"
+    android:id="@+id/questionsRL"
+    >
+       
+           <LinearLayout
+               android:id="@+id/active_support"
+               android:layout_width="match_parent"
+               android:layout_height="2dp"
+               android:background="@color/Blue"
+               android:orientation="vertical"
+               android:visibility="gone" >
+
+    </LinearLayout>
+         <ImageButton
+             android:layout_centerInParent="true"
+        android:id="@+id/btnQuestions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/questions" 
+        android:layout_weight="1"
+         android:layout_marginRight="10dp"
+      />
+    </RelativeLayout>
+</LinearLayout>

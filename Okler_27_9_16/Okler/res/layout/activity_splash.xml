@@ -1,0 +1,15 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"	
+    android:layout_height="fill_parent"
+    tools:context="com.okler.android.SplashActivity"
+    android:background="@drawable/main_screen_final" >
+
+    <!-- <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:src="@drawable/main_screen_final" 
+        android:layout_alignParentTop="true"/> -->
+
+</RelativeLayout>

@@ -1,0 +1,156 @@
+<RelativeLayout android:layout_height="match_parent"
+    android:layout_width="match_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+    <include 
+        	    android:id="@+id/toolbar" 
+            	layout="@layout/toolbar_healthshop_new"
+            	android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:layout_below="@id/toolbar"
+        android:id="@+id/no_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This brand have no products"
+        android:visibility="gone"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"      
+    android:layout_gravity="end"
+    tools:context="com.okler.android.HSNew"    
+    android:background="@color/White"
+    android:layout_below="@id/no_item">
+     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/containerLayout">
+	<RelativeLayout 
+	    android:id="@+id/searchHistoryRL"
+	    android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	    
+	    >
+	    
+	    <TextView
+    android:id="@+id/search_history"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_below="@+id/topLayout"
+    android:layout_marginRight="6dp"
+    android:background="@null"
+    android:text="@string/view_search_history"
+    android:textColor="#99d5e3"
+    android:textSize="16sp" />
+
+<RelativeLayout 
+    android:id="@+id/separatorRL"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/search_history"
+    
+    >
+   <include layout="@layout/separator_1dp"/>
+	    
+	</RelativeLayout>	
+	</RelativeLayout>	
+	    	<FrameLayout
+        		android:id="@+id/frame_container"
+        		android:layout_width="match_parent"
+        		android:layout_height="match_parent"
+          		android:background="@color/White"
+          		android:layout_below="@id/searchHistoryRL"
+          		android:layout_above="@id/bottombar">
+          		 <GridView
+        android:id="@+id/gridView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/White"
+        android:horizontalSpacing="1dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="1dp"
+        android:layout_weight="1"
+        android:layout_below="@id/toolbar" >
+    </GridView>
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="1dp"
+        android:divider="@color/Gray"
+        android:layout_below="@id/toolbar"
+        android:visibility="gone"
+        />
+    
+ 		<TextView 
+ 		    android:id="@+id/noresult"
+     	    android:layout_width="wrap_content"
+     		    android:layout_height="wrap_content"
+     		    android:text="No data found"
+     		    android:textColor="@color/Black"
+     		    android:visibility="gone"
+     		    />
+        
+    </FrameLayout>
+     		<include
+        		android:id="@+id/bottombar"
+        		android:layout_width="fill_parent"
+        		android:layout_height="wrap_content"
+        		layout="@layout/layout_bottom_bar"
+        		android:layout_alignParentBottom="true"/>
+      </RelativeLayout>
+       <LinearLayout        
+        android:layout_width="300dp"        
+        android:layout_height="match_parent"
+        android:id="@+id/sliderManuParentLinear"
+        android:orientation="horizontal"
+        android:weightSum="5"
+        android:layout_gravity="end"        
+        android:layout_below="@id/toolbar">
+     		<ScrollView android:id="@+id/scrSubCaT"
+     		    android:layout_width="wrap_content"
+     		    android:layout_height="fill_parent"     		    
+     		    android:layout_weight="2">
+     		 <LinearLayout android:layout_width="150dp"
+        		android:layout_height="fill_parent"
+        		android:id="@+id/rightMenuSubcats"
+        		android:orientation="vertical"
+        		>                 
+           </LinearLayout>
+          </ScrollView>
+         <include android:id="@+id/separatorVerti"
+               		layout="@layout/separator_1dp_vertical"
+               		android:layout_weight="1"/>    
+               			<ScrollView android:id="@+id/scrT"
+     		    android:layout_width="wrap_content"
+     		    android:layout_height="fill_parent"     		    
+     		    android:layout_weight="2">
+                <LinearLayout android:layout_width="150dp"
+        		android:layout_height="fill_parent"
+        		android:id="@+id/rightMenuCats"
+        		android:orientation="vertical"
+        		android:layout_weight="2">             
+           </LinearLayout>
+              </ScrollView>
+      </LinearLayout>         
+</android.support.v4.widget.DrawerLayout>
+<LinearLayout 
+        android:orientation="vertical" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" 
+        android:id="@+id/progressLinLayout" 
+        android:gravity="center" 
+        android:visibility="gone" 
+        android:layout_centerInParent="true">
+	<ProgressBar 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:indeterminate="true"/>
+     </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar_cart"
+    android:layout_width="match_parent"
+    android:layout_height="128dp"
+    android:minHeight="128dp"
+    android:elevation="4dip"
+    android:paddingBottom="4dp"
+    android:background="@color/actionBarBackground"> 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/frame_layout">           
+        <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"        
+        android:layout_gravity="left"
+        android:id="@+id/toolbar_back" 
+           android:layout_marginTop="20dp"  
+        android:src="@drawable/back_arrow_white"/>
+        
+     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Toolbar Title"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/toolbar_title" 
+        android:textColor="@color/White"
+            android:layout_marginTop="15dp"  
+        android:textSize="20sp"/>
+     
+      <Button
+	        android:id="@+id/toolBarCount"
+	        android:layout_width="57dp"
+	        android:layout_height="40dp"
+	        android:text="01"
+	        android:gravity="top|center_horizontal"
+	        android:textColor="@color/White"	     
+	            android:layout_marginTop="15dp"     
+	        android:background="@drawable/ahopping_cart_top_5dp"
+	          android:layout_gravity="right"/>
+      <RelativeLayout   android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+               android:layout_gravity="left|bottom"
+               android:id="@+id/parentSearchLayout">
+           <SearchView
+            android:id="@+id/menu_search"         
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"    
+            android:layout_toLeftOf="@+id/listingIcon"    
+            android:background="@color/White"  
+             
+             android:visibility="visible"
+            
+            /> 
+                  <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/column_layout_icon"            
+            android:id="@id/listingIcon"
+            android:layout_toLeftOf="@+id/filterIcon"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"/>
+            <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/filter_icon"            
+            android:id="@id/filterIcon"
+            android:layout_toLeftOf="@+id/overflowIcon"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"/>
+                 <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/white_vertical_dots_icon"            
+            android:id="@+id/overflowIcon"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"/> 
+       
+            </RelativeLayout>
+          
+                
+    </FrameLayout>
+</android.support.v7.widget.Toolbar>

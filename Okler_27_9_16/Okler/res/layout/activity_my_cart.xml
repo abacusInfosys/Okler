@@ -1,0 +1,120 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.okler.android.MyCart" >
+    <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar_count"            
+            android:layout_alignParentTop="true"
+           />
+    <ScrollView
+        android:id="@+id/scrollViewMyCartMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/submit"
+        >
+        <RelativeLayout 
+            android:id="@+id/RL_for_scrll"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+        <LinearLayout
+            android:id="@+id/med_LL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            
+            >
+
+            <include
+                android:id="@+id/title"
+                layout="@layout/include_title_for_mycart" />
+<LinearLayout
+        android:id="@+id/medList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="1dp"
+        android:divider="@color/Gray"
+        android:orientation="vertical"
+        android:layout_below="@id/title" >
+        </LinearLayout>
+            <!-- <include
+                android:id="@+id/mainStuff"
+                layout="@layout/row_product_checkout_list"/> -->
+            
+         </LinearLayout> 
+         <LinearLayout
+            android:id="@+id/hs_LL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/med_LL"
+            >
+
+            <include
+                android:id="@+id/title"
+                layout="@layout/include_title_for_mycart" />
+			 <LinearLayout
+        android:id="@+id/hsList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="1dp"
+        android:divider="@color/Gray"
+        android:orientation="vertical"
+        android:layout_below="@id/title" >
+    </LinearLayout>
+            <!-- <include
+                android:id="@+id/mainStuff"
+                layout="@layout/row_product_checkout_list"/> -->
+            
+         </LinearLayout> 
+         <LinearLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/hs_LL">
+<include 
+    android:id="@+id/amountLayout"
+    layout="@layout/include_amount_layout"/>
+  
+    
+   </LinearLayout>   
+         </RelativeLayout>
+    </ScrollView>
+    
+    
+    <Button 
+	    android:id="@+id/submit"
+	    android:layout_width="match_parent"
+	    android:layout_height="?actionBarSize"
+	    android:text="SUBMIT ORDER"
+	    android:textColor="@color/White"
+	    android:background="@color/Blue"
+	    android:textSize="20dp"
+	    android:layout_above="@+id/bottombar"
+	    android:gravity="center"/>
+    
+    
+   <include
+    	android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_bottom_bar" 
+        android:layout_alignParentBottom="true"/>
+   
+    <LinearLayout 
+        android:orientation="vertical" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" 
+        android:id="@+id/progressLinLayout" 
+        android:gravity="center" 
+        android:visibility="gone" 
+        android:layout_centerInParent="true">
+	<ProgressBar 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:indeterminate="true"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,124 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	tools:context="com.okler.android.MyOrderHome" >
+	 <LinearLayout
+        android:id="@+id/toolBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
+		<include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar_count"/>
+		<RelativeLayout 
+		    android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+           	android:background="@color/Blue800">
+
+			<TextView
+			    android:id="@+id/my_order_text"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="10dp"
+			    android:layout_centerVertical="true"
+			    android:text="MEDICINES"
+			    android:textColor="@color/White" />
+
+        </RelativeLayout>
+        <!-- <ImageView 
+            android:id="@+id/progressInScreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/my_order_title_image"
+            /> -->
+            <LinearLayout 
+                android:id="@+id/titleId"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="#9BA1A5"
+                android:weightSum="3">
+			<RelativeLayout 
+			    android:id="@+id/rel1"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    
+			    android:layout_marginLeft="5dp"
+			    android:layout_gravity="center_vertical">
+                <TextView 
+                    android:id="@+id/orderIdTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/White"
+                    android:text="ORDER ID"
+                    
+                    
+                    android:textSize="20dp"/>
+                   
+                </RelativeLayout>
+                <RelativeLayout 
+			    android:id="@+id/rel2"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:layout_gravity="center_vertical">
+                <TextView 
+                    android:id="@+id/statusTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="STATUS"
+                    android:textColor="@color/White"
+                    android:textSize="20dp"/>
+                </RelativeLayout>
+                <RelativeLayout 
+			    android:id="@+id/rel3"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:layout_gravity="center_vertical">
+                <TextView 
+                    android:id="@+id/dateTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    
+                    android:text="DATE"
+                    android:textSize="20dp"
+                    android:textColor="@color/White"/>
+                </RelativeLayout>
+            </LinearLayout>
+	</LinearLayout>
+
+	<ListView
+	    android:id="@+id/myOrderList"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@+id/bottombar"
+	    android:layout_below="@id/toolBarLayout"
+	    android:divider="@color/LightGrey"
+	    android:dividerHeight="1dp" >
+
+	</ListView>
+    <include
+        android:id="@+id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        layout="@layout/layout_bottom_bar" />
+<LinearLayout 
+        android:orientation="vertical" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" 
+        android:id="@+id/progressLinLayout" 
+        android:gravity="center" 
+        android:visibility="gone" 
+        android:layout_centerInParent="true">
+	<ProgressBar 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:indeterminate="true"/>
+     </LinearLayout>
+</RelativeLayout>

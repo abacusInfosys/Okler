@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.okler.android.Allopathy"
+    android:background="@drawable/main_page_bkgrnd" >
+
+    <include 
+            android:id="@+id/toolbar" 
+            layout="@layout/tool_bar_cart"
+            android:layout_alignParentTop="true"
+            />
+    <ScrollView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@+id/bottombar">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        
+        >
+    <ImageView 
+        android:id="@+id/searchMedicineIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/search_by_medicine_2"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        />
+    
+    <ImageView 
+        android:id="@+id/searchDeseasesIv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchMedicineIv"
+        android:src="@drawable/search_by_disease_2"
+        android:layout_centerHorizontal="true"
+        />
+        </RelativeLayout>    
+		</ScrollView>
+    
+    <include
+    	android:layout_alignParentBottom="true"
+        android:id="@id/bottombar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/layout_bottom_bar" />
+</RelativeLayout>
