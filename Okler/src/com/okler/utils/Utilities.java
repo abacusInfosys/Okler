@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -89,27 +90,27 @@ public class Utilities {
 	//create image to internal storage
 		public static File createImageFile() throws IOException {
 		    // Create an image file name
-			Utilities.writeToLogFIle("createImageFile() ");
+		//	Utilities.writeToLogFIle("createImageFile() ");
 		    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		    Utilities.writeToLogFIle("createImageFile() timestamp "+timeStamp);
+		 //   Utilities.writeToLogFIle("createImageFile() timestamp "+timeStamp);
 		    String imageFileName = "JPEG_" + timeStamp + "_";
  Utilities.writeToLogFIle("createImageFile() imagefilename "+imageFileName);
  
 
-		    File storageDir = Environment.getExternalStoragePublicDirectory(
+		   /* File storageDir = Environment.getExternalStoragePublicDirectory(
 		            Environment.DIRECTORY_PICTURES);
-					Utilities.writeToLogFIle("createImageFile() storageDir "+ storageDir);
+					Utilities.writeToLogFIle("createImageFile() storageDir "+ storageDir);*/
  //Remove below code later. Added to test redmi upload crash
- /*File storageDir2 = new File("/sdcard/Okler");
+ File storageDir2 = new File("/sdcard/Okler/Images");
 		    Utilities.writeToLogFIle("createImageFile() Storagedir2 "+storageDir2);
 		    boolean isCreated = storageDir2.mkdirs();
 		    Utilities.writeToLogFIle("createImageFile() mkdirs "+storageDir2);
-		    Utilities.writeToLogFIle("createImageFile() isCreated = "+isCreated);*/
+		    Utilities.writeToLogFIle("createImageFile() isCreated = "+isCreated);
 		    File image = File.createTempFile(
 		        imageFileName,  /* prefix */
 		        ".jpg",         /* suffix */
-		        storageDir      /* directory */
-//storageDir2  
+//		        storageDir      /* directory */
+storageDir2  
 		    );
 		    Utilities.writeToLogFIle("createImageFile() image "+image);
 		    // Save a file: path for use with ACTION_VIEW intents
@@ -122,7 +123,7 @@ public class Utilities {
 		    // Create an image file name
 			File image = null;
 			try{
-			Utilities.writeToLogFIle("createImageFile() ");
+		//	Utilities.writeToLogFIle("createImageFile() ");
 		    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		    Utilities.writeToLogFIle("createImageFile() timestamp "+timeStamp);
 		    String imageFileName = "JPEG_" + timeStamp + "_";
@@ -182,7 +183,7 @@ public class Utilities {
 		{
 			Bitmap imgBitmap = null;
 		   //File f=new File(filePath);//, fileName);
-		    imgBitmap = Utilities.decodeSampledBitmapFromFile(filePath, 100,100);	   
+		    imgBitmap = Utilities.decodeSampledBitmapFromFile(filePath, 800,800);	   
 		    return imgBitmap;
 		}
 		
@@ -250,7 +251,7 @@ public class Utilities {
 	  
 	  	public static void captureImageFromCamera(Fragment context)
 		{
-	  		Utilities.writeToLogFIle("");
+	 // 		Utilities.writeToLogFIle("");
 	  		Utilities.writeToLogFIle("captureImageFromCamera(Fragment "+context.toString());
 			    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			    Utilities.writeToLogFIle("captureImageFromCamera(Fragment "+takePictureIntent.toString());
@@ -273,15 +274,13 @@ public class Utilities {
 			        }
 			        // Continue only if the File was successfully created
 			        if (photoFile != null) {
-			        	Utilities.writeToLogFIle("captureImageFromCamera(Fragment photofile!=null");
-			        	Utilities.writeToLogFIle("captureImageFromCamera(Fragment photofile = "+photoFile);
-			        	Utilities.writeToLogFIle("Your android build info is:"+android.os.Build.BRAND + "/" + android.os.Build.PRODUCT + "/"
-			                    + android.os.Build.DEVICE);
+			      //  	Utilities.writeToLogFIle("captureImageFromCamera(Fragment photofile!=null");
+			        //	Utilities.writeToLogFIle("captureImageFromCamera(Fragment photofile = "+photoFile);
 			            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
 			                    Uri.fromFile(photoFile));
-			            Utilities.writeToLogFIle("captureImageFromCamera(Fragment putextra");
+			          //  Utilities.writeToLogFIle("captureImageFromCamera(Fragment putextra");
 			           context.startActivityForResult(takePictureIntent, CAMERA_PICTURE);
-			           Utilities.writeToLogFIle("captureImageFromCamera(Fragment startactivity "+takePictureIntent.toString());
+			         //  Utilities.writeToLogFIle("captureImageFromCamera(Fragment startactivity "+takePictureIntent.toString());
 			        }
 			    }
 		}
@@ -299,18 +298,18 @@ public class Utilities {
 	  	//This is for activity
 	  	public static void captureImageFromCamera(Activity context)
 		{
-	  			Utilities.writeToLogFIle("captureImageFromCamera(Activity "+context.toString());
+	  		//	Utilities.writeToLogFIle("captureImageFromCamera(Activity "+context.toString());
 			    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			    Utilities.writeToLogFIle("captureImageFromCamera "+takePictureIntent.toString());
+			//    Utilities.writeToLogFIle("captureImageFromCamera "+takePictureIntent.toString());
 			    // Ensure that there's a camera activity to handle the intent
 			    if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
 			        // Create the File where the photo should go	
-			    	Utilities.writeToLogFIle("captureImageFromCamera in if");
+			 //   	Utilities.writeToLogFIle("captureImageFromCamera in if");
 			        try {
 			        	//commented to debug upload crash on Asus
 			            photoFile =Utilities.createImageFile();
 				//		  photoFile =Utilities.createImageFile(context.getApplicationContext());
-			            Utilities.writeToLogFIle("captureImageFromCamera photofile "+photoFile);
+			   //         Utilities.writeToLogFIle("captureImageFromCamera photofile "+photoFile);
 			        } catch (Exception ex) {
 			            // Error occurred while creating the File
 			        	Utilities.writeToLogFIle("captureImageFromCamera exception"+String.valueOf(ex.getStackTrace()));
@@ -319,20 +318,13 @@ public class Utilities {
 			        }
 			        // Continue only if the File was successfully created
 			        if (photoFile != null) {
-			        	Utilities.writeToLogFIle("captureImageFromCamera photofile!=null");
-			        	Utilities.writeToLogFIle("captureImageFromCamera photofile ="+photoFile);
-			            
-			        	Utilities.writeToLogFIle("Your android build info is:"+android.os.Build.BRAND + "/" + android.os.Build.PRODUCT + "/"
-			                    + android.os.Build.DEVICE);
-			        	Uri newUri = Uri.fromFile(photoFile);
-			        	Utilities.writeToLogFIle("New URI is:"+newUri);
-			        	/*Temporary commenting put extra.. to cross check*/
-			        	Utilities.writeToLogFIle("Commented extra_output to check culprit");
-			        	/*takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-			            		newUri);*/
-			            Utilities.writeToLogFIle("captureImageFromCamera putextra");
+			    //    	Utilities.writeToLogFIle("captureImageFromCamera photofile!=null");
+			   //     	Utilities.writeToLogFIle("captureImageFromCamera photofile ="+photoFile);
+			            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+			                    Uri.fromFile(photoFile));
+			    //        Utilities.writeToLogFIle("captureImageFromCamera putextra");
 			           context.startActivityForResult(takePictureIntent, CAMERA_PICTURE);
-			           Utilities.writeToLogFIle("captureImageFromCamera startactivity"+takePictureIntent.toString());
+			   //        Utilities.writeToLogFIle("captureImageFromCamera startactivity"+takePictureIntent.toString());
 			        }
 			    }
 		}
@@ -350,19 +342,19 @@ public class Utilities {
 			if (resultCode == Activity.RESULT_OK) {
 				if (requestCode == CAMERA_PICTURE) {				
 					try {
-						Utilities.writeToLogFIle("Before URI:");
-						Utilities.writeToLogFIle("Before URI: photofile "+photoFile);
+				//		Utilities.writeToLogFIle("Before URI:");
+				//		Utilities.writeToLogFIle("Before URI: photofile "+photoFile);
 						Uri fileUri= Uri.fromFile(photoFile);
-						Utilities.writeToLogFIle("URI:"+fileUri);
+				//		Utilities.writeToLogFIle("URI:"+fileUri);
 						imageFilePath=fileUri.getPath();
-						Utilities.writeToLogFIle("URI image file path:"+imageFilePath);
+				//		Utilities.writeToLogFIle("URI image file path:"+imageFilePath);
 						camGalImgInfo.setUri(imageFilePath);
-						thumbnailImg=Utilities.decodeSampledBitmapFromFile(imageFilePath, 100, 100);
-						Utilities.writeToLogFIle("URI image thumbnail:"+thumbnailImg);
+						thumbnailImg=Utilities.decodeSampledBitmapFromFile(imageFilePath, 800, 800);
+				//		Utilities.writeToLogFIle("URI image thumbnail:"+thumbnailImg);
 						if(thumbnailImg == null)
 							Utilities.writeToLogFIle("URI image thumbnail is null");
 						thumbnailImg = rotateImageIfRequired(imageFilePath,thumbnailImg);
-						Utilities.writeToLogFIle("URI image thumbnail after rotation");
+				//		Utilities.writeToLogFIle("URI image thumbnail after rotation");
 						//thumbnailImg = (Bitmap) data.getExtras().get("data"); 
 						//c = Calendar.getInstance(); 
 						//seconds = c.get(Calendar.SECOND);
@@ -413,17 +405,17 @@ public class Utilities {
 							//String imgDecodableString = getAbsolutePath(context,selectedImageUri);
 							String pp = selectedImageUri.getPath();
 							File f = new File(pp);
-							Utilities.writeToLogFIle("file f "+f);
+						//	Utilities.writeToLogFIle("file f "+f);
 							 imgDecodableString = f.getAbsoluteFile().toString();
-							 Utilities.writeToLogFIle("imgdecodestring "+imgDecodableString);
-							   thumbnailImg = Utilities.decodeSampledBitmapFromFile(imgDecodableString, 100, 100);
+					//		 Utilities.writeToLogFIle("imgdecodestring "+imgDecodableString);
+							   thumbnailImg = Utilities.decodeSampledBitmapFromFile(imgDecodableString, 800, 800);
 		                boolean flg = false;
 		                if(thumbnailImg == null)
 		                {
 		                	String[] filePathColumn = { MediaStore.Images.Media.DATA };
-		                	for(int i = 0;i<filePathColumn.length;i++)
+		             /*   	for(int i = 0;i<filePathColumn.length;i++)
 		                	Utilities.writeToLogFIle("filepathcolumn "+filePathColumn[i]);
-			                Cursor cursor = context.getContentResolver().query(selectedImageUri,
+			         */       Cursor cursor = context.getContentResolver().query(selectedImageUri,
 			                        filePathColumn, null, null, null);
 			                // Move to first row
 			                cursor.moveToFirst();	 
@@ -433,12 +425,12 @@ public class Utilities {
 			                flg = true;
 		                }
 		                if(flg)
-		                	thumbnailImg = Utilities.decodeSampledBitmapFromFile(imgDecodableString, 100, 100);
+		                	thumbnailImg = Utilities.decodeSampledBitmapFromFile(imgDecodableString, 800, 800);
 		                if(thumbnailImg == null)
 		                {
 		                	imgDecodableString = getPath(context,selectedImageUri);
 		                	Utilities.writeToLogFIle("selectedImgUri "+imgDecodableString);
-		                	thumbnailImg = Utilities.decodeSampledBitmapFromFile(imgDecodableString, 100, 100);
+		                	thumbnailImg = Utilities.decodeSampledBitmapFromFile(imgDecodableString, 800, 800);
 		                }
 		                
 		            	c = Calendar.getInstance(); 
@@ -458,7 +450,7 @@ public class Utilities {
 	  	
 	 // By using this method get the Uri of Internal/External Storage for Media
 	  	private static Uri getUri() {
-	  		Utilities.writeToLogFIle("getUri()");
+	  	//	Utilities.writeToLogFIle("getUri()");
 	  	    String state = Environment.getExternalStorageState();
 	  	    if(!state.equalsIgnoreCase(Environment.MEDIA_MOUNTED))
 	  	        return MediaStore.Images.Media.INTERNAL_CONTENT_URI;
@@ -470,14 +462,14 @@ public class Utilities {
 	  	}
 	  	
 	  	public static String getAbsolutePath(Activity curAct, Uri uri) {
-	  		Utilities.writeToLogFIle("getAbsolutePath()");
+	  	//	Utilities.writeToLogFIle("getAbsolutePath()");
 	        String[] projection = { MediaColumns.DATA };
 	        @SuppressWarnings("deprecation")
 	        Cursor cursor = curAct.managedQuery(uri, projection, null, null, null);
 	        if (cursor != null) {
 	            int column_index = cursor.getColumnIndexOrThrow(MediaColumns.DATA);
 	            cursor.moveToFirst();
-	            Utilities.writeToLogFIle("column index"+cursor.getString(column_index));
+	         //   Utilities.writeToLogFIle("column index"+cursor.getString(column_index));
 	            return cursor.getString(column_index);
 	        } else
 	            return null;
@@ -552,7 +544,7 @@ public class Utilities {
 		    	return sharedPref;
 		    }
 		    
-		    private static void writeIntToSharedPref(Activity activity,String key,int value)
+		    public static void writeIntToSharedPref(Activity activity,String key,int value)
 		    {
 		    	SharedPreferences sharedPref = getSharedPrefs(activity.getApplicationContext());
 		    	SharedPreferences.Editor editor = sharedPref.edit();
@@ -618,27 +610,27 @@ public class Utilities {
 		    	String ss="";
 		    	try
 		    	{
-		    	 Utilities.writeToLogFIle("convertImageToBase64 line 1"+bitmap);
+		//    	 Utilities.writeToLogFIle("convertImageToBase64 line 1"+bitmap);
 				 ByteArrayOutputStream stream=new ByteArrayOutputStream();
-				 Utilities.writeToLogFIle("convertImageToBase64 line 2"+stream);
+		//		 Utilities.writeToLogFIle("convertImageToBase64 line 2"+stream);
 				    int heightbefore=bitmap.getHeight();
-				    Utilities.writeToLogFIle("convertImageToBase64 line 3"+heightbefore);
+		//		    Utilities.writeToLogFIle("convertImageToBase64 line 3"+heightbefore);
 				   // System.out.println("Bitmap height"+heightbefore);
 				    int widthbefore=bitmap.getWidth();
-				    Utilities.writeToLogFIle("convertImageToBase64 line 4"+widthbefore);
+		//		    Utilities.writeToLogFIle("convertImageToBase64 line 4"+widthbefore);
 				    //System.out.println("bitmap width"+widthbefore);
 			        bitmap.compress(Bitmap.CompressFormat.JPEG,90, stream);
-			        Utilities.writeToLogFIle("convertImageToBase64 line 5"+bitmap);
+		//	        Utilities.writeToLogFIle("convertImageToBase64 line 5"+bitmap);
 				    int height=bitmap.getHeight();
-				    Utilities.writeToLogFIle("convertImageToBase64 line 6"+height);
+			//	    Utilities.writeToLogFIle("convertImageToBase64 line 6"+height);
 				    //System.out.println("Bitmap height"+height);
 				    int width=bitmap.getWidth();
-				    Utilities.writeToLogFIle("convertImageToBase64 line 7"+width);
+		//		    Utilities.writeToLogFIle("convertImageToBase64 line 7"+width);
 				    //System.out.println("bitmap width"+width);
 				    byte[] image=stream.toByteArray();
-				    Utilities.writeToLogFIle("convertImageToBase64 line 8"+image);
+			//	    Utilities.writeToLogFIle("convertImageToBase64 line 8"+image);
 				    String imag=Base64.encodeToString(image, Base64.DEFAULT);
-				    Utilities.writeToLogFIle("convertImageToBase64 line 9"+imag);
+			//	    Utilities.writeToLogFIle("convertImageToBase64 line 9"+imag);
 				    return imag;
 		    	}catch(Exception ex)
 		    	{
@@ -711,7 +703,7 @@ public class Utilities {
 		    {
 		    	Gson gson = new Gson();
 		    	  String json = gson.toJson(CurrUser);
-		    	writeStringToSharedPref(activity, "currentUser", json);
+		    	writeStringToSharedPref(activity.getApplicationContext(), "currentUser", json);
 		    }
 		    public static void writejustViewdProdsToSharedPref(Activity activity,JustViewedProdsDataBean jbean){
 		    	Gson gson = new Gson();
@@ -719,6 +711,8 @@ public class Utilities {
 		    	writeStringToSharedPref(activity, "JustViewed", json);
 		    }
 		   
+		  
+		    
 		    public static void writejustViewProdToSharedPref(Activity activity,ProductDataBean CurrProd,int i)
 		    {
 		    	Gson gson = new Gson();
@@ -726,6 +720,20 @@ public class Utilities {
 		    	writeStringToSharedPref(activity, "currentProd"+i, json);
 		    }
 		    
+		    public static void writeCartToSharedPref(Activity activity,CartDataBean cartDataBean)
+		    {
+		    	Gson gson = new Gson();
+		    	  String cartJson = gson.toJson(cartDataBean);
+		    	writeStringToSharedPref(activity, "userCart", cartJson);
+		    }
+		    
+		    public static void writeFavouritesToSharedPref(Activity activity,ArrayList<ProductDataBean> favs){
+		    	Gson gson = new Gson();
+		    	CartDataBean cart = new CartDataBean();
+		    	cart.setProdList(favs);
+		    	  String cartJson = gson.toJson(cart);
+		    	writeStringToSharedPref(activity, "Favourites", cartJson);
+		    }
 		    public  static UsersDataBean getCurrentUserFromSharedPref(Activity activity){
 		    	Gson fgson = new Gson();
 		    	String curUser;
@@ -756,6 +764,37 @@ public class Utilities {
 		    	return jbean;		    	
 		    }
 
+		    public static CartDataBean getCartDataBean(Activity activity){
+		    	Gson fgson = new Gson();
+		    	String cartValue;
+		    	CartDataBean cartBean = new CartDataBean();
+		    	SharedPreferences sharedPref = getSharedPrefs(activity.getApplicationContext());
+		    	cartValue=sharedPref.getString("userCart", "default");
+		    	try{
+		    		cartBean=fgson.fromJson(cartValue, CartDataBean.class);
+		  	    	}
+		    	catch(Exception e){
+		    		e.printStackTrace();
+		    	}
+		    	return cartBean;		    	
+		    }
+		    
+		    public static ArrayList<ProductDataBean> getFavourites(Activity activity){
+		    	ArrayList<ProductDataBean> favs = new ArrayList<ProductDataBean>();
+		    	Gson fgson = new Gson();
+		    	CartDataBean cart;
+		    	String favourites;
+		    	SharedPreferences sharedPref = getSharedPrefs(activity.getApplicationContext());
+		    	favourites = sharedPref.getString("Favourites", "default");
+		    	
+		    	try{
+		    		cart = fgson.fromJson(favourites, CartDataBean.class);
+		    		favs = cart.getProdList();
+		    	}catch(Exception e){
+		    		e.printStackTrace();
+		    	}
+		    	return favs;
+		    }
 		    public  static ProductDataBean getProductdataBean(Activity activity,String prodDetail){
 		    	Gson fgson = new Gson();
 		    	
@@ -786,7 +825,7 @@ public class Utilities {
 		    				break;
 		    		case 3:userStatus = UserStatusEnum.LOGGED_IN_FB;
 		    				break;
-		    		case 4: userStatus = UserStatusEnum.LOGGED_OUT;
+		    		case 5: userStatus = UserStatusEnum.LOGGED_OUT;
 		    				break;		    		
 		    	}
 		    	return userStatus;
@@ -891,7 +930,7 @@ public class Utilities {
 		    	writeIntToSharedPref(activity, activity.getString(R.string.user_login_status), userStatus.ordinal());
 		    }
 
-		    public static UserStatusEnum getUserStatusEnumFromSharedPref(Activity activity)
+		    /*public static UserStatusEnum getUserStatusEnumFromSharedPref(Activity activity)
 		    {
 		    	UserStatusEnum userStatus = UserStatusEnum.NOT_REGISTERED;
 		    	SharedPreferences sharedPref = getSharedPrefs(activity.getApplicationContext()); //activity.getSharedPreferences(name, mode).getPreferences(Context.MODE_PRIVATE);
@@ -912,7 +951,7 @@ public class Utilities {
 		    				break;		    		
 		    	}
 		    	return userStatus;
-		    }
+		    }*/
 		    
 		    public static void writecurrentUserNameToSharedPref(Activity activity,String userName)
 		    {
@@ -1083,8 +1122,8 @@ public class Utilities {
 		     */
 		    public static String getDataColumn(Context context, Uri uri, String selection,
 		            String[] selectionArgs) {
-		    	Utilities.writeToLogFIle("");
-		    	Utilities.writeToLogFIle("Context "+context+"Uri "+uri+"selection"+selection);
+		    //	Utilities.writeToLogFIle("");
+		    //	Utilities.writeToLogFIle("Context "+context+"Uri "+uri+"selection"+selection);
 		    	for(int i=0;i<selectionArgs.length;i++){
 		    		Utilities.writeToLogFIle("selectionargs "+selectionArgs[i]);
 		    	}
@@ -1093,9 +1132,9 @@ public class Utilities {
 		        final String[] projection = {
 		                column
 		        };
-		        Utilities.writeToLogFIle("column "+column);
-		        for(int i=0;i<projection.length;i++)
-		        Utilities.writeToLogFIle("projection "+projection[i]);
+		      //  Utilities.writeToLogFIle("column "+column);
+		      //  for(int i=0;i<projection.length;i++)
+		     //   Utilities.writeToLogFIle("projection "+projection[i]);
 		        try {
 		            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
 		                    null);
@@ -1147,7 +1186,7 @@ public class Utilities {
 		    
 		    public static 	ArrayList<NameValuePair> getPrescriptionNameValPairFromBean(Activity curActivity, PrescriptionsDataBean prescriptionsDataBean,boolean isMedPres,int required_type)
 		    {
-		    	Utilities.writeToLogFIle("In Utiities nvpairs");
+		    	//Utilities.writeToLogFIle("In Utiities nvpairs");
 		    	ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		    	String[]	imagesBase64 = new String[prescriptionsDataBean.getPresImages().size()];
 				String[] imageTypes =  new String[prescriptionsDataBean.getPresImages().size()];
@@ -1173,6 +1212,7 @@ public class Utilities {
 				//to change user id later on
 				nameValuePairs.add(new BasicNameValuePair("patient_name", prescriptionsDataBean.getPatientName()));		
 				nameValuePairs.add(new BasicNameValuePair("doc_name", prescriptionsDataBean.getDocName()));	
+				nameValuePairs.add(new BasicNameValuePair("doctorlname",prescriptionsDataBean.getDocSirname()));
 				nameValuePairs.add(new BasicNameValuePair("required_type", ""+required_type));			
 				nameValuePairs.add(new BasicNameValuePair("phoneno", prescriptionsDataBean.getMobileNumber()));			
 				for(int imgCount = 0 ; imgCount < prescriptionsDataBean.getPresImages().size(); imgCount ++)
@@ -1229,5 +1269,9 @@ public class Utilities {
 				              Log.e("ERRR", "Could not create file",e);
 				        } 
 			}
+		    
+		  
+		    
+		   
 		    
 }

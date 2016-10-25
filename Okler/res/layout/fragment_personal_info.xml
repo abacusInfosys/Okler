@@ -59,7 +59,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:drawableRight="@drawable/mobile_icon"
-        android:inputType="numberSigned" />
+        android:inputType="phone" />
     
     <AutoCompleteTextView
         android:id="@+id/edtTxt_state"

@@ -3,11 +3,9 @@ package com.okler.android;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.android.volley.Request.Method;
 import com.android.volley.Response.Listener;
 import com.android.volley.Response;
@@ -23,9 +21,6 @@ import com.okler.utils.TextValidations;
 import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
-
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.app.Activity;
@@ -34,11 +29,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -47,12 +40,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ProductCheckoutUserDetail extends BaseActivity {
 	private Toolbar toolBar;
@@ -64,29 +57,32 @@ public class ProductCheckoutUserDetail extends BaseActivity {
 	TextView tv_checkout,btv_prefferedDelTime;
 	ImageView progressInScreen,imgBack;
 	UsersDataBean ubean;
-	EditText editText1,editText2,editText3,editText4,et_firstName,et_surName,et_address,et_addressLine2,et_prefferedDelTime,bet_firstName,bet_surName,bet_address,bet_addressLine2,bet_pincode,bet_prefferedDelTime;
+	EditText editText1,editText2,editText3,editText4,et_firstName,et_surName,et_address
+	,et_addressLine2,et_prefferedDelTime,bet_firstName,bet_surName,bet_address
+	,bet_addressLine2,bet_pincode,bet_prefferedDelTime;
 	//EditText et_pincode;
 	WebJsonObjectRequest webjson;
-ArrayAdapter<String> adapter,adapter2;
-AutoCompleteTextView edt_city, edt_state,bedt_city, bedt_state;
+	ArrayAdapter<String> adapter,adapter2;
+	AutoCompleteTextView edt_city, edt_state,bedt_city, bedt_state;
 	ArrayList<String> cities = new ArrayList<String>();
 	ArrayList<String> states = new ArrayList<String>();
+	ArrayList<String> billingCities = new ArrayList<String>();
 	ArrayList<String> citi_ids = new ArrayList<String>();
+	ArrayList<String> bill_citi_ids = new ArrayList<String>();
 	int state_id,bStateId,maincount;
 	AddressDataBean adbean;
 	String cityUrl;
 	ArrayList<AddressDataBean> addrList;
 	RelativeLayout billing_addr_RL;
 	CartDataBean odbean;
-	ArrayList<ProductDataBean> pdList;
 	CheckBox bcheckBox1;
 	int check;
 	String cityId,bcityId="";
 	String city,bcity;
 	int cid,bcid;
-	//String s_add_id,b_add_id;
-boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=false;
-	
+	ArrayAdapter<String> adapterBilling;
+	boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=false;
+	ArrayList<String> state_id_list = new ArrayList<String>();
 	int user_id;
 	RelativeLayout back_layout;
 	
@@ -103,42 +99,25 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 	        ubean = Utilities.getCurrentUserFromSharedPref(ack);
 			user_id = ubean.getId();
 	  		addrList = ubean.getAddDatabean();
-	  		int adrsize = addrList.size();
-	  		/*if(adrsize<=0){
-	  			firstTime=true;
-	  		}*/
-			
-	       //mImageLoader = VolleyRequest.getInstance(context).getImageLoader();
+	  		addrList.trimToSize();
 	       setSupportActionBar(toolBar);
-	       final ActionBar ab=getSupportActionBar();
-	       if(check == 1){
-	       odbean = Okler.getInstance().getSingleCart();
-	       }
-	       else{
-	    	   odbean = Okler.getInstance().getMainCart();
-	       }
-	 //      ab.setDisplayHomeAsUpEnabled(true);
+	       odbean = Utilities.getCartDataBean(ack);
 	       tv_checkout = (TextView)findViewById(R.id.tv_checkout);
 	       progressInScreen = (ImageView)findViewById(R.id.progressInScreen);
 	       if(Okler.getInstance().getBookingType()==0){
-				//ab.setTitle(R.string.title_activity_allopathy);
 				progressInScreen.setImageResource(R.drawable.md_process_user_details_image);
 				tv_checkout.setBackgroundColor(getResources().getColor(R.color.Brightyellow));
 				Utilities.setTitleText(toolBar, getString(R.string.allopathy));
-				
 			}else if(Okler.getInstance().getBookingType()==3){
 				progressInScreen.setImageResource(R.drawable.md_process_user_details_image);
 				tv_checkout.setBackgroundColor(getResources().getColor(R.color.Brightyellow));
 				Utilities.setTitleText(toolBar, getString(R.string.ayurvedic));
-				//ab.setTitle(R.string.title_activity_ayurvedic);
 			}else if(Okler.getInstance().getBookingType()==4){
 				progressInScreen.setImageResource(R.drawable.md_process_user_details_image);
 				tv_checkout.setBackgroundColor(getResources().getColor(R.color.Brightyellow));
-				//ab.setTitle(R.string.title_activity_homeopathy);
 				Utilities.setTitleText(toolBar, getString(R.string.homeopathy));
 				
 			}else{
-				//ab.setTitle(R.string.title_activity_health_shop_grid);
 				 Utilities.setTitleText(toolBar, "Health Shop");
 			}
 	       toolBar.setBackgroundResource(UIUtils.getToolBarDrawable(Okler.getInstance().getBookingType()));
@@ -147,48 +126,22 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 	    	   tv_checkout.setBackgroundColor(Color.BLUE);
 	    	   Utilities.setTitleText(toolBar, "Cart");
 	       }
-			//end of code to be copied
-	      /* back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
-			back_layout.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-				finish();	
-				}
-			});
-	       imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
-	       imgBack.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-			finish();	
-			}
-		});*/
-	       
 	       UIUtils.setBackClick(toolBar, ack);
-			
-	       /*toolBar.setBackgroundResource(R.drawable.custom_view_grad_healthshop);*/
 	       bottomBarLayout = findViewById(R.id.bottombar);
 	       handleMapping(bottomBarLayout);
 	       
 	       pincode_et=(EditText) findViewById(R.id.et_pincode);
-	       pincode_et.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.location_icon), null);
+	       pincode_et.setCompoundDrawables(null, null, getResources().getDrawable(R.drawable.location_icon)
+	    		   , null);
 	       nextButton=(Button) findViewById(R.id.nextButton);
 	       nextButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				edt_city.setAdapter(adapter2);
-				bedt_city.setAdapter(adapter2);
-				// TODO Auto-generated method stub
 				TextValidations tval;
 				UIUtils uiutil;
 				AddressDataBean curbean = new AddressDataBean();
 				ArrayList<AddressDataBean> newList = new ArrayList<AddressDataBean>();
-				/*if(et_firstName.getText().toString().trim().equals("")||et_firstName.getText().toString().trim().equals(null)){
-					
-				}*/
 				flag2 =false;
 		  		UsersDataBean ubean2 = new UsersDataBean();
 		  		ubean2.setAddDatabean(newList);
@@ -243,7 +196,7 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 				uiutil = new UIUtils(edt_city);
 				flag2 =false;
 				String city2 = edt_city.getText().toString();
-				if(uiutil.validateCity("Please Enter a City",city2,ack)){
+				if(validateBillingAddr(city2, cities,edt_city)){
 				curbean.setCity(edt_city.getText().toString());
 				if(!(cities.size()<=0)){
 				cid = cities.indexOf(city);
@@ -308,15 +261,15 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 				uiutil = new UIUtils(bedt_city);
 				flag2 =false;
 				String city = bedt_city.getText().toString();
-				if(uiutil.validateCity("Please Enter a Valid City",city,ack)){
+				if(validateBillingAddr(city, billingCities,bedt_city)){
 				curbean2.setCity(bedt_city.getText().toString());
-				if(!(cities.size()<=0)){
-				cid = cities.indexOf(city);
-				if(!(citi_ids.size()<=0))
+				if(!(billingCities.size()<=0)){
+				cid = billingCities.indexOf(city);
+				if(!(bill_citi_ids.size()<=0))
 					if(bcheckBox1.isChecked()){
 					bcityId = cityId;	
 					}
-				bcityId = citi_ids.get(cid);
+				bcityId = bill_citi_ids.get(cid);
 				}
 				curbean2.setCity_id(bcityId);
 				flag2 =true;
@@ -328,22 +281,25 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 				}
 				}
 				}
-				
+				newList.trimToSize();
 		  		ubean.setAddDatabean(newList);
 		  		
 		  		
 		  		if(check == 1){
-		  		odbean = Okler.getInstance().getSingleCart();
+		  		
+		  		odbean =Utilities.getCartDataBean(ack);
 		  		odbean.setCurUBean(ubean2);
 		  		Okler.getInstance().setSingleCart(odbean);
+		  		Utilities.writeCartToSharedPref(ack, odbean);
 		  		}
 		  		else{
-		  			odbean = Okler.getInstance().getMainCart();
+		  			odbean = Utilities.getCartDataBean(ack);
 		  			odbean.setCurUBean(ubean2);
 			  		Okler.getInstance().setSingleCart(odbean);
+			  		Utilities.writeCartToSharedPref(ack, odbean);
 		  		}
-		  		//int size = ubean.getAddDatabean().size();
-		  		String fname="",sname="",add1="",add2="",bfname="",bsname="",badd1="",badd2="",pref_del_time1="";
+		  		String fname="",sname="",add1="",add2="",bfname="",bsname="",badd1="",badd2=""
+		  				,pref_del_time1="";
 		  		
 		  		
 		  		try {
@@ -362,18 +318,22 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 					e.printStackTrace();
 				}
 		  		if(flag2){
-		  		String add_address = getResources().getString(R.string.add_patient_address) + "customer_id="+ user_id + "&company="+ ubean.getCompany()  
-				+"&customer_name=" + fname +"&surname=" + sname + "" + "&dob=" + ubean.getDob() + "&gender=" + ubean.getGender()
-				+"&email=" + ubean.getEmail() + "&mobileNo=" + ubean.getPhone() + "&addr1=" + add1 + "&addr2=" + add2 + "&landmark=" + "" + "&zip="+pincode_et.getText().toString()
-				+ "&country_id=" + "99" + "&zone_id=" + "" + "&state_id=" + state_id + "&city_id=" + cityId+ "&delivery_time=" + pref_del_time1;
+		  		String add_address = getResources().getString(R.string.add_patient_address) + "customer_id="
+		  		+ user_id + "&company="+ ubean.getCompany()+"&customer_name=" + fname +"&surname=" + sname 
+		  		+ "" + "&dob=" + ubean.getDob() + "&gender="+ ubean.getGender()+"&email=" + ubean.getEmail()
+		  		+ "&mobileNo=" + ubean.getPhone() + "&addr1=" + add1 + "&addr2=" + add2 + "&landmark=" + "" 
+		  		+ "&zip="+pincode_et.getText().toString()+ "&country_id=" + "99" + "&zone_id=" + "" 
+		  		+ "&state_id=" + state_id + "&city_id=" + cityId+ "&delivery_time=" + pref_del_time1;
 		  		flag = false;
 		  		addNewAddress(add_address);
-		  		/*String add_address2 = getResources().getString(R.string.add_patient_address) + "customer_id="+ user_id + "&company="+ ubean.getCompany()  
-				+"&customer_name=" + bfname +"&surname=" + bsname + "" + "&dob=" + ubean.getDob() + "&gender=" + ubean.getGender()
-				+"&email=" + ubean.getEmail() + "&mobileNo=" + ubean.getPhone() + "&addr1=" + badd1 + "&addr2=" + badd2 + "&landmark=" + "" + "&zip="+ bet_pincode.getText().toString()
-				+ "&country_id=" + "99" + "&zone_id=" + "" + "&state_id=" + bStateId + "&city_id=" + bcityId;
+		  		String add_address2 = getResources().getString(R.string.add_patient_address) + "customer_id="
+		  		+ user_id + "&company="+ ubean.getCompany()+"&customer_name=" + bfname +"&surname=" + bsname 
+		  		+ "" + "&dob=" + ubean.getDob() + "&gender=" + ubean.getGender()+"&email=" + ubean.getEmail()
+		  		+ "&mobileNo=" + ubean.getPhone() + "&addr1=" + badd1 + "&addr2=" + badd2 + "&landmark=" +
+		  		"" + "&zip="+ bet_pincode.getText().toString()+ "&country_id=" + "99" + "&zone_id=" + "" +
+		  		"&state_id=" + bStateId + "&city_id=" + bcityId;
 		  		flag = true;
-		  		addNewAddress(add_address2);*/
+		  		addNewAddress(add_address2);
 		  		}
 			}
 		});
@@ -400,7 +360,6 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 	      
 	    
 	    
-	   // ubean = Utilities.getCurrentUserFromSharedPref(ack);
 	    editText1.setText(ubean.getFname());
 	    editText2.setText(ubean.getLname());
 	    editText3.setText(ubean.getPhone());
@@ -415,7 +374,8 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 	  		
 	  		
 	  		states = Okler.getInstance().getStates();
-	  		adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, states)
+	  		adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout
+	  				.simple_dropdown_item_1line, states)
 	  				{
 	  		    @Override
 	  		    public View getView(int position, View convertView, ViewGroup parent) {
@@ -434,9 +394,11 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					
-				getCityList(edt_state);	
-				edt_city.setAdapter(adapter2);
+					String state = edt_state.getText().toString();
+				    int	stIndex = states.indexOf(state);
+					Log.i("id_tag", "id is:" + stIndex);
+					String state_id1 = state_id_list.get(stIndex);
+				getCity(state_id1,false);	
 	  			}
 	  		});
 	  		
@@ -456,8 +418,12 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		  				getCityList(bedt_state);
-	  				bedt_city.setAdapter(adapter2);
+					String state = bedt_state.getText().toString();
+				    int	stIndex = states.indexOf(state);
+					Log.i("id_tag", "id is:" + stIndex);
+					
+					String state_id1 = state_id_list.get(stIndex);
+					getCity(state_id1,true);
 	  				}
 	  		});
 	  		
@@ -467,7 +433,7 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				
 					bcity = bedt_city.getText().toString();
-	  				bedt_city.setAdapter(adapter2);
+	  				bedt_city.setAdapter(adapterBilling);
 					
 				}
 			});
@@ -477,13 +443,15 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					if(isChecked){
+						billingCities=cities;
+						bill_citi_ids=citi_ids;
 						bet_firstName.setText(et_firstName.getText().toString());
 						bet_surName.setText(et_surName.getText().toString());
 						bet_address.setText(et_address.getText().toString());
 						bet_addressLine2.setText(et_addressLine2.getText().toString());
 						bet_pincode.setText(pincode_et.getText().toString());
-						
-						bedt_city.setText(edt_city.getText().toString());
+						String c=edt_city.getText().toString();
+						bedt_city.setText(c);
 						bcityId = cityId;
 						bedt_state.setText(edt_state.getText().toString());
 						bStateId = state_id;
@@ -497,15 +465,11 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		return true;		
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -516,39 +480,35 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 	public void addNewAddress(String Url)
 	{
 		
-		WebJsonObjectRequest webjson =new WebJsonObjectRequest(Method.GET, Url, new JSONObject(),new Listener<JSONObject>() 
+		WebJsonObjectRequest webjson =new WebJsonObjectRequest(Method.GET, Url, new JSONObject()
+				,new Listener<JSONObject>() 
 				{
 					@Override
 					public void onResponse(JSONObject response) 
 					{
-					//	Toast.makeText(getApplicationContext(), "response", Toast.LENGTH_LONG).show();
-						
 						try
 						{
 						JSONObject responseObj =(JSONObject)response;
 						JSONObject doctorsArr = responseObj.getJSONObject("result");
-					//	Toast.makeText(getApplicationContext(), "try", Toast.LENGTH_LONG).show();
 						String messaqge = doctorsArr.getString("message");
-						if((messaqge.equals("inserted successfully"))||messaqge.equals("updated successfully")){
-							//if(firstTime){
+						if((messaqge.equals("inserted successfully"))||messaqge.
+								equals("updated successfully")){
 							int add_id = Integer.parseInt(doctorsArr.getString("addr_id"));
 							String u1,u2,u3,setDefaultAddUrl;
 							u1 = getString(R.string.DefaultBillShipPart1);
 							u2 = getString(R.string.DefaultBillShipPart2);
 							u3 = getString(R.string.DefaultBillShipPart3);
 							if(flag){
-								setDefaultAddUrl = u1+user_id+u2+add_id+u3;
-								
-							
+							setDefaultAddUrl = u1+user_id+u2+u3+add_id;
 							
 							}else{
-								setDefaultAddUrl = u1+user_id+u2+u3+add_id;
+								setDefaultAddUrl = u1+user_id+u2+add_id+u3;
 							}
-					WebJsonObjectRequest adjson = new WebJsonObjectRequest(Method.GET, setDefaultAddUrl, new JSONObject(), new Response.Listener<JSONObject>() {
+					WebJsonObjectRequest adjson = new WebJsonObjectRequest(Method.GET, setDefaultAddUrl
+							, new JSONObject(), new Response.Listener<JSONObject>() {
 
 						@Override
 						public void onResponse(JSONObject response) {
-							/*if(flag){*/
 								Utilities.writeCurrentUserToSharedPref(ack, ubean);
 								Intent intent = null;
 								CartDataBean cbean = new CartDataBean();
@@ -567,25 +527,17 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 										break;
 									}
 								}
-								if(!flag)
-								{
-									if(prescNeeded==1)
-									{
-										intent = new Intent(getApplicationContext(),AlloPrescActivity.class);
-										intent.putExtra("Check", check);
-										finish();
-										startActivity(intent);
-									}
-									else
-									{
-										intent = new Intent(getApplicationContext(),ProductCheckoutSummary.class);
-										intent.putExtra("Check", check);
-										finish();
-										startActivity(intent);
-									}
+								if(!flag){
+								if(prescNeeded==1){
+									intent = new Intent(getApplicationContext(),AlloPrescActivity.class);
+									intent.putExtra("Check", check);
+									startActivity(intent);
+								}else{
+								intent = new Intent(getApplicationContext(),ProductCheckoutSummary.class);
+								intent.putExtra("Check", check);
+								startActivity(intent);
 								}
-								else
-								{
+								}else{
 									flag=false;
 								}							
 						}
@@ -612,8 +564,6 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 						@Override
 						public void onErrorResponse(VolleyError error) 
 						{
-						
-						//	Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
 							Log.i("error", String.valueOf(error));
 						}
 					}
@@ -622,115 +572,127 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
 		VolleyRequest.addJsonObjectRequest(getApplicationContext(),webjson);		
 	}
 	
-	public void getCityList(EditText edt){
-		int id1 = 0;
-			
-		cities.clear();
-		citi_ids.clear();
-			String state = edt.getText().toString();
-			
-			id1 = states.indexOf(state);
-			
-			Log.i("id_tag", "id is:" + id1);
-			
-			state_id = 1268 + id1;
-			
-			cityUrl = getResources().getString(R.string.cityUrl) + "state_id="+state_id;
-			
-			if(state_id>=1268){
-			webjson=new WebJsonObjectRequest(Method.GET, cityUrl, new JSONObject(),new Listener<JSONObject>() 
-					{
-						@Override
-						public void onResponse(JSONObject response) 
-						{
-							// TODO Auto-generated method stub
-							
-							try
-							{
-							JSONObject responseObj =(JSONObject)response;
-							JSONArray doctorsArr = responseObj.getJSONArray("result");
-							//docCount=responseObj.getInt("TotalCount");
-							for(int i = 0 ; i < doctorsArr.length();i++)
-							{
-								try
-								{
-									JSONObject docObj =(JSONObject) doctorsArr.get(i);
-									cities.add(docObj.getString("city_name"));
-									citi_ids.add(docObj.optString("id")); 
-									Log.i("tag", "json object" + docObj);
-									}catch (JSONException e) {
-										// TODO: handle exception
-										Log.e("JSON Exception", e.getMessage());
-									}
-							 }
-							Okler.getInstance().setCities(cities);
-							Okler.getInstance().setCiti_ids(citi_ids);
-							cities = Okler.getInstance().getCities();
-					  		adapter2 = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, cities) {
-					  		    @Override
-					  		    public View getView(int position, View convertView, ViewGroup parent) {
-					  		        View view = super.getView(position, convertView, parent);
-					  		        TextView text = (TextView) view.findViewById(android.R.id.text1);
-					  		        text.setTextColor(Color.BLACK);
-					  		        return view;
-					  		    }
-					  		};
-					  		edt_city.setAdapter(adapter2);
-					  		bedt_city.setAdapter(adapter2);
-							adapter2.notifyDataSetChanged();
-							}catch(JSONException jsonEx)
-							{
-								Log.e("Exception json", jsonEx.getStackTrace().toString());
-							}
-					
-						}}, 
-						new Response.ErrorListener() 
-						{
+	
+	public void getCity(String state_id, final boolean isBilling) {
 
-							@Override
-							public void onErrorResponse(VolleyError error) 
-							{
-								// TODO Auto-generated method stub
-					
+		cityUrl = getResources().getString(R.string.cityUrl) + "state_id="
+				+ state_id;
+		webjson = new WebJsonObjectRequest(Method.GET, cityUrl,
+				new JSONObject(), new Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						try {
+							JSONObject responseObj = (JSONObject) response;
+							JSONArray doctorsArr = responseObj
+									.getJSONArray("result");
+							for (int i = 0; i < doctorsArr.length(); i++) {
+								try {
+									JSONObject docObj = (JSONObject) doctorsArr
+											.get(i);
+									
+									if(isBilling)
+									{
+										billingCities.add(docObj.getString("city_name"));
+										bill_citi_ids.add(docObj.optString("id"));
+									}
+									else
+									{
+										cities.add(docObj.getString("city_name"));
+										citi_ids.add(docObj.optString("id"));
+									}
+									
+									Log.i("tag", "json object" + docObj);
+								} catch (JSONException e) {
+									// TODO: handle exception
+									Log.e("JSON Exception", e.getMessage());
+								}
 							}
+							cities.trimToSize();
+							citi_ids.trimToSize();
+							billingCities.trimToSize();
+							bill_citi_ids.trimToSize();
+							adapter2 = new ArrayAdapter<String>(
+									ack,
+									android.R.layout.simple_dropdown_item_1line,
+									cities)
+							{
+								@Override
+								public View getView(int position,
+										View convertView, ViewGroup parent) {
+									View view = super.getView(position,
+											convertView, parent);
+									TextView text = (TextView) view
+											.findViewById(android.R.id.text1);
+									text.setTextColor(Color.BLACK);
+									return view;
+								}
+							};
+							adapterBilling = new ArrayAdapter<String>(
+									ack,
+									android.R.layout.simple_dropdown_item_1line,
+									billingCities)
+							{
+								@Override
+								public View getView(int position,
+										View convertView, ViewGroup parent) {
+									View view = super.getView(position,
+											convertView, parent);
+									TextView text = (TextView) view
+											.findViewById(android.R.id.text1);
+									text.setTextColor(Color.BLACK);
+									return view;
+								}
+							};
+							edt_city.setAdapter(adapter2);
+							bedt_city.setAdapter(adapterBilling);
+							adapter2.notifyDataSetChanged();
+							adapterBilling.notifyDataSetChanged();
+						} catch (JSONException jsonEx) {
+							Log.e("Exception json", jsonEx.getStackTrace()
+									.toString());
 						}
-						,true	);
-				
-			VolleyRequest.addJsonObjectRequest(getApplicationContext(),webjson);
-			}else{
-				
-			}
-			
-			Log.i("city url", cityUrl);
+
+					}
+				}, new Response.ErrorListener() {
+
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						// TODO Auto-generated method stub
+						Log.e("ERROR", String.valueOf(error));
+					}
+				}, true);
+
+		VolleyRequest.addJsonObjectRequest(getApplicationContext(), webjson);
+
+		Log.i("city url", cityUrl);
 
 	}
 	
 	public void getStates(){
-		  //web call for states
-  		webjson=new WebJsonObjectRequest(Method.GET, getResources().getString(R.string.stateUrl), new JSONObject(),new Listener<JSONObject>() 
+  		webjson=new WebJsonObjectRequest(Method.GET, getResources().getString(R.string.stateUrl)
+  				, new JSONObject(),new Listener<JSONObject>() 
   				{
   					@Override
   					public void onResponse(JSONObject response) 
   					{
-  						// TODO Auto-generated method stub
-  						
   						try
   						{
   						JSONObject responseObj =(JSONObject)response;
   						JSONArray doctorsArr = responseObj.getJSONArray("result");
-  						//docCount=responseObj.getInt("TotalCount");
   						for(int i = 0 ; i < doctorsArr.length();i++)
   						{
   							try
   							{
   								JSONObject docObj =(JSONObject) doctorsArr.get(i);
   								states.add(docObj.getString("state_name"));
+  								state_id_list.add(docObj.getString("id"));
   								Log.i("tag", "json object" + docObj);
   								}catch (JSONException e) {
   									// TODO: handle exception
   									Log.e("JSON Exception", e.getMessage());
   								}
   						 }
+  						states.trimToSize();
   						Okler.getInstance().setStates(states);
   						}catch(JSONException jsonEx)
   						{
@@ -744,18 +706,38 @@ boolean flag =false,flag2 = false,stateFound=false,cityFound=false,firstTime=fal
   						@Override
   						public void onErrorResponse(VolleyError error) 
   						{
-  							// TODO Auto-generated method stub
-  				
   						}
   					}
   					,true);
   			
   		VolleyRequest.addJsonObjectRequest(getApplicationContext(),webjson);
 	}
+	
+	
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
 		UIUtils.setCartCount(notifCount, ack);
+	}
+	
+	public boolean validateBillingAddr(String city, ArrayList<String> lstToTest,EditText txtToVerify)
+	{
+			String inputText = txtToVerify.getText().toString();
+			if (inputText == null || inputText.equals("") || inputText == "") {
+				txtToVerify.setError("");
+				txtToVerify.requestFocus();
+				return false;
+			} else {
+				
+				for (int i = 0; i < lstToTest.size(); i++) {
+					if (city.equals(lstToTest.get(i))) {
+						return true;
+					}
+				}
+				Toast.makeText(context, "Please Enter Valid City",
+						Toast.LENGTH_LONG).show();
+			}
+			return false;
 	}
 }

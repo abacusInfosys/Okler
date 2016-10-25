@@ -23,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.Request.Method;
 import com.android.volley.Response.Listener;
+import com.google.gson.Gson;
 import com.okler.android.MyOrderMed_Hs_Details;
 import com.okleruser.R;
 import com.okler.databeans.OrdersDataBean;
@@ -45,14 +46,16 @@ public class DialogCancellation extends Dialog implements
 	public Activity c;
 	public Dialog d;
 	String cancel_order;
+	String uOrder="";
 
 	TextView text_no_need, text_too_late, text_bought_myself, text_by_mistake,
 			text_cancel;
 
-	public DialogCancellation(Activity a) {
+	public DialogCancellation(Activity a,String uOrder) {
 		super(a);
 		// TODO Auto-generated constructor stub
 		this.c = a;
+		this.uOrder=uOrder;
 	}
 
 	@Override
@@ -86,7 +89,9 @@ public class DialogCancellation extends Dialog implements
 		email = ubean.getEmail();
 
 		int position = Okler.getInstance().getPostion();
-		obean = Okler.getInstance().getUsersOrders().get(position);
+		Gson gson=new Gson();
+		obean = gson.fromJson(uOrder,OrdersDataBean.class);
+				//Okler.getInstance().getUsersOrders().get(position);
 		order_id = obean.getOrderId();
 		order_date = obean.getDate();
 

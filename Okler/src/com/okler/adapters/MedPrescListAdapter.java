@@ -4,19 +4,15 @@ import java.util.ArrayList;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.okler.adapters.PrescriptionListAdapter.Holder;
 import com.okler.android.PrescriptionList;
 import com.okleruser.R;
 import com.okler.databeans.PrescriptionImagesDataBean;
 import com.okler.databeans.PrescriptionsDataBean;
-import com.okler.dialogs.ConfirmPrescDialog;
 import com.okler.network.VolleyRequest;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -59,15 +55,11 @@ public class MedPrescListAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
 		Holder holder = new Holder();
-        View rowView;
-        
         if(convertView==null){
 			holder=new Holder();
 			convertView = inflater.inflate(R.layout.custom_view_med_presc, null);
 			convertView.setTag(holder);	
         }else{
-        	
-        	
         }
         holder.img = (NetworkImageView)convertView.findViewById(R.id.img1);
         holder.select = (ImageView)convertView.findViewById(R.id.select);
@@ -79,7 +71,7 @@ public class MedPrescListAdapter extends BaseAdapter{
         ArrayList<PrescriptionImagesDataBean> imagesInPresc = prsbean.getPresImages();
         String fName = imagesInPresc.get(0).getPresUrl();
         holder.img.setImageUrl(fName, imgLoader);
-        String name = medPrescHistory.get(position).getPatientName()/*+" "+medPrescHistory.get(position).getPatientSirName()*/;
+        String name = medPrescHistory.get(position).getPatientName();
         if(name == null|| name == "null" || name == "")
         {
         	holder.name.setText("");
@@ -88,7 +80,7 @@ public class MedPrescListAdapter extends BaseAdapter{
         {
         	holder.name.setText(name);
         }
-        String docName= medPrescHistory.get(position).getDocName()/*+" "+medPrescHistory.get(position).getDocSirname()*/;
+        String docName= medPrescHistory.get(position).getDocName();
         if(docName == null || docName == "null" || docName == "" )
         {
         	holder.docName.setText("");
@@ -99,9 +91,7 @@ public class MedPrescListAdapter extends BaseAdapter{
         }
         holder.prescId.setText(medPrescHistory.get(position).getPresId());
         presId = holder.prescId.getText().toString();
-        
         holder.statusTv.setText(medPrescHistory.get(position).getPrescStatus());
-     
 		return convertView;
 	}
 }

@@ -15,10 +15,13 @@
         <TextView
             android:id="@+id/textView1"
             android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="Checkout"
+            android:textSize="16sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:background="#FCAB12" />
         <ImageView 
             android:id="@+id/progressInScreen"
@@ -88,10 +91,12 @@
         android:layout_alignParentBottom="true">
     <Button
             android:id="@+id/payment_placeorder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:background="@color/Blue"
             android:text="Place Order"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:textColor="@color/White" />
 
     <include

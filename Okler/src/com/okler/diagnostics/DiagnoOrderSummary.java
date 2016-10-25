@@ -2,6 +2,7 @@ package com.okler.diagnostics;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.Network;
 import com.android.volley.Request.Method;
 import com.okler.android.BaseActivity;
 import com.okleruser.R;
@@ -25,11 +27,19 @@ import com.okler.databeans.DiagnoOrderDataBean;
 import com.okler.databeans.DiagnoPackageDataBean;
 import com.okler.databeans.TestDataBean;
 import com.okler.databeans.UsersDataBean;
+import com.okler.databeans.diagnobean.DiagnoLabBranchDataBean;
+import com.okler.databeans.diagnobean.DiagnoLabTestDataBean;
+import com.okler.databeans.diagnobean.DiagnoOrder;
+import com.okler.databeans.diagnobean.DiagnoPackagesDataBean;
+import com.okler.databeans.diagnobean.DiagnoTestDataBean;
+import com.okler.diagno.DiagnoTestPkgHome;
 import com.okler.dialogs.ConfirmTestDeleteDialog;
 import com.okler.dialogs.DiagnoOrderCancellation;
+import com.okler.enums.DiagnoOrderType;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
+import com.okler.utils.TextValidations;
 import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
@@ -64,9 +74,12 @@ public class DiagnoOrderSummary extends BaseActivity implements
 	CustomViewSelectedLabs customLab;
 	LinearLayout.LayoutParams params;
 	ImageView imgBack;
-	String pickupType;
-	DiagnoOrderDataBean dobean = new DiagnoOrderDataBean();
-	DiagnoLabsDataBean labbean = new DiagnoLabsDataBean();
+	String pickupType="";
+	//DiagnoOrderDataBean dobean = new DiagnoOrderDataBean();
+	DiagnoOrderType diagnoOrderType;
+	DiagnoOrder dobean = new DiagnoOrder();
+	//DiagnoLabsDataBean labbean = new DiagnoLabsDataBean();
+	DiagnoLabBranchDataBean labbean = new DiagnoLabBranchDataBean();
 	TextView lab_title, home_title, shipping_charg_value_tv, shipping_charg_tv,
 			user_details_Tv, nameTv, lab_addr_tv, lab_addr_title_tv,
 			title_appo_info, dateValue, timeValue, atValue, coupon_appl_text,
@@ -79,23 +92,26 @@ public class DiagnoOrderSummary extends BaseActivity implements
 			coupon_code_heading;
 	// ArrayList<TestDataBean> tList;
 	Activity ack;
-	Button apply_button;
+	Button apply_button,txt_add_more_tests;
 	EditText coupon_code;
 	String couponCodeUrl;
-	DiagnoPackageDataBean dpbean = new DiagnoPackageDataBean();
+	ArrayList<DiagnoPackagesDataBean> dpList = new ArrayList<DiagnoPackagesDataBean>();
+	//DiagnoPackageDataBean dpbean = new DiagnoPackageDataBean();
 	float amount = 0.00f, discount = 0.00f, tax = 0.00f, net_pay = 0.00f,
 			home_visit = 0.00f, redAmt = 0.00f;
 	UsersDataBean ubean = new UsersDataBean();
-	ArrayList<AddressDataBean> paList = new ArrayList<AddressDataBean>();
-	ArrayList<TestDataBean> tList = new ArrayList<TestDataBean>();
+	//ArrayList<AddressDataBean> paList = new ArrayList<AddressDataBean>();
+	AddressDataBean paList = new AddressDataBean();
+	ArrayList<DiagnoTestDataBean> tList = new ArrayList<DiagnoTestDataBean>();
+	//ArrayList<TestDataBean> tList = new ArrayList<TestDataBean>();
 	String mainUrl;
 	int userId, pat_id;
 	String result;
 	ImageView edit_red_pencil;
 	boolean isFromOrder;
 	int pos = 0, pickup;
-	ArrayList<DiagnoOrderDataBean> usersDiagnoOrder;
-	static TextView sched_appoint;
+	ArrayList<DiagnoOrder> usersDiagnoOrder;
+	static Button sched_appoint;
 	RelativeLayout coupon_code_inner_RL;
 
 	String lab_id;
@@ -111,25 +127,32 @@ public class DiagnoOrderSummary extends BaseActivity implements
 		isFromOrder = getIntent().getBooleanExtra("isFromOrder", false);
 		ubean = Utilities.getCurrentUserFromSharedPref(ack);
 		userId = ubean.getId();
+		diagnoOrderType = Okler.getInstance().getDiagnoOrder().getOrderType();
 		if (isFromOrder) {
 			usersDiagnoOrder = Okler.getInstance().getUserDiagnoOrders();
 			pos = getIntent().getIntExtra("position", 0);
-			paList = usersDiagnoOrder.get(pos).getUserBean().getPatAddList();
+			paList = usersDiagnoOrder.get(pos).getPatientAddr();
 			pickupType = usersDiagnoOrder.get(pos).getPickupType();
 			dobean = usersDiagnoOrder.get(pos);
+			diagnoOrderType = dobean.getOrderType();
 		} else {
-			paList = ubean.getPatAddList();
-			pickupType = getIntent().getStringExtra("PickupType");
-			dobean = Okler.getInstance().getDiagnoOrderDataBean();
+			dobean = Okler.getInstance().getDiagnoOrder();
+			paList = dobean.getPatientAddr();
+			pickupType = dobean.getPickupType(); 
+					//getIntent().getStringExtra("PickupType");
+			
 		}
-
-		labbean = dobean.getSelectedLab();
+		if(pickupType==null){
+			pickupType="";
+		}
+		
 		order_id_RL = (RelativeLayout) findViewById(R.id.orderIdInnerRL);
 		TextView title_orderId = (TextView) order_id_RL
 				.findViewById(R.id.title_mycart);
 		title_orderId.setText("ORDER ID");
 
 		LL_for_selected_labs = (LinearLayout) findViewById(R.id.LL_for_selected_labs);
+		txt_add_more_tests = (Button)findViewById(R.id.txt_add_more_tests);
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		LL_for_selected_tests = (LinearLayout) findViewById(R.id.LL_for_selected_tests);
 		selected_labs_RL = (RelativeLayout) findViewById(R.id.selected_labs_RL);
@@ -140,10 +163,19 @@ public class DiagnoOrderSummary extends BaseActivity implements
 		coupon_code_heading = (RelativeLayout) findViewById(R.id.coupon_code_heading);
 		shipping_charg_RL.setVisibility(View.GONE);
 		title_Lab = (TextView) selected_labs_RL.findViewById(R.id.title_mycart);
-		title_Lab.setText("SELECTED LAB");
 		title_Test = (TextView) selected_tests_RL
 				.findViewById(R.id.title_mycart);
-		title_Test.setText("SELECTED TESTS");
+		if(diagnoOrderType.equals(DiagnoOrderType.TEST)){
+			labbean = dobean.getLabTestDataBean().getCurrentLab();
+			title_Test.setText("SELECTED TESTS");
+		}else{
+			labbean = dobean.getLabPkgDataBean().getCurrentLab();
+			txt_add_more_tests.setText("ADD MORE PACKAGES");
+			title_Test.setText("SELECTED PACKAGES");
+		}
+		title_Lab.setText("SELECTED LAB");
+		
+		
 		title_Bill = (TextView) bill_summary_RL.findViewById(R.id.title_mycart);
 		title_Bill.setText("BILL SUMMARY");
 
@@ -156,6 +188,7 @@ public class DiagnoOrderSummary extends BaseActivity implements
 		apply_button = (Button) findViewById(R.id.apply_button);
 		coupon_code = (EditText) findViewById(R.id.coupon_code);
 		coupon_disc_RL = (RelativeLayout) findViewById(R.id.coupon_disc_RL);
+		coupon_disc_RL.setVisibility(View.VISIBLE);
 		coupon_disc_value_tv = (TextView) findViewById(R.id.coupon_disc_value_tv);
 		coupon_appl_text = (TextView) findViewById(R.id.coupon_appl_text);
 		dateValue = (TextView) findViewById(R.id.dateValue);
@@ -179,8 +212,8 @@ public class DiagnoOrderSummary extends BaseActivity implements
 		shipping_charg_value_tv = (TextView) findViewById(R.id.shipping_charg_value_tv);
 		edit_red_pencil = (ImageView) findViewById(R.id.edit_red_pencil);
 		edit_red_pencil.setVisibility(View.GONE);
-		sched_appoint = (TextView) findViewById(R.id.sched_appoint);
-		tList = new ArrayList<TestDataBean>();
+		sched_appoint = (Button) findViewById(R.id.sched_appoint);
+		tList = new ArrayList<DiagnoTestDataBean>();
 		setSupportActionBar(toolBar);
 		final ActionBar ab = getSupportActionBar();
 
@@ -196,9 +229,12 @@ public class DiagnoOrderSummary extends BaseActivity implements
 				finish();
 			}
 		});*/
+		coupon_disc_value_tv.setText("Rs." + redAmt);
 		UIUtils.setBackClick(toolBar, ack);
-		if (!isFromOrder)
+		if (!isFromOrder){
 			Utilities.setTitleText(toolBar, "Diagnostic Test [5/5]");
+			txt_add_more_tests.setVisibility(View.VISIBLE);
+		}
 		else
 			Utilities.setTitleText(toolBar, "Diagnostic Order History");
 
@@ -230,12 +266,22 @@ public class DiagnoOrderSummary extends BaseActivity implements
 
 			@Override
 			public void onClick(View v) {
-				String cCode = coupon_code.getText().toString();
-				float amt = Float.parseFloat(amount_value_tv.getText()
-						.toString());
-				couponCodeUrl = getString(R.string.couponCodeUrlPart1) + cCode
-						+ getString(R.string.couponCodeUrlPart2) + "diagnostic"
-						+ getString(R.string.couponCodeUrlPart3) + amt;
+				String cCode = coupon_code.getText().toString().trim();
+				//float amt = Float.parseFloat(amount_value_tv.getText()
+						//.toString());
+				try {
+					cCode = URLEncoder.encode(cCode, "UTF-8");
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				if(cCode.equals("")|| cCode.length()==0)
+				{
+					Toast.makeText(ack, "Please enter coupon code", Toast.LENGTH_SHORT).show();
+				}else{	
+					couponCodeUrl = getString(R.string.couponCodeUrlPart1) + cCode
+							+ getString(R.string.couponCodeUrlPart2) + 2
+							+ getString(R.string.couponCodeUrlPart3) + amount;
 
 				WebJsonObjectRequest cjson = new WebJsonObjectRequest(
 						Method.GET, couponCodeUrl, new JSONObject(),
@@ -257,7 +303,7 @@ public class DiagnoOrderSummary extends BaseActivity implements
 											net_pay = net;
 											coupon_disc_RL
 													.setVisibility(View.VISIBLE);
-											net_pay_value_tv.setText(""
+											net_pay_value_tv.setText("Rs. "
 													+ net_pay);
 											coupon_disc_value_tv.setText("Rs. "
 													+ redAmt);
@@ -291,6 +337,7 @@ public class DiagnoOrderSummary extends BaseActivity implements
 						});
 
 				VolleyRequest.addJsonObjectRequest(ack, cjson);
+				}
 			}
 		});
 		if (pickupType.equals("Lab Visit")) {
@@ -300,13 +347,30 @@ public class DiagnoOrderSummary extends BaseActivity implements
 			setHomeAddr();
 			pickup = 1;
 		}
+		
+		txt_add_more_tests.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(DiagnoOrderSummary.this,DiagnoTestPkgHome.class);
+				intent.putExtra("isFromSummary", true);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				intent.putExtra("isTestsPkgsByLabs", true);
+				startActivity(intent);
+				
+			}
+		});	
 	}// end of onCreate
 
 	private void setHomeAddr() {
 		AddressDataBean abean = new AddressDataBean();
 		if (isFromOrder) {
-			abean = paList.get(0);
-			nameTv.setText(abean.getFirstname() + " " + abean.getLastname());
+			abean = paList;
+			String lname = abean.getLastname();
+			if(lname==null)
+				lname="";
+			
+			nameTv.setText(abean.getFirstname() + " " + lname);
 			String addr = abean.getDob() + "\n";
 			String rel = abean.getRelation();
 			if (!(rel.equals("null")))
@@ -316,37 +380,44 @@ public class DiagnoOrderSummary extends BaseActivity implements
 					+ abean.getZip() + "\n" + "+91 " + abean.getPhone();
 			user_details_Tv.setText(addr);
 		} else {
-			int length = paList.size();
-			for (int i = 0; i < length; i++) {
-				abean = new AddressDataBean();
+			/*int length = paList.size();
+			for (int i = 0; i < length; i++) {*/
+				//abean = new AddressDataBean();
 
-				abean = paList.get(i);
-				if (abean.isSelected()) {
-					nameTv.setText(abean.getFirstname() + " "
-							+ abean.getLastname());
-					String addr = abean.getDob() + "\n";
-					String rel = abean.getRelation();
+				//abean = paList.get(i);
+				//if (abean.isSelected()) {
+					nameTv.setText(paList.getFirstname() + " "
+							+ paList.getLastname());
+					String addr = paList.getDob() + "\n";
+					String rel = paList.getRelation();
 					if (!(rel.equals("null")))
 						addr = addr + rel + "\n";
-					addr = addr + abean.getGender() + "\n"
-							+ abean.getAddress1() + "\n" + abean.getAddress2()
-							+ "\n" + abean.getCity() + " - " + abean.getZip()
-							+ "\n" + "+91 " + abean.getPhone();
+					addr = addr + paList.getGender() + "\n"
+							+ paList.getAddress1() + "\n" + paList.getAddress2()
+							+ "\n" + paList.getCity() + " - " + paList.getZip()
+							+ "\n" + "+91 " + paList.getPhone();
 					user_details_Tv.setText(addr);
-					relation = abean.getRelation();
-					break;
-				}
-			}
+					relation = paList.getRelation();
+					//break;
+				//}
+			//}
 		}
 	}
 
 	private void setLabAddr() {
 		lab_addr_RL.setVisibility(View.VISIBLE);
 		pickup_addr_RL.setVisibility(View.GONE);
-		DiagnoLabsDataBean dbean = dobean.getSelectedLab();
+		
+		DiagnoLabBranchDataBean dbean = new DiagnoLabBranchDataBean(); 
+		if(diagnoOrderType.equals(DiagnoOrderType.TEST))		
+			dbean = dobean.getLabTestDataBean().getCurrentLab();
+		else
+			dbean = dobean.getLabPkgDataBean().getCurrentLab();
+		//DiagnoLabsDataBean dbean = dobean.getSelectedLab();
 		lab_addr_title_tv.setText(dbean.getLab_name());
-		String addr = dbean.getLab_address() + ", " + dbean.getLab_city()
-				+ " - " + dbean.getLab_pinCode() + ", " + dbean.getLab_state();
+		String addr = dbean.getAddr1();
+				//dbean.getLab_address() + ", " + dbean.getLab_city()
+				//+ " - " + dbean.getLab_pinCode() + ", " + dbean.getLab_state();
 		lab_addr_tv.setText(addr);
 	}
 
@@ -372,44 +443,48 @@ public class DiagnoOrderSummary extends BaseActivity implements
 					// Start cancel order flow
 					DiagnoOrderCancellation dgOrd = new DiagnoOrderCancellation(
 							ack, "" + userId, usersDiagnoOrder.get(pos)
-									.getOrderId(), ap_date);
+									.getOrderId()+"", ap_date);
 					dgOrd.show();
 				} else {
+					sched_appoint.setEnabled(false);
 					String fname = "fname";
 					String lname = "lname";
 					String name = fname + lname;
 					String dob = "";
 					String addr1 = "", adr2 = "", city_id = "", state_id = "", zip = "", landmark = "";
+					String mobile = "";
 
-					int length = paList.size();
+					//int length = paList;
 
-					for (int i = 0; i < length; i++) {
+					/*for (int i = 0; i < length; i++) {
 						AddressDataBean abean = new AddressDataBean();
 						abean = paList.get(i);
-						if (abean.isSelected()) {
-							fname = abean.getFirstname();
-							lname = abean.getLastname();
+						if (abean.isSelected()) {*/
+							fname = paList.getFirstname();
+							lname = paList.getLastname();
 							name = fname + " " + lname;
-							dob = abean.getDob();
-							addr1 = abean.getAddress1();
-							adr2 = abean.getAddress2();
-							city_id = abean.getCity_id();
-							state_id = "" + abean.getState_id();
-							zip = abean.getZip();
-							landmark = abean.getLandmark();
-							pat_id = abean.getPat_id();
+							dob = paList.getDob();
+							addr1 = paList.getAddress1();
+							adr2 = paList.getAddress2();
+							city_id = paList.getCity_id();
+							state_id = "" + paList.getState_id();
+							zip = paList.getZip();
+							landmark = paList.getLandmark();
+							mobile = paList.getPhone();
+							pat_id = paList.getPat_id();
 
-						}
-					}
+						//}
+					//}
 					String placeOrder = getString(R.string.PlaceOrderDiagnoUrl);
-
-					tList = labbean.getTestBean();
+					tList = dobean.getLabTestDataBean().getCurrentTests();
+					
+					//tList = labbean.getTestBean();
 					String testId = "";
 					entity_price = "";
 					String packId = "";
 					int len = tList.size();
 					for (int i = 0; i < len; i++) {
-						TestDataBean tbean = new TestDataBean();
+						DiagnoTestDataBean tbean = new DiagnoTestDataBean();
 						tbean = tList.get(i);
 						if (testId.equals("")) {
 							testId = String.valueOf(tbean.getTestId());
@@ -423,19 +498,37 @@ public class DiagnoOrderSummary extends BaseActivity implements
 									+ tbean.getOklerTestPrice();
 						}
 					}
-					if (labbean.getPackageBean() != null) {
-						dpbean = labbean.getPackageBean();
-						packId = String.valueOf(dpbean.getPacakageId());
-						entity_price = String.valueOf(dpbean.getPack_oklerPrice());
+					if (diagnoOrderType.equals(DiagnoOrderType.PACKAGE)) {
+						dpList = dobean.getLabPkgDataBean().getCurrentPkgs();
+						for (int i = 0; i < dpList.size(); i++) {
+							if(packId.equals("")){
+								packId = String.valueOf(dpList.get(i).getPacakageId());
+							}else{
+								packId = packId + "," + String.valueOf(dpList.get(i).getPacakageId());
+							}
+							if(entity_price.equals("")){
+								entity_price = dpList.get(i).getPackOklerPrice()+"";
+							}else{
+								entity_price = entity_price + ","
+										+ dpList.get(i).getPackOklerPrice()+"";
+							}
+						}
+						//packId = String.valueOf(dpbean.getPacakageId());
+						//entity_price = String.valueOf(dpbean.getPack_oklerPrice());
 					}
 
-					lab_id = String.valueOf(dobean.getSelectedLab().getLabId());
-					slot_id = dobean.getSlot_id();
-					lab_city_id = dobean.getSelectedLab().getLab_city_id();
-					state_lab_id = dobean.getSelectedLab().getLab_state_id();
-					lab_branch_id = dobean.getSelectedLab()
-							.getLab_city_branch_id();
-					ap_date = dobean.getAp_date();
+					lab_id = String.valueOf(labbean.getLabId());
+					slot_id = dobean.getAppTimeSlotId();
+					lab_city_id = String.valueOf(labbean.getCityId());
+					if(lab_city_id==null)
+						lab_city_id = "";
+					state_lab_id = String.valueOf(labbean.getStateId());
+					if (state_lab_id==null)
+						state_lab_id="";
+					lab_branch_id = String.valueOf(labbean.getBranchId());
+					if(lab_branch_id==null)
+						lab_branch_id="";
+					ap_date = dobean.getApptDt();
 					disc = String.valueOf(discount);
 					// okler_disc_value_tv.getText().toString();
 					String tax1 = String.valueOf(tax);
@@ -460,6 +553,7 @@ public class DiagnoOrderSummary extends BaseActivity implements
 
 					} catch (UnsupportedEncodingException e1) {
 						// TODO Auto-generated catch block
+						sched_appoint.setEnabled(true);
 						e1.printStackTrace();
 					}
 
@@ -480,8 +574,14 @@ public class DiagnoOrderSummary extends BaseActivity implements
 							+ address2 + "&city=" + city_id + "&state="
 							+ state_id + "&zip=" + zip + "&landmark="
 							+ landmark1 + "&ccode=" + cCode1
-							+ "&coupon_discount=" + cDisc;
+							+ "&coupon_discount=" + cDisc
+							+ "&mobile=" + mobile;
+					if(redAmt>0)
+						mainUrl = mainUrl+getString(R.string.coupon_type)+2;
+					String uri = mainUrl;
 					Log.d("MainUrl", mainUrl);
+					
+					if(net_pay>0){
 					WebJsonObjectRequest wjson = new WebJsonObjectRequest(
 							Method.GET, mainUrl, new JSONObject(),
 							new Response.Listener<JSONObject>() {
@@ -506,12 +606,11 @@ public class DiagnoOrderSummary extends BaseActivity implements
 											String salutation = ubean
 													.getSalutation();
 
-											String time = dobean.getAp_time();
+											String time = dobean.getAppTime();
 											time = URLEncoder.encode(time,
 													"UTF-8");
-											String lab_name = dobean
-													.getSelectedLab()
-													.getLab_name();
+											String lab_name = labbean.getLab_name();
+													
 											lab_name = URLEncoder.encode(
 													lab_name, "UTF-8");
 											customer_name = URLEncoder.encode(
@@ -587,12 +686,14 @@ public class DiagnoOrderSummary extends BaseActivity implements
 										} catch (JSONException e) {
 											// TODO Auto-generated catch block
 											e.printStackTrace();
+											sched_appoint.setEnabled(true);
 											// Toast.makeText(ack,
 											// "Some error Ocurred while booking",
 											// Toast.LENGTH_LONG).show();
 										} catch (UnsupportedEncodingException e) {
 											// TODO Auto-generated catch block
 											e.printStackTrace();
+											sched_appoint.setEnabled(true);
 										}
 
 										// Toast.makeText(ack, result,
@@ -609,6 +710,7 @@ public class DiagnoOrderSummary extends BaseActivity implements
 												ack,
 												"Some error Ocurred while booking",
 												Toast.LENGTH_LONG).show();
+										sched_appoint.setEnabled(true);
 									}
 
 								}
@@ -616,14 +718,24 @@ public class DiagnoOrderSummary extends BaseActivity implements
 
 								@Override
 								public void onErrorResponse(VolleyError error) {
+									 Log.e("Error",
+												 new
+												 String(error.networkResponse.data));
 									Toast.makeText(ack,
 											"Some error Ocurred while booking",
 											Toast.LENGTH_LONG).show();
+									sched_appoint.setEnabled(true);
 
 								}
 							});
-					VolleyRequest.addJsonObjectRequest(ack, wjson);
-
+					if(VolleyRequest.addJsonObjectRequest(ack, wjson))
+						sched_appoint.setEnabled(false);
+					else
+						sched_appoint.setEnabled(true);
+					}else{
+						Toast.makeText(ack, "Please select atleast one test/package", Toast.LENGTH_SHORT).show();
+						sched_appoint.setEnabled(true);
+					}
 				}
 			}
 		});
@@ -634,15 +746,15 @@ public class DiagnoOrderSummary extends BaseActivity implements
 
 		customLab = new CustomViewSelectedLabs(getApplicationContext());
 		TextView labName = (TextView) customLab.findViewById(R.id.testNameTv);
-		labName.setText(dobean.getSelectedLab().getLab_name());
+		labName.setText(labbean.getLab_name());
 		customLab.setLayoutParams(params);
 		LL_for_selected_labs.addView(customLab);
 
 		setTestUi();
 
 		atValue.setText(pickupType);
-		dateValue.setText(dobean.getAp_date());
-		timeValue.setText(dobean.getAp_time());
+		dateValue.setText(dobean.getApptDt());
+		timeValue.setText(dobean.getAppTime());
 		/*
 		 * title_Coupon = (TextView)findViewById(R.id.title_Coupon);
 		 * title_Coupon.setText();
@@ -658,11 +770,11 @@ public class DiagnoOrderSummary extends BaseActivity implements
 	}
 
 	public void setUIForOrder() {
-		labbean = dobean.getSelectedLab();
+		labbean = dobean.getLabTestDataBean().getCurrentLab();
 		// ArrayList<TestDataBean> tList = new ArrayList<TestDataBean>();
 
-		tList = labbean.getTestBean();
-		dpbean = labbean.getPackageBean();
+		tList = dobean.getLabTestDataBean().getCurrentTests();
+		dpList = dobean.getLabPkgDataBean().getCurrentPkgs();
 	}
 
 	public void setTestUi() {
@@ -670,20 +782,20 @@ public class DiagnoOrderSummary extends BaseActivity implements
 		// dobean = Okler.getInstance().getDiagnoOrderDataBean();
 		// DiagnoLabsDataBean labbean = new DiagnoLabsDataBean();
 
-		labbean = dobean.getSelectedLab();
+	//	labbean = dobean.getLabTestDataBean().getCurrentLab();
 		// ArrayList<TestDataBean> tList = new ArrayList<TestDataBean>();
 
-		tList = labbean.getTestBean();
-		dpbean = labbean.getPackageBean();
+		tList = dobean.getLabTestDataBean().getCurrentTests();
+		dpList = dobean.getLabPkgDataBean().getCurrentPkgs();
 
 		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(
 				LinearLayout.LayoutParams.FILL_PARENT,
 				LinearLayout.LayoutParams.WRAP_CONTENT);
 		params2.setMargins(0, 10, 0, 0);
 
-		if (labbean.getPackageBean() == null) {
-			CustomViewSelectedTests customTest[] = new CustomViewSelectedTests[50];
+		if (diagnoOrderType.equals(DiagnoOrderType.TEST)) {
 			int length = tList.size();
+			CustomViewSelectedTests customTest[] = new CustomViewSelectedTests[length];
 			amount = 0.0f;
 			discount = 0.0f;
 			tax = 0.0f;
@@ -706,7 +818,7 @@ public class DiagnoOrderSummary extends BaseActivity implements
 				 * if(length==1){ deleteImage.setVisibility(View.INVISIBLE); }
 				 */
 				// deleteImage.setTag(""+i+100);
-				TestDataBean tb = new TestDataBean();
+				DiagnoTestDataBean tb = new DiagnoTestDataBean();
 				tb = tList.get(i);
 				testNameTv.setText(tb.getTestname());
 				priceTv.setText("Rs." + tb.getOklerTestPrice());
@@ -716,48 +828,68 @@ public class DiagnoOrderSummary extends BaseActivity implements
 
 					@Override
 					public void onClick(View v) {
-						int id = Integer.parseInt(String.valueOf(v.getTag()));
-						// id = id -100;
-						tList.remove(id);
-						// dobean.getSelectedLab().setSelectedTest(tList);
-						labbean.setTestBean(tList);
-						dobean.setSelectedLab(labbean);
-						Okler.getInstance().setDiagnoOrderDataBean(dobean);
-						amount_value_tv.setText("");
-						okler_disc_value_tv.setText("");
-						shipping_charg_value_tv.setText("");
-						tax_value_tv.setText("");
-						net_pay_value_tv.setText("");
-						coupon_disc_value_tv.setText("");
+						
 
-						setTestUi();
-						// ConfirmTestDeleteDialog clg = new
-						// ConfirmTestDeleteDialog(ack, id,
-						// LL_for_selected_tests,pickupType);
-						// clg.show(getFragmentManager(), "Delete Test");
-						// LL_for_selected_tests.postInvalidate();
+						// TODO Auto-generated method stub
+						final int id = Integer.parseInt(String.valueOf(v.getTag()));
+						int viewid = v.getId();
+						//int id/* = viewid - 1000*/;
+						final AlertDialog alertDialog = new AlertDialog.Builder(ack).create();
+				alertDialog.setTitle("Alert");
+				alertDialog.setMessage("Are you sure, you want to delete the selected test");
+				alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								
+								
+								// id = id -100;
+								tList.remove(id);
+								// dobean.getSelectedLab().setSelectedTest(tList);
+								dobean.getLabTestDataBean().setCurrentTests(tList);
+								//dobean.setSelectedLab(labbean);
+								Okler.getInstance().setDiagnoOrder(dobean);
+								amount_value_tv.setText("");
+								okler_disc_value_tv.setText("");
+								shipping_charg_value_tv.setText("");
+								tax_value_tv.setText("");
+								net_pay_value_tv.setText("");
+								coupon_disc_value_tv.setText("");
 
+								setTestUi();
+							}
+						});
+
+				alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						});
+
+				alertDialog.show();
 					}
 				});
 				if (isFromOrder)
 					deleteImage.setVisibility(View.INVISIBLE);
 				else {
 					amount = amount + (tb.getMarketPrice());
-					tax = tax + (tb.getTax());
+					
 					net_pay = net_pay + (tb.getOklerTestPrice());
 				}
-
-			}
+				
+			}tax = dobean.getTax();
 
 			if (isFromOrder) {
-				amount = Float.parseFloat(dobean.getAmount());
-				tax = Float.parseFloat(dobean.getTax());
-				net_pay = Float.parseFloat(dobean.getNetPayable());
-				discount = Float.parseFloat(dobean.getOklerDiscount());
+				amount = dobean.getMrp();
+				tax = dobean.getTax();
+				net_pay = (dobean.getNetPayable());
+				discount = (dobean.getYouSaveRs());
 				amount_value_tv.setText("Rs." + amount);
 				okler_disc_value_tv.setText("Rs." + discount);
 				tax_value_tv.setText("Rs." + tax);
 				net_pay_value_tv.setText("Rs." + net_pay);
+				coupon_disc_value_tv.setText("Rs." + redAmt);
 				if (pickupType.equals("Home Visit")) {
 					shipping_charg_RL.setVisibility(View.VISIBLE);
 					shipping_charg_tv.setText("Home Visit Charges");
@@ -772,72 +904,145 @@ public class DiagnoOrderSummary extends BaseActivity implements
 				okler_disc_value_tv.setText("Rs." + discount);
 				tax_value_tv.setText("Rs." + tax);
 				net_pay_value_tv.setText("Rs." + net_pay);
+				coupon_disc_value_tv.setText("Rs." + redAmt);
 			}
 			if (pickupType.equals("Home")) {
 				shipping_charg_RL.setVisibility(View.VISIBLE);
 				shipping_charg_tv.setText("Home Visit Charges");
-				home_visit = 150;
+				
+				if(amount>0)
+					home_visit = 150;
+				else 
+					home_visit = 0;
 				shipping_charg_value_tv.setText("Rs." + home_visit);
 				net_pay = net_pay + home_visit;
-				net_pay_value_tv.setText("" + net_pay);
+				net_pay_value_tv.setText("Rs." + net_pay);
+				coupon_disc_value_tv.setText("Rs." + redAmt);
 			}
 		} else {
-			CustomViewSelectedTests customPkg = new CustomViewSelectedTests(ack);
+			int len2 = dpList.size();
+			CustomViewSelectedTests customPkg[] = new CustomViewSelectedTests[len2];
 			LL_for_selected_tests.removeAllViews();
-			TextView testNameTv2 = (TextView) customPkg
-					.findViewById(R.id.testNameTv);
-			TextView priceTv2 = (TextView) customPkg.findViewById(R.id.priceTv);
-			ImageView deleteImage2 = (ImageView) customPkg
-					.findViewById(R.id.deleteImage);
-			deleteImage2.setVisibility(View.INVISIBLE);
+			for (int i = 0; i < len2; i++) {
+				customPkg[i] = new CustomViewSelectedTests(ack);
+				
+				TextView testNameTv2 = (TextView) customPkg[i]
+						.findViewById(R.id.testNameTv);
+				TextView priceTv2 = (TextView) customPkg[i].findViewById(R.id.priceTv);
+				ImageView deleteImage2 = (ImageView) customPkg[i]
+						.findViewById(R.id.deleteImage);
+				if(isFromOrder)
+				deleteImage2.setVisibility(View.INVISIBLE);
+				deleteImage2.setTag(""+i);
 
-			testNameTv2.setText(dpbean.getPackage_name());
-			priceTv2.setText("Rs." + dpbean.getPack_oklerPrice());
-			customPkg.setLayoutParams(params2);
-			LL_for_selected_tests.addView(customPkg);
+				testNameTv2.setText(dpList.get(i).getPackageName());
+				priceTv2.setText("Rs." + dpList.get(i).getPackOklerPrice());
+				customPkg[i].setLayoutParams(params2);
+				LL_for_selected_tests.addView(customPkg[i]);
 
-			if (!isFromOrder) {
-				amount_value_tv.setText("Rs." + dpbean.getPack_mrp());
-				okler_disc_value_tv.setText("Rs."
-						+ (dpbean.getPack_mrp() - dpbean.getPack_oklerPrice()));
-				tax_value_tv.setText("Rs." + tax);
-				net_pay_value_tv.setText("Rs." + dpbean.getPack_oklerPrice());
-				net_pay = dpbean.getPack_oklerPrice();
-			}
-			if (isFromOrder) {
-				amount = Float.parseFloat(dobean.getAmount());
-				tax = Float.parseFloat(dobean.getTax());
-				net_pay = Float.parseFloat(dobean.getNetPayable());
-				amount_value_tv.setText("Rs." + amount);
-				okler_disc_value_tv.setText("Rs." + (amount - net_pay));
-				tax_value_tv.setText("Rs." + tax);
-				net_pay_value_tv.setText("Rs." + net_pay);
-				if (pickupType.equals("Home Visit")) {
-					if (pickupType.equals("Home")) {
-						shipping_charg_RL.setVisibility(View.VISIBLE);
-						shipping_charg_tv.setText("Home Visit Charges");
-						home_visit = 150;
-						shipping_charg_value_tv.setText("Rs." + home_visit);
-						net_pay = net_pay + home_visit;
-						net_pay_value_tv.setText("" + net_pay);
-					}
+				deleteImage2.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						final int id = Integer.parseInt(String.valueOf(v.getTag()));
+						int viewid = v.getId();
+						//int id/* = viewid - 1000*/;
+						final AlertDialog alertDialog = new AlertDialog.Builder(ack).create();
+				alertDialog.setTitle("Alert");
+				alertDialog.setMessage("Are you sure, you want to delete the selected package");
+				alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dpList.remove(id);
+								dobean.getLabPkgDataBean().setCurrentPkgs(dpList);
+								//dobean.setSelectedLab(labbean);
+								Okler.getInstance().setDiagnoOrder(dobean);
+								amount_value_tv.setText("");
+								okler_disc_value_tv.setText("");
+								shipping_charg_value_tv.setText("");
+								tax_value_tv.setText("");
+								net_pay_value_tv.setText("");
+								coupon_disc_value_tv.setText("");
+								
+								amount=0.00f;
+								discount=0.00f;
+								tax=0.00f;
+								net_pay=0.00f;
+								home_visit = 0.00f;
+
+								setTestUi();
+							}
+						});
+
+				alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						});
+
+				alertDialog.show();
+					
+						}
+				});
+				if (!isFromOrder) {
+					amount = amount + dpList.get(i).getPackMrp();
+					net_pay = net_pay + dpList.get(i).getPackOklerPrice(); 
+					
+				}
+				if (isFromOrder) {
+					amount = (dobean.getMrp());
+					tax = tax+0;
+					net_pay = (dobean.getNetPayable());
+					amount_value_tv.setText("Rs." + amount);
+					okler_disc_value_tv.setText("Rs." + (amount - net_pay));
+					tax_value_tv.setText("Rs." + tax);
+					net_pay_value_tv.setText("Rs." + net_pay);
+					coupon_disc_value_tv.setText("Rs." + redAmt);
+					
 				}
 			}
+			amount_value_tv.setText("Rs." + amount);
+			discount = amount - net_pay;
+			okler_disc_value_tv.setText("Rs."+ discount);
+			tax_value_tv.setText("Rs." + tax);
+			net_pay_value_tv.setText("Rs." + net_pay);
+			coupon_disc_value_tv.setText("Rs." + redAmt);
+			if (pickupType.equals("Home")) {
+					shipping_charg_RL.setVisibility(View.VISIBLE);
+					shipping_charg_tv.setText("Home Visit Charges");
+					if(amount>0)
+					home_visit = 150;
+					else 
+						home_visit = 0;
+					shipping_charg_value_tv.setText("Rs." + home_visit);
+					net_pay = net_pay + home_visit;
+					net_pay_value_tv.setText("Rs." + net_pay);
+					coupon_disc_value_tv.setText("Rs." + redAmt);
+			}
+			if(pickupType.equals("Home Visit")){
+				shipping_charg_RL.setVisibility(View.VISIBLE);
+				shipping_charg_tv.setText("Home Visit Charges");
+				if(amount>0)
+					home_visit = 150;
+					else 
+						home_visit = 0;
+					shipping_charg_value_tv.setText("Rs." + home_visit);
+			}
+
+			
 		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.diagno_order_summary, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;

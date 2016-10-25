@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.okler.diagnostics.DiagnoDiseaseHome" >
+    tools:context="com.okler.diagno.DiagnoDiseaseHome" >
      <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -17,14 +17,16 @@
 		<RelativeLayout 
     	android:id="@+id/titleLayout"
     	android:layout_width="fill_parent"
-    	android:layout_height="56dp"
-    	android:background="@color/darkPurple">
+    	android:layout_height="wrap_content"
+    	android:background="@color/ModerateMagenta">
+    	
      		<TextView 
 			    android:id="@+id/select_disease_activity_heading"
 			    android:layout_width="fill_parent"
-			    android:layout_height="?actionBarSize"
-			    android:minHeight="?actionBarSize"
-			    android:background="@color/ModerateMagenta"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="6dp"
+			    android:layout_marginBottom="6dp"
+			    android:textSize="16sp"
 			    android:textColor="@color/White"
 			    android:text="@string/select_diseases"
 			    android:gravity="center"
@@ -41,6 +43,27 @@
 		    android:layout_marginLeft="10dp"
 			android:layout_below="@+id/topLayout"
 			/>
+			<TextView
+    android:id="@+id/search_history"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_below="@+id/topLayout"
+    android:layout_marginRight="6dp"
+    android:background="@null"
+    android:text="@string/view_search_history"
+    android:textColor="#99d5e3"
+    android:textSize="16sp" />
+
+<RelativeLayout 
+    android:id="@+id/separatorRL"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/currentPosition_Diagno_dis"
+    
+    >
+   <include layout="@layout/separator_1dp"/>
+</RelativeLayout>
 			<TextView
     android:id="@+id/no_items"
     android:layout_below="@id/currentPosition_Diagno_dis"
@@ -60,7 +83,7 @@
     android:layout_alignParentRight="true"
     android:orientation="horizontal"
     >
-    <ListView
+    <!-- <ListView
         android:id="@+id/lvDiagnoDiseases"
         android:layout_width="0dp"
         android:layout_weight="85"
@@ -68,7 +91,17 @@
         android:layout_alignParentLeft="true"
         android:divider="@null"
         >
-    </ListView> 
+    </ListView>  -->
+    <android.support.v7.widget.RecyclerView
+    	     android:id="@+id/lvTests2"
+        android:layout_marginTop="5dp"
+        android:layout_width="0dp"
+        android:layout_weight="85"
+        android:scrollbars="vertical"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:divider="@null"
+    	    />
 	<ListView
         android:id="@+id/alphabetsScrView"
         android:layout_width="0dp"
@@ -85,14 +118,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
-		<!-- <Button
+		 <Button
    		 	android:id="@+id/nextButn"
     		android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"    
 		    android:layout_above="@+id/bottombar"    
-		    android:background="@color/darkPurple"
+		    android:background="@color/ModerateMagenta"
 		    android:textColor="@color/White"
-		    android:text="@string/next_btn" /> -->
+		    android:text="@string/next_btn"
+		    android:layout_marginTop="6dp"
+		    android:layout_marginBottom="6dp"
+		    android:textSize="16sp"/> 
+		    
 				<include
 		    	android:layout_alignParentBottom="true"
 		        android:id="@+id/bottombar"

@@ -12,10 +12,11 @@
     <TextView 
         android:id="@+id/order_details"
         android:layout_width="fill_parent"
-        android:layout_height="?actionBarSize"
-    	android:minHeight="?actionBarSize"
+        android:layout_height="wrap_content"
+    	android:paddingTop="6dp"
+    	android:paddingBottom="6dp"
     	android:background="@color/ModerateMagenta"
-    	android:textSize="20sp"
+    	android:textSize="16sp"
     	android:textColor="@color/White"
     	android:gravity="center"
     	android:text="@string/diagno_order_details"
@@ -39,7 +40,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 >
                 <ImageView 
                     android:id="@+id/thumbsUpImg"
@@ -48,7 +49,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/thumbs_up_blue_icon"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     />
                 <RelativeLayout 
                     android:id="@+id/RL_for_smileyText"
@@ -56,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/thumbsUpImg"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     >
                 <TextView 
                     android:id="@+id/order_placed_text"
@@ -90,8 +91,8 @@
                     android:textColor="@color/ModerateMagenta"
                     android:layout_alignParentTop="true"
                     android:text="Order ID:"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
                     />
                 <TextView 
                     android:id="@+id/orderId"
@@ -99,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/orderIdTv"
                     android:text="OK001526598"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     />
                 <ImageView 
                     android:id="@+id/blue_person"
@@ -107,9 +108,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@+id/orderIdTv"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:src="@drawable/blue_person_icon"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="10dp"
                     />
                 <TextView 
                 android:id="@+id/nameTv"
@@ -119,7 +120,7 @@
                 android:layout_toRightOf="@+id/blue_person"
                 android:text=""
                 android:textStyle="bold"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
                 />
                 <TextView 
@@ -129,7 +130,7 @@
                 android:minLines="2"
                 android:layout_below="@+id/nameTv"
                 android:text=""
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_alignLeft="@+id/nameTv"
                 />
                 <ImageView 
@@ -138,10 +139,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@+id/user_details_Tv"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:src="@drawable/blue_mobile_icon"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="10dp"
                     />
                 <TextView 
                 android:id="@+id/mobileTv"
@@ -150,9 +151,9 @@
                 android:layout_below="@+id/user_details_Tv"
                 android:layout_toRightOf="@+id/blue_mobile"
                 android:text=""
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 />
             </RelativeLayout>
             
@@ -161,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_below="@+id/userDetailsRL"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 >
                 <include 
                     android:id="@+id/appoint_info_heading"
@@ -171,12 +172,12 @@
                     android:id="@+id/a_date_tv"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:ems="7"
+                    android:ems="9"
                     android:textStyle="bold"
                     android:text="Appointment Date"
                     android:layout_below="@+id/appoint_info_heading"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     />
                 <TextView 
                     android:id="@+id/dateValue"
@@ -185,13 +186,13 @@
                     android:text=""
                     android:layout_below="@+id/appoint_info_heading"
                     android:layout_toRightOf="@+id/a_date_tv"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     />
                 <TextView 
                     android:id="@+id/a_time_tv"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:ems="7"
+                    android:ems="9"
                     android:textStyle="bold"
                     android:text="Appointment Time"
                     android:layout_below="@+id/a_date_tv"
@@ -209,7 +210,7 @@
                     android:id="@+id/a_at_tv"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:ems="7"
+                    android:ems="9"
                     android:textStyle="bold"
                     android:text="Appointment At"
                     android:layout_below="@+id/a_time_tv"
@@ -230,8 +231,8 @@
             android:layout_height="wrap_content"
             android:background="@color/LightGrey"
             android:layout_below="@+id/appoint_info_RL"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             >
             <TextView 
                 android:id="@+id/queryText"
@@ -239,8 +240,8 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:text="@string/queryText"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp"
                 />
             <TextView 
@@ -250,14 +251,14 @@
                 android:textStyle="bold"
                 android:text="@string/phone"
                 android:layout_below="@+id/queryText"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp"
                 />
             <TextView 
                 android:id="@+id/phoneValueTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+91022234567890"
+                android:text=" 77100 88100"
                 android:layout_below="@+id/queryText"
                 android:layout_toRightOf="@+id/phoneTv"
                 android:layout_marginBottom="5dp"
@@ -269,18 +270,18 @@
                 android:textStyle="bold"
                 android:text="@string/email"
                 android:layout_below="@+id/phoneTv"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
                 />
             	
             <TextView 
                 android:id="@+id/emailValueTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="care@okler.com"
+                android:text=" contact@okler.com"
                 android:layout_below="@+id/phoneTv"
                 android:layout_toRightOf="@+id/emailTv"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/ModerateMagenta"
                 />
             
@@ -293,8 +294,7 @@
     <LinearLayout
         android:id="@+id/bottom_button_LL"
         android:layout_width="fill_parent"
-        android:layout_height="?actionBarSize"
-    	android:minHeight="?actionBarSize"
+        android:layout_height="wrap_content"
     	android:layout_above="@+id/bottombar"
         android:orientation="horizontal"
         >
@@ -304,7 +304,7 @@
             android:layout_weight="1"
             android:layout_height="fill_parent"
             android:textColor="@color/White"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:background="@color/Gray"
             android:text="@string/check_order_status"
             />
@@ -314,7 +314,7 @@
             android:layout_weight="1"
             android:layout_height="fill_parent"
             android:textColor="@color/White"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:background="@color/ModerateMagenta"
             android:text="@string/place_new_order"
             />

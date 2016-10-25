@@ -18,21 +18,17 @@
 				        android:id="@+id/parentImageFav"
 				        android:layout_width="wrap_content"
 				        android:layout_height="wrap_content"
-				        android:visibility="gone"
-				        android:layout_marginBottom="10dp"
+				        android:layout_marginBottom="5dp"
 				        android:layout_alignParentRight="true" >
 				    <ImageView
 				        android:id="@+id/image_favourite"
 				        android:layout_width="20dp"
 				        android:layout_height="20dp"
-				        android:src="@drawable/favourites"				        
-				        android:layout_marginTop="5dp"
-				        android:visibility="gone" 
-				        android:layout_marginBottom="5dp"
-				        android:layout_marginLeft="5dp"
+				        android:background="@drawable/favourites"				        
+				        android:layout_margin="5dp"
 				        />
 				    
-				    <ImageView
+				   <!--  <ImageView
 				        android:id="@+id/image_favourite_filled"
 				        android:layout_width="20dp"
 				        android:layout_height="20dp"
@@ -41,7 +37,7 @@
 				               android:visibility="gone" 
 				        android:layout_marginBottom="5dp"
 				        android:layout_marginLeft="5dp"
-				        />
+				        /> -->
 					</RelativeLayout>
 	<RelativeLayout                   
  	    android:id="@+id/relativeImageLayout"
@@ -214,18 +210,18 @@
 			            android:layout_height="40dp"
 			            android:background="@drawable/item_amount_background"
 			            android:text="Okler Price Rs. "
-			            android:textSize="13sp"
-			            android:layout_toLeftOf="@id/image_cart"
+			            android:textSize="12sp"
 			            android:textColor="@color/Black"
 			            android:layout_below="@id/forMycartScreen" />
-					<Button
+					<!-- android:layout_toLeftOf="@id/image_cart" -->
+					<!-- <Button
 			            android:id="@+id/image_cart"
 			            android:layout_width="50dp"
 			            android:layout_height="40dp"
 			            android:layout_marginRight="10dp"
 			            android:layout_alignParentRight="true"  
 			            android:background="@drawable/health_shop_shoppingcart" 
-			            android:layout_below="@id/forMycartScreen"/> 
+			            android:layout_below="@id/forMycartScreen"/>  -->
 								    
 				</RelativeLayout>
 			</LinearLayout>	

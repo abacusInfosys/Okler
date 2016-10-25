@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import com.okler.utils.CameraGalleryImageInfo;
 import com.okler.utils.Okler;
 import com.okler.utils.TextValidations;
 import com.okler.utils.Utilities;
@@ -15,20 +14,17 @@ import com.okler.databeans.PrescriptionsDataBean;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
+//import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,9 +33,9 @@ import android.widget.Toast;
 public class CameraGallery extends Fragment implements OnClickListener {
 	LinearLayout cameraLayout, galleryLayout;
 	public static final int MEDIA_TYPE_IMAGE = 1;
-	private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-	private static final int RESULT_OK = 1;
-	private static final int RESULT_CANCELED = 2;
+	//private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+//	private static final int RESULT_OK = 1;
+//	private static final int RESULT_CANCELED = 2;
 
 	// directory name to store captured images and videos
 	private static final String IMAGE_DIRECTORY_NAME = "Hello Camera";
@@ -50,11 +46,11 @@ public class CameraGallery extends Fragment implements OnClickListener {
 
 	static File mediaFile;
 
-	private ImageView imgPreview;
+	//private ImageView imgPreview;
 	String parent;
 	public Bitmap bitmap;
 	Activity parentAct;
-	private String prescType, patientName, docName, mobNum;
+	private String prescType, patientName, docName,doctorlname, mobNum;
 	public PrescriptionsDataBean pdtBean;
 
 	@Override
@@ -62,10 +58,10 @@ public class CameraGallery extends Fragment implements OnClickListener {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		parentAct = getActivity();
-		Utilities.writeToLogFIle("CamGalFrag:  ");
+	//	Utilities.writeToLogFIle("CamGalFrag:  ");
 
 		parent = String.valueOf(parentAct.getComponentName());
-		Utilities.writeToLogFIle("CamGalFrag:  parent " + parent);
+		//Utilities.writeToLogFIle("CamGalFrag:  parent " + parent);
 		View view = inflater.inflate(R.layout.fragment_camera_gallery, null);
 		Okler.getInstance().getPrescriptionsDataBeans().getPresImages().clear();
 		cameraLayout = (LinearLayout) view.findViewById(R.id.layout_camera);
@@ -87,7 +83,7 @@ public class CameraGallery extends Fragment implements OnClickListener {
 					Utilities.captureImageFromCamera(getActivity());
 				}
 
-				Utilities.writeToLogFIle("CamGalFrag:  CameraClicked");
+			//	Utilities.writeToLogFIle("CamGalFrag:  CameraClicked");
 			}
 		});
 		galleryLayout.setOnClickListener(new OnClickListener() {
@@ -142,47 +138,55 @@ public class CameraGallery extends Fragment implements OnClickListener {
 		// Verify Patient Name
 		EditText upload_edit_patientname = (EditText) parentAct
 				.findViewById(R.id.upload_edit_patientname);
-		TextValidations txtValidation = new TextValidations(
-				upload_edit_patientname);
-		if (!txtValidation.ValidateMinimumChars("Enter Patient's Name", 3))
-			return false;
+		String fname = upload_edit_patientname.getText().toString().trim();
+		if(fname.length()>0){
+			TextValidations txtValidation = new TextValidations(upload_edit_patientname);
+			if (!txtValidation.ValidateMinimumChars("Enter Patient's Name", 3))
+				return false;
+		}
+		
 
 		EditText upload_edit_patientsirname = (EditText) parentAct
 				.findViewById(R.id.upload_edit_surname);
-		TextValidations txValidation1 = new TextValidations(
-				upload_edit_patientsirname);
-		if (!txValidation1.ValidateMinimumChars("Enter Patien's Surname", 3))
-			return false;
+		String lname = upload_edit_patientsirname.getText().toString().trim();
+		if(lname.length()>0){
+			TextValidations txValidation1 = new TextValidations(upload_edit_patientsirname);
+			if (!txValidation1.ValidateMinimumChars("Enter Patien's Surname", 3))
+			return false;	
+		}
+		
 
 		patientName = upload_edit_patientname.getText().toString() + " "
 				+ upload_edit_patientsirname.getText().toString();
 
 		// Verify Doc Name
-		EditText upload_edit_docname = (EditText) parentAct
-				.findViewById(R.id.upload_edit_doctorname);
-		txtValidation = new TextValidations(upload_edit_docname);
-		if (!txtValidation.ValidateMinimumChars("Enter Doctor's Name", 3))
-			return false;
+		//EditText upload_edit_docname = (EditText) parentAct.findViewById(R.id.upload_edit_doctorname);
+		//txtValidation = new TextValidations(upload_edit_docname);
+		//if (!txtValidation.ValidateMinimumChars("Enter Doctor's Name", 3))
+			//return false;
 
-		EditText upload_edit_docsirname = (EditText) parentAct
-				.findViewById(R.id.upload_edit_docsurname);
-		TextValidations txValidations2 = new TextValidations(
-				upload_edit_docsirname);
-		if (!txValidations2.ValidateMinimumChars("Enter Doctor's Surname", 3))
-			return false;
+		//EditText upload_edit_docsirname = (EditText) parentAct.findViewById(R.id.upload_edit_docsurname);
+		//TextValidations txValidations2 = new TextValidations(upload_edit_docsirname);
+		//if (!txValidations2.ValidateMinimumChars("Enter Doctor's Surname", 3))
+			//return false;
 
-		docName = upload_edit_docname.getText().toString() + " "
-				+ upload_edit_docsirname.getText().toString();
+		//docName = upload_edit_docname.getText().toString();
+		//doctorlname=upload_edit_docsirname.getText().toString();
 
 		// Verify Mobile Number
 		EditText upload_mob_number = (EditText) parentAct
 				.findViewById(R.id.uploaa_edit_mobileno);
-		txtValidation = new TextValidations(upload_mob_number);
-		if (!txtValidation.validateMobile("Enter Correct Mobile Number"))
-			return false;
+		String phone = upload_mob_number.getText().toString().trim();
+		if(phone.length()>0){
+			TextValidations txtValidation = new TextValidations(upload_mob_number);
+			if (!txtValidation.validateMobile("Enter Correct Mobile Number"))
+			return false;	
+		}
+		
 
 		mobNum = upload_mob_number.getText().toString();
 		Okler.getInstance().getPrescriptionsDataBeans().setDocName(docName);
+		Okler.getInstance().getPrescriptionsDataBeans().setDocSirname(doctorlname);
 		Okler.getInstance().getPrescriptionsDataBeans()
 				.setPatientName(patientName);
 		Okler.getInstance().getPrescriptionsDataBeans().setMobileNumber(mobNum);

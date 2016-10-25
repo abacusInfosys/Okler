@@ -64,7 +64,8 @@
             android:layout_height="wrap_content"
              android:layout_toLeftOf="@+id/overflowIcon"  
             android:background="@color/White" 
-           	android:focusable="false"  
+           	android:focusable="false"
+           	android:layout_marginLeft="20dp"  
 			android:visibility="visible"
             />     
             <ImageView

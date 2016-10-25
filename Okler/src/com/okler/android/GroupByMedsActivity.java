@@ -7,11 +7,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.android.volley.Request.Method;
 import com.google.gson.Gson;
 import com.android.volley.Response;
@@ -20,10 +18,12 @@ import com.okler.adapters.GroupExpandableListAdapter;
 import com.okler.databeans.BrandsDataBean;
 import com.okler.databeans.GroupDataBean;
 import com.okler.databeans.ProductDataBean;
+import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
 import com.okler.utils.UIUtils;
+import com.okler.utils.UserStatusEnum;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
 import android.app.Activity;
@@ -34,7 +34,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -50,7 +49,6 @@ import android.widget.Button;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
@@ -77,16 +75,16 @@ public class GroupByMedsActivity extends BaseActivity implements
 	Activity ack;
 	ProductDataBean hsBean;
 	int pageNo, cur_pageNo, totalrecordsfromwebservice, page_count, prodtype,
-			mappingId;
+			mappingId,term_type_value;
 	boolean isONScrollProg = false, isBrandsCalled = false,
-			isSearching = false;
+			isSearching = false,isSearchClicked=false;
 	String[] alpha = { "#", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
 			"K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W",
 			"X", "Y", "Z" };
-	String abc = "", FromWhere = "", brand_id = "",lastClickText="";
+	String abc = "", FromWhere = "", brand_id = "",lastClickText="",term_type="",term="",addToSearchUrl="",queryText="";
 	ListView lv1;
 	ArrayAdapter<String> adapter;
-	TextView no_items,currentPosition,lastClick;
+	TextView no_items,currentPosition,lastClick,search_history;
 	LinearLayout progressLinLayout,relParentSearchMed,rightMenuSubcatsMeds;
 	Toolbar toolBar;
 	Button btnCart, viewMore;
@@ -95,17 +93,17 @@ public class GroupByMedsActivity extends BaseActivity implements
 	ImageView overflow, imgBack;
 	ArrayList<BrandsDataBean> brandsData;
 	DrawerLayout mDrawerLayout;
-	int diseaseId, lastBrandsPage, totalBrands;
+	int diseaseId, lastBrandsPage, totalBrands, userId;
 	BrandsDataBean brndHS;
 	RelativeLayout back_layout;
+	UsersDataBean ubean;
 	
-
+	WebJsonObjectRequest wjson;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_group_by_meds);
-		FromWhere = getIntent().getStringExtra("FromWhere");
-		diseaseId = getIntent().getIntExtra("DiseaseId", 0);
+		
 		serverUrl = getString(R.string.serverUrl);
 		ack = this;
 		Glist = new HashMap<GroupDataBean, List<ProductDataBean>>();
@@ -125,27 +123,39 @@ public class GroupByMedsActivity extends BaseActivity implements
 		rightMenuSubcatsMeds = (LinearLayout) findViewById(R.id.rightMenuSubcatsMeds);
 		overflow = (ImageView) toolBar.findViewById(R.id.overflowIcon);
 		setSupportActionBar(toolBar);
-		ActionBar ab = getSupportActionBar();
 		toolBar.setBackgroundResource(UIUtils.getToolBarDrawable(Okler
 				.getInstance().getBookingType()));
 		brandsData = new ArrayList<BrandsDataBean>();
 		setTitle();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		search_history = (TextView)findViewById(R.id.search_history);
+		ubean = Utilities.getCurrentUserFromSharedPref(ack);
+		userId = ubean.getId();
+		
 		drawerSetUp();
 		setToolBarListeners();
 		setUpSearchView();
-				 
-		
-		
-		if (Okler.getInstance().getBookingType() == 0) {
-			brandsData = Okler.getInstance().getAlloBrands();
-			populateBrands();
-		} else if (Okler.getInstance().getBookingType() == 4) {
-			brandsData = Okler.getInstance().getHomeoBrands();
-			populateBrands();
+		if (Utilities.getUserStatusFromSharedPref(ack) == UserStatusEnum.LOGGED_IN
+				|| (Utilities
+						.getUserStatusFromSharedPref(ack) == UserStatusEnum.LOGGED_IN_FB)
+				|| (Utilities
+						.getUserStatusFromSharedPref(ack) == UserStatusEnum.LOGGED_IN_GOOGLE)) {
+			search_history.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(GroupByMedsActivity.this,SearchHistoryActivity.class);
+					intent.putExtra("bookingType", getIntent().getStringExtra("bookingType"));
+					intent.putExtra("FromWhere", getIntent().getStringExtra("FromWhere"));
+					intent.putExtra("DiseaseId", getIntent().getIntExtra("DiseaseId", 0));
+					intent.putExtra("term_type_value", term_type_value);
+					startActivity(intent);
+				}
+			});
+			
+		}else{
+			search_history.setVisibility(View.INVISIBLE);
 		}
-		if (Okler.getInstance().getBookingType() == 3)
-			overflow.setVisibility(View.INVISIBLE);
 
 		medListExp.setOnScrollListener(this);
 
@@ -154,20 +164,15 @@ public class GroupByMedsActivity extends BaseActivity implements
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v,
 					int groupPosition, int childPosition, long id) {
-
-				// Toast.makeText(ack,
-				// parent+" "+v+" "+groupPosition+" "+childPosition+" "+id,
-				// 5000).show();
-				Log.e("TP",
-						"parent" + parent.toString() + " " + "View "
-								+ v.toString() + " " + "grppsn "
-								+ groupPosition + " chpsn" + childPosition
-								+ " id " + id);
 				ProductDataBean pbeab = Glist.get(gdList.get(groupPosition))
 						.get(childPosition);
-				// Toast.makeText(ack,
-				// "name = "+pbeab.getProdName()+" \n "+"id = "+pbeab.getProdId(),
-				// 4000).show();
+				if (Utilities.getUserStatusFromSharedPref(ack) == UserStatusEnum.LOGGED_IN
+						|| (Utilities
+								.getUserStatusFromSharedPref(ack) == UserStatusEnum.LOGGED_IN_FB)
+						|| (Utilities
+								.getUserStatusFromSharedPref(ack) == UserStatusEnum.LOGGED_IN_GOOGLE)) {
+				UIUtils.addToSearchHistory(pbeab.getProdName(),ack,mappingId);
+				}
 				getProductInfoById("" + pbeab.getProdId());
 				return true;
 			}
@@ -189,7 +194,6 @@ public class GroupByMedsActivity extends BaseActivity implements
 				View view = super.getView(position, convertView, parent);
 				TextView text = (TextView) view
 						.findViewById(android.R.id.text1);
-
 				text.setTextColor(Color.BLACK);
 				return view;
 			}
@@ -202,8 +206,6 @@ public class GroupByMedsActivity extends BaseActivity implements
 			
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
@@ -218,28 +220,19 @@ public class GroupByMedsActivity extends BaseActivity implements
 					}else{
 						tv.setTextColor(Color.BLACK);
 					}
-							
 				}
-				
 			}
 		});
 		setAlphaClick();
-		
-
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		// getMenuInflater().inflate(R.menu.group_by_test, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -251,6 +244,47 @@ public class GroupByMedsActivity extends BaseActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		
+		String bookingType = getIntent().getStringExtra("bookingType");
+		FromWhere = getIntent().getStringExtra("FromWhere");
+		diseaseId = getIntent().getIntExtra("DiseaseId", 0);
+		Okler.getInstance().setBookingType(UIUtils.getBookingType(bookingType));
+		if (Okler.getInstance().getBookingType() == 0) {
+			brandsData = Okler.getInstance().getAlloBrands();
+			brandsData.trimToSize();
+			populateBrands();
+			term_type_value=4;
+		} else if (Okler.getInstance().getBookingType() == 4) {
+			brandsData = Okler.getInstance().getHomeoBrands();
+			brandsData.trimToSize();
+			populateBrands();
+			term_type_value=5;
+		}
+		if (Okler.getInstance().getBookingType() == 3){
+			overflow.setVisibility(View.INVISIBLE);
+			term_type_value=3;
+		}
+		if(abc.isEmpty())
+		abc = getIntent().getStringExtra("searchText");
+		if(abc==null||abc.equals("null"))
+			abc="";
+		else{
+			try {
+				queryText = abc;
+				abc = URLEncoder.encode(abc, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			queryText = queryText.replaceAll("[+]", " ");
+			queryText = queryText.replaceAll("%27", "'");
+			
+		
+		searchView.setQuery(queryText, false);
+		isSearching = true;
+		isSearchClicked=true;
+		}
 		pageNo= 0;
 		cur_pageNo=0;
 		totalrecordsfromwebservice=0;
@@ -258,30 +292,36 @@ public class GroupByMedsActivity extends BaseActivity implements
 		Glist.clear();
 		gdList.clear();
 		ProdList.clear();
+		
 		gAdap.notifyDataSetChanged();
 		setUrl();
 		callWebService(Url);
-		currentPosition.setText("#");
+		for(int i = 0;i<alpha.length;i++){
+			if(abc.equals(alpha[i])){
+				currentPosition.setText(abc);
+				break;
+			}else{
+				if(abc.equals("")){
+					currentPosition.setText("#");
+					break;
+				}
+			}
+		}
 		UIUtils.setCartCount(btnCart, ack);
-
 	}
 
 	public void processResponse(JSONObject response) {
-
 		try {
 
 			if (isONScrollProg)
 				isONScrollProg = false;
 			if (isSearching) {
-				Glist.clear();
-				gdList.clear();
-				ProdList.clear();
-				gAdap.notifyDataSetChanged();
+				
+				isSearching=false;
 			}
 			JSONArray jarr = response.optJSONArray("result");
 			JSONObject jobj, jobj2;
 			JSONArray jarr2;
-
 			cur_pageNo = response.optInt("cur_page");
 			totalrecordsfromwebservice = response.optInt("records_count");
 			page_count = response.optInt("page_count");
@@ -303,9 +343,9 @@ public class GroupByMedsActivity extends BaseActivity implements
 				jarr2 = jobj.optJSONArray("product_details");
 				if (jarr2 == null) {
 					jarr2 = new JSONArray();
-
 				}
 				ProdList = new ArrayList<ProductDataBean>();
+				
 				for (int j = 0; j < jarr2.length(); j++) {
 					ProductDataBean pbean = new ProductDataBean();
 					jobj2 = new JSONObject();
@@ -316,24 +356,20 @@ public class GroupByMedsActivity extends BaseActivity implements
 					pbean.setProdName(jobj2.optString("product_name"));
 					ProdList.add(pbean);
 				}
-				Okler.getInstance().setProdList(ProdList);
 				gdList.add(gbean);
+				gdList.trimToSize();
+				ProdList.trimToSize();
 				Glist.put(gbean, ProdList);
-
-				// gbean.setProdList(ProdList);
 			}
-
 			gAdap.notifyDataSetChanged();
 	setAlphaClick();
 			showProgress(false);
-
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 	setAlphaClick();
 			showProgress(false);
 		}
-
 	}
 
 	public void setUrl() {
@@ -359,42 +395,30 @@ public class GroupByMedsActivity extends BaseActivity implements
 			mappingId = 5;
 			Utilities.setTitleText(toolBar, getString(R.string.homeopathy));
 		}
-
 	}
 
 	private void drawerSetUp() {
-		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolBar, // nav
-																				// menu
-																				// toggle
-																				// icon
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolBar, 
+				// nav menu toggle icon
 				R.string.app_name, // nav drawer open - description for
 									// accessibility
 				R.string.app_name // nav drawer close - description for
 									// accessibility
 		) {
 			public void onDrawerClosed(View view) {
-				// getSupportActionBar().setTitle(mTitle);
-				// calling onPrepareOptionsMenu() to show action bar icons
 				invalidateOptionsMenu();
-				// Toast.makeText(getApplicationContext(), "Drawer closed",
-				// Toast.LENGTH_LONG).show();
 				mDrawerLayout
 						.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 			}
 
 			public void onDrawerOpened(View drawerView) {
-				// Toast.makeText(getApplicationContext(), "Drawer open",
-				// Toast.LENGTH_LONG).show();
 				mDrawerLayout
 						.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 			}
 		};
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
-		mDrawerToggle.setDrawerIndicatorEnabled(false); // disable
-														// "hamburger to arrow"
-														// drawable
-		// mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_drawer);
-		// mDrawerToggle.setDrawerIndicatorEnabled(true);
+		mDrawerLayout.addDrawerListener(mDrawerToggle);
+		mDrawerToggle.setDrawerIndicatorEnabled(false); 
+		// disable "hamburger to arrow" drawable
 	}
 
 	private void setUpSearchView() {
@@ -407,24 +431,6 @@ public class GroupByMedsActivity extends BaseActivity implements
 
 	private void setToolBarListeners() {
 		
-		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
-		back_layout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-			finish();	
-			}
-		});
-		
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
-		imgBack.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				finish();
-			}
-		});*/
 		UIUtils.setBackClick(toolBar, ack);
 		
 		overflow = (ImageView) toolBar.findViewById(R.id.overflowIcon);
@@ -466,8 +472,6 @@ public class GroupByMedsActivity extends BaseActivity implements
 	}
 
 	private void populateBrands() {
-		// if(lastBrandsPage != 1)
-
 		if (brandsData.size() <= 0) {
 			lastBrandsPage = 0;
 			setNextBrands(0);
@@ -491,8 +495,8 @@ public class GroupByMedsActivity extends BaseActivity implements
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					TextView txtSubCategoryName = (TextView) v
-							.findViewById(R.id.subCategory);
+					/*TextView txtSubCategoryName = (TextView) v
+							.findViewById(R.id.subCategory);*/
 					int length = brandsData.size();
 					pageNo = 0;
 					cur_pageNo = 0;
@@ -501,23 +505,21 @@ public class GroupByMedsActivity extends BaseActivity implements
 					Glist.clear();
 					gdList.clear();
 					ProdList.clear();
+					
 					for (int i = 0; i < length; i++) {
-
 						if (brandsData.get(i).getBrandId()
 								.equals(v.getTag().toString())) {
 							Glist.clear();
 							gdList.clear();
 							ProdList.clear();
-
+							
 							abc = "";
 							brand_id = brandsData.get(i).getBrandId();
 							setUrl();
 							callWebService(Url);
-
 						}
 					}
-
-					pageNo = 1;
+					//pageNo = 1;
 					mDrawerLayout.closeDrawer(Gravity.END);
 				}
 			});
@@ -538,7 +540,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 		}
 		if (Okler.getInstance().getBookingType() == 0) {
 			viewMore = new Button(this);
-			viewMore.setWidth(LayoutParams.FILL_PARENT);
+			viewMore.setWidth(LayoutParams.MATCH_PARENT);
 			viewMore.setHeight(LayoutParams.WRAP_CONTENT);
 			viewMore.setText("View More");
 			viewMore.setBackgroundResource(R.color.LightGrey);
@@ -566,6 +568,9 @@ public class GroupByMedsActivity extends BaseActivity implements
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				removeAlphaClick();
+				isSearchClicked=false;
+				searchView.setQuery("", false);
+				
 				abc = ((TextView) view).getText().toString();
 				currentPosition.setText(abc);	
 				if (abc.equals("#"))
@@ -581,7 +586,6 @@ public class GroupByMedsActivity extends BaseActivity implements
 				else
 					lastClick.setTextColor(getResources().getColor(
 							R.color.Black));
-				
 				}
 				lastClick = text;
 				
@@ -592,6 +596,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 				Glist.clear();
 				gdList.clear();
 				ProdList.clear();
+				
 				brand_id = "";
 				gAdap.notifyDataSetChanged();
 				setUrl();
@@ -625,17 +630,18 @@ public class GroupByMedsActivity extends BaseActivity implements
 							isBrandsCalled = true;
 							JSONArray resultsArr = response
 									.getJSONArray("result");
-							totalBrands = response.optInt("total_brand_count");
+							totalBrands = response.optInt("total_company_count");
 							for (int j = 0; j < resultsArr.length(); j++) {
 								brndHS = new BrandsDataBean();
 								JSONObject subCates = resultsArr
 										.getJSONObject(j);
 								brndHS.setBrandId(subCates.optString("id"));
 								brndHS.setBrandName(subCates
-										.optString("brand_name"));
+										.optString("company_name"));
 								brandsData.add(brndHS);
 
 							}
+							brandsData.trimToSize();
 							populateBrands();
 							lastBrandsPage++;
 							if (Okler.getInstance().getBookingType() == 0)
@@ -650,9 +656,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 				}, new Response.ErrorListener() {
 					@Override
 					public void onErrorResponse(VolleyError error) {
-
-						// Toast.makeText(getApplicationContext(),
-						// "In on error repsonse", Toast.LENGTH_LONG).show();
+						error.printStackTrace();
 					}
 
 				});
@@ -667,7 +671,6 @@ public class GroupByMedsActivity extends BaseActivity implements
 		part2 = getString(R.string.getProdInfoByIdUrlPart2);
 		part3 = getString(R.string.getProdInfoByIdUrlPart3);
 		getProdUrl = part1 + pid + part2 + prodtype + part3;
-		// getProdUrl = part1+pid+part2+"0"+part3;
 		WebJsonObjectRequest prodjson = new WebJsonObjectRequest(Method.GET,
 				getProdUrl, new JSONObject(),
 				new Response.Listener<JSONObject>() {
@@ -737,7 +740,6 @@ public class GroupByMedsActivity extends BaseActivity implements
 								String colon = ":";
 								String j3[] = j2.split(colon);
 								String url = j3[2];
-								// String url1 = url.substring(1);
 								int length = url.length();
 								url2 = url.substring(1, (length - 1));
 							}
@@ -749,9 +751,6 @@ public class GroupByMedsActivity extends BaseActivity implements
 								showProgress(false);
 								e.printStackTrace();
 							}
-							// JSONObject jimg2 = jimg.getJSONObject("");
-							// JSONObject jimg3 = jobj2.getJSONObject("images");
-							// pdBean.setImgUrl(jobj2.getJSONObject("images").getJSONObject("").optString("filename"));
 							hsBean.setImgUrl(image_name);
 							JSONObject uobj = new JSONObject();
 							uobj = response.getJSONObject("product_image_url");
@@ -770,16 +769,12 @@ public class GroupByMedsActivity extends BaseActivity implements
 							hsBean.setDosage(jobj2.optString("dosage"));
 							hsBean.setCompany(jobj2.optString("company_name"));
 							if (jobj2.has("generic_val")) {
-								hsBean.setGeneric_name(jobj2.optString("generic_val"));// need
-																						// string
-																						// from
-																						// webservice
-								// Log.e("URL", jobj2.optString("generic_val"));
+								hsBean.setGeneric_name(jobj2.optString("generic_val"));
 							}
 							
 							if (jobj2.has("constituents_details")) {
 								jArray = jobj2.getJSONArray("constituents_details");
-								int len = jArray.length();
+								//int len = jArray.length();
 									
 									jobj3 = jArray.optJSONObject(0);
 									if(jobj3!=null){
@@ -800,16 +795,12 @@ public class GroupByMedsActivity extends BaseActivity implements
 							}
 							
 
-							ArrayList<ProductDataBean> hList = new ArrayList<ProductDataBean>();
-							hList.add(hsBean);
-							Okler.getInstance().setProdList(hList);
 							Gson gson = new Gson();
 							String hsbean = gson.toJson(hsBean);
 							Intent intent = null;
 							if(Okler.getInstance().getBookingType()==0)
 									intent = new Intent(ack,
 											AlloMedsActivity.class);
-									
 							else
 									intent = new Intent(ack,
 									ProductDetailsActivity.class);
@@ -817,9 +808,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 							startActivity(intent);
 							showProgress(false);
 							}
-							// finish();
 						} catch (JSONException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 							showProgress(false);
 						}
@@ -829,13 +818,12 @@ public class GroupByMedsActivity extends BaseActivity implements
 
 					@Override
 					public void onErrorResponse(VolleyError error) {
-						// TODO Auto-generated method stub
 						showProgress(false);
 					}
 				});
 
 		VolleyRequest.addJsonObjectRequest(ack, prodjson);
-		// return hsBean;
+	
 	}
 
 	@Override
@@ -847,7 +835,7 @@ public class GroupByMedsActivity extends BaseActivity implements
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
-		boolean drawerOpen = mDrawerLayout.isDrawerOpen(relParentSearchMed);
+		/*boolean drawerOpen = mDrawerLayout.isDrawerOpen(relParentSearchMed);*/
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -870,14 +858,18 @@ public class GroupByMedsActivity extends BaseActivity implements
 			int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
 		int lastItemInScreen = firstVisibleItem + visibleItemCount;
+		
 		if ((lastItemInScreen == totalItemCount)
 				&& totalrecordsfromwebservice != Glist.size()) {
 			if (pageNo > (totalrecordsfromwebservice / 10))
 				return;
+			if(isSearching)
+				return;
+			if(Glist.size()>totalrecordsfromwebservice)
+				return;
+			
 			if (!isONScrollProg) {
 				isONScrollProg = true;
-				// Url = MedUrl(serverUrl, 0, "asc", pageNo, abc);
-				// Url = disUrl(serverUrl, 4, diseaseId, "asc", abc, pageNo);
 				pageNo++;
 				setUrl();
 				callWebService(Url);
@@ -898,7 +890,9 @@ public class GroupByMedsActivity extends BaseActivity implements
 	}
 
 	public void callWebService(String Url) {
-		WebJsonObjectRequest wjson = new WebJsonObjectRequest(Method.GET, Url,
+		
+		Log.e("URL", Url);
+		wjson = new WebJsonObjectRequest(Method.GET, Url,
 				new JSONObject(), new Response.Listener<JSONObject>() {
 
 					@Override
@@ -927,59 +921,66 @@ public class GroupByMedsActivity extends BaseActivity implements
 	@Override
 	public boolean onQueryTextSubmit(String query) {
 		// TODO Auto-generated method stub
+		
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
-		return false;
-	}
-
-	@Override
-	public boolean onQueryTextChange(String newText) {
-		// TODO Auto-generated method stub
-
 		try {
-			abc = URLEncoder.encode(newText, "utf-8");
+			abc = URLEncoder.encode(query, "utf-8");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		if(abc.length()>=3){
+		currentPosition.setText("#");
 		pageNo = 0;
 		cur_pageNo = 0;
 		totalrecordsfromwebservice = 0;
 		page_count = 0;
-		/*
-		 * Glist.clear(); gdList.clear(); ProdList.clear();
-		 */
+		Glist.clear();
+		gdList.clear();
+		ProdList.clear();
+		
+		gAdap.notifyDataSetChanged();
 		setUrl();
 		isSearching = true;
+		isSearchClicked=true;
+		if (Utilities.getUserStatusFromSharedPref(ack) == UserStatusEnum.LOGGED_IN
+				|| (Utilities
+						.getUserStatusFromSharedPref(ack) == UserStatusEnum.LOGGED_IN_FB)
+				|| (Utilities
+						.getUserStatusFromSharedPref(ack) == UserStatusEnum.LOGGED_IN_GOOGLE)) {
+		UIUtils.addToSearchHistory(query, ack,mappingId);
+		}
 		callWebService(Url);
-		}
-		else if(abc.length()==0){
-			setUrl();
-			callWebService(Url);
-		}
-		else
-		{
-			pageNo= 0;
-			cur_pageNo=0;
-			totalrecordsfromwebservice=0;
-			page_count=0;
+	
+		return false;
+	}
+	
+	
+
+	@Override
+	public boolean onQueryTextChange(String newText) {
+		// TODO Auto-generated method stub
+		
+		if(newText.length()==0 && isSearchClicked){
+			abc="";
+			pageNo = 0;
+			cur_pageNo = 0;
+			totalrecordsfromwebservice = 0;
+			page_count = 0;
 			Glist.clear();
 			gdList.clear();
 			ProdList.clear();
+			
 			gAdap.notifyDataSetChanged();
-			if(no_items.getVisibility()==0){
-			no_items.setVisibility(View.GONE);
-			medListExp.setVisibility(View.VISIBLE);
-			}
-		}
-	if(newText.equals(""))
-		{
+			isSearching = true;
+			isSearchClicked=false;
+			setUrl();
 			currentPosition.setText("#");
 			currentPosition.setTextColor(getResources().getColor(R.color.Red));
+			callWebService(Url);
 		}
-		return false;
+
+			return false;
 	}
 
 }

@@ -7,24 +7,17 @@ import org.json.JSONObject;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.gson.Gson;
 import com.okler.customviews.CustomViewOrderProdDetails;
 import com.okler.databeans.AddressDataBean;
 import com.okler.databeans.OrdersDataBean;
 import com.okler.databeans.ProductDataBean;
-import com.okler.dialogs.CameraGalleryDialog;
-
 import com.okler.dialogs.DialogCancellation;
-
-import com.okler.dialogs.OrderCancellationDialog;
 import com.okler.network.VolleyRequest;
-import com.okler.utils.Okler;
-import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
 
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -34,7 +27,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MyOrderMed_Hs_Details extends BaseActivity {
@@ -54,13 +46,12 @@ public class MyOrderMed_Hs_Details extends BaseActivity {
 	Button okler_amount, image_cart;
 	CustomViewOrderProdDetails customProd[] = new CustomViewOrderProdDetails[50];
 	LinearLayout custview;
-	Activity ack;
-
+	String uorder;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_my_order_med__hs__details);
-		ack = this;
+
 		TextView title_mycart = (TextView) findViewById(R.id.title_mycart);
 		title_mycart.setText("SUMMARY");
 		View view = (View) findViewById(R.id.address_title);
@@ -101,7 +92,7 @@ public class MyOrderMed_Hs_Details extends BaseActivity {
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 
-		/*ImageView imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		ImageView imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -110,8 +101,7 @@ public class MyOrderMed_Hs_Details extends BaseActivity {
 				finish();
 			}
 
-		});*/
-		UIUtils.setBackClick(toolBar, ack);
+		});
 
 		Utilities.setTitleText(toolBar, "My Orders");
 
@@ -131,7 +121,7 @@ public class MyOrderMed_Hs_Details extends BaseActivity {
 				// TODO Auto-generated method stub
 
 				DialogCancellation cdd = new DialogCancellation(
-						MyOrderMed_Hs_Details.this);
+						MyOrderMed_Hs_Details.this,uorder);
 				cdd.show();
 
 			}
@@ -140,15 +130,11 @@ public class MyOrderMed_Hs_Details extends BaseActivity {
 		// image_cart = (Button) (findViewById(R.id.image_cart));
 		// image_cart.setVisibility(View.GONE);
 
-		int intentValue = getIntent().getIntExtra("intent_value", 0);
-		switch (intentValue) {
-		case 1:
 			int pos = getIntent().getIntExtra("position", -1);
-
-			ArrayList<OrdersDataBean> uorder = new ArrayList<OrdersDataBean>();
-			uorder = Okler.getInstance().getUsersOrders();
-			OrdersDataBean obean = new OrdersDataBean();
-			obean = uorder.get(pos);
+			uorder=getIntent().getStringExtra("MedOrderDetails");
+			Gson gson=new Gson();
+			OrdersDataBean obean=gson.fromJson(uorder,OrdersDataBean.class);
+			//obean = uorder.get(pos);
 			ArrayList<ProductDataBean> prodArr = new ArrayList<ProductDataBean>();
 			prodArr = obean.getProd_list();
 			ArrayList<AddressDataBean> addarr = new ArrayList<AddressDataBean>();
@@ -188,10 +174,12 @@ public class MyOrderMed_Hs_Details extends BaseActivity {
 						.findViewById(R.id.prescriptionRL);
 				Button okler_Amount = (Button) customProd[i]
 						.findViewById(R.id.okler_Amount);
-				Button image_cart = (Button) customProd[i]
+				/*Button image_cart = (Button) customProd[i]
 						.findViewById(R.id.image_cart);
-				image_cart.setVisibility(View.GONE);
-
+				image_cart.setVisibility(View.GONE);*/
+				ImageView image_favourite = (ImageView)customProd[i]
+						.findViewById(R.id.image_favourite);
+				image_favourite.setVisibility(View.GONE);
 				item_name.setText(pbean.getProdName());
 				if (pbean.getUnits() < 9) {
 					unit_tv_value.setText("0" + pbean.getUnits());
@@ -289,12 +277,6 @@ public class MyOrderMed_Hs_Details extends BaseActivity {
 			addr_tv1.setText(bill_addr);
 
 			
-			break;
-
-		default:
-			break;
-		}
-
 		JSONObject prodBean = null;
 		String pbean = getIntent().getStringExtra("pbean");
 		try {

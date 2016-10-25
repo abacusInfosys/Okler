@@ -174,8 +174,13 @@ public class ProfileNewAddress extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				int id1 = 0;
+				String state = stateTv.getText().toString();
+				id1 = states.indexOf(state);
+				Log.i("id_tag", "id is:" + id);
+				state_id = state_id_list.get(id1);
 
-				getCity(stateTv);
+				getCity();
 			}
 		});
 
@@ -274,8 +279,8 @@ public class ProfileNewAddress extends BaseActivity {
 			button_saveinfo.setBackgroundColor(getResources().getColor(
 					R.color.ModerateMagenta));
 			button_saveinfo.setText("SAVE INFORMATION & CONTINUE");
-			checkbill.setVisibility(View.INVISIBLE);
-			checkship.setVisibility(View.INVISIBLE);
+			checkbill.setVisibility(View.GONE);
+			checkship.setVisibility(View.GONE);
 		} else {
 			toolBar.setBackgroundColor(getResources().getColor(R.color.Blue));
 			Utilities.setTitleText(toolBar, "Add a New Address");
@@ -334,7 +339,7 @@ public class ProfileNewAddress extends BaseActivity {
 		// ab.setDisplayHomeAsUpEnabled(true);
 		// Okler.getInstance().setBookingType(9);
 
-		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -344,8 +349,7 @@ public class ProfileNewAddress extends BaseActivity {
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
 			}
-		});*/
-		UIUtils.setBackClick(toolBar, act);
+		});
 
 		adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, gender);
@@ -1014,16 +1018,7 @@ public class ProfileNewAddress extends BaseActivity {
 
 	}
 
-	public void getCity(EditText edt) {
-
-		int id = 0;
-		cities.clear();
-		city_id_list.clear();
-		String state = edt.getText().toString();
-		states = Okler.getInstance().getStates();
-		id = states.indexOf(state);
-		Log.i("id_tag", "id is:" + id);
-		state_id = String.valueOf(1268 + id);
+	public void getCity() {		
 		String cityUrl = getResources().getString(R.string.cityUrl)
 				+ "state_id=" + state_id;
 		webjson = new WebJsonObjectRequest(Method.GET, cityUrl,
@@ -1109,6 +1104,7 @@ public class ProfileNewAddress extends BaseActivity {
 									JSONObject docObj = (JSONObject) doctorsArr
 											.get(i);
 									states.add(docObj.getString("state_name"));
+									state_id_list.add(docObj.getString("id"));
 									Log.i("tag", "json object" + docObj);
 								} catch (JSONException e) {
 									// TODO: handle exception
@@ -1118,7 +1114,7 @@ public class ProfileNewAddress extends BaseActivity {
 							Okler.getInstance().setStates(states);
 							if (content == 2) {
 								city = cityTV.getText().toString();
-								getCity(stateTv);
+								getCity( );
 							}
 						} catch (JSONException jsonEx) {
 							Log.e("Exception json", jsonEx.getStackTrace()

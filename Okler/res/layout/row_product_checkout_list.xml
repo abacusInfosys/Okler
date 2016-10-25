@@ -4,10 +4,7 @@
     android:layout_height="fill_parent"
     android:background="@color/White"
     >
-    
-     
-      
-	    	<RelativeLayout 
+ 	    	<RelativeLayout 
 	        android:id="@+id/productLin"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"

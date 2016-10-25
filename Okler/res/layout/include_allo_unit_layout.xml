@@ -54,10 +54,11 @@
 	    android:ems="2"
 	    android:text="01"
 	    android:background="@null"
+	    android:imeOptions="actionDone"
 	    android:gravity="center_horizontal"
 	    android:textSize="17sp"
 	    android:maxLength="2"
-	    android:imeOptions="actionDone"
+	    
 	    android:layout_centerVertical="true"
 	    />
 	</RelativeLayout>

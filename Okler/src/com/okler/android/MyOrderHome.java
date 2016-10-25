@@ -15,9 +15,16 @@ import com.okler.databeans.PhysioAndMedicalBean;
 import com.okler.databeans.ProductDataBean;
 import com.okler.databeans.TestDataBean;
 import com.okler.databeans.UsersDataBean;
-import com.okler.diagnostics.DiagnoLabsAvailable;
+import com.okler.databeans.diagnobean.DiagnoLabBranchDataBean;
+import com.okler.databeans.diagnobean.DiagnoLabPackageDataBean;
+import com.okler.databeans.diagnobean.DiagnoLabTestDataBean;
+import com.okler.databeans.diagnobean.DiagnoOrder;
+import com.okler.databeans.diagnobean.DiagnoPackagesDataBean;
+import com.okler.databeans.diagnobean.DiagnoTestDataBean;
+//import com.okler.diagnostics.DiagnoLabsAvailable;
 import com.okler.diagnostics.DiagnoOrderSummary;
 import com.okler.dialogs.PhysiomedDialog;
+import com.okler.enums.DiagnoOrderType;
 import com.okler.utils.Okler;
 import com.okler.utils.Utilities;
 import com.okler.network.*;
@@ -32,6 +39,7 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.ResponseDelivery;
 import com.android.volley.VolleyError;
+import com.google.android.gms.nearby.messages.Strategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.android.volley.Request.Method;
@@ -61,7 +69,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,9 +82,8 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 	String myOrderUrl;
 	int get;
 	int pos = 0;
-	int intentValue;
 	ArrayList<PhysioAndMedicalBean> physio;
-	ArrayList<DiagnoOrderDataBean> diagnoOdtBeanArr;
+	ArrayList<DiagnoOrder> diagnoOdtBeanArr;
 	JSONObject addressobj;
 	Button toolbarcount;
 	MyOrdersAdapter ordAdapter;
@@ -95,9 +101,16 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 	int cust_id, service_type;
 	Activity ack;
 	TextView text_name;
-	RelativeLayout back_layout;
+	Intent startOrderDetails;
+	Gson gson;
+	String aBean;
+	PhysioAndMedicalBean  physioMedBean;
+	OrdersDataBean odtBean;
+	ArrayList<DiagnoTestDataBean> tests = new ArrayList<DiagnoTestDataBean>();
+	ArrayList<DiagnoPackagesDataBean> pkgs = new ArrayList<DiagnoPackagesDataBean>();
+	DiagnoLabTestDataBean dLTbean = new DiagnoLabTestDataBean();
+	DiagnoLabPackageDataBean dLPbean = new DiagnoLabPackageDataBean();
 	
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -116,161 +129,87 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 		myOrderList.setOnScrollListener(this);
 		ubean = Utilities.getCurrentUserFromSharedPref(this);
 		cust_id = ubean.getId();
-		// myPhysioUrl =
-		// "http://183.82.110.105:8081/oklerapi//nurse/GetAllservicesByuser?user_id="+cust_id+"&service_type=";
-		// myMedUrl =
-		// "http://183.82.110.105:8081/oklerapi/order/getorders?cust_id="+cust_id+"&order_id="+"&page=";
 		myMedUrl = setMedUrl(cust_id, order_id, pageNo);
-		// digno_url =
-		// "http://183.82.110.105:8081/oklerapi/lab/retrivelabbook?cust_id="+cust_id;
 		digno_url = setDiagnoUrl(cust_id, order_id, pageNo);
-
 		myOrderUrl = "";
-
 		get = getIntent().getIntExtra("value", -1);
-		odtBeanArr = new ArrayList<OrdersDataBean>();
+		if(get==3 || get==4)
+		{
+			physio = new ArrayList<PhysioAndMedicalBean>();
+			physioMedBean = new PhysioAndMedicalBean();
+		}
+		if(get==2)
+		{
+			diagnoOdtBeanArr = new ArrayList<DiagnoOrder>();
+			diagnoAdp = new MyOrderDiagnoOrderAdapter(context, diagnoOdtBeanArr);
+			myOrderList.setAdapter(diagnoAdp);
+			Utilities.writeToLogFIle("my ord lst");
+		}
+		else
+		{
+			odtBeanArr = new ArrayList<OrdersDataBean>();
+			odtBean=new OrdersDataBean();
+			ordAdapter = new MyOrdersAdapter(context, odtBeanArr);
+			myOrderList.setAdapter(ordAdapter);
+			ordAdapter.notifyDataSetChanged();
+		}
 		text_name = (TextView) findViewById(R.id.my_order_text);
-		physio = new ArrayList<PhysioAndMedicalBean>();
-		diagnoOdtBeanArr = new ArrayList<DiagnoOrderDataBean>();
-		// for medicines
-		// myOrderUrl= myMedUrl;
-
-		// for other services
-		// myOrderUrl= myPhysioUrl;
-		Utilities.writeToLogFIle("Physio and diagno");
-
 		Utilities.setTitleText(toolBar, "My Orders");
-		Utilities.writeToLogFIle("My order URL set title");
-		// myOrderList.setFocusable(false);
-
 		myOrderList.setOnItemSelectedListener(new OnItemSelectedListener() {
-
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				// TODO Auto-generated method stub
-				// Toast.makeText(getApplicationContext(), "on item sel",
-				// Toast.LENGTH_LONG).show();
-			}
-
+				}
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
-				// Toast.makeText(getApplicationContext(), "on item not sel",
-				// Toast.LENGTH_LONG).show();
 			}
 		});
 		myOrderList.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
-
-				if (get == 2) {
-					// If diagno order - then stat new activity
-					Intent startDiagno = new Intent(context,
-							DiagnoOrderSummary.class);
-					startDiagno.putExtra("isFromOrder", true);
-					startDiagno.putExtra("position", position);
-					startActivity(startDiagno);
-				} else {
 					pos = myOrderList.getSelectedItemPosition();
-					Intent startOrderDetails;
-					PhysioAndMedicalBean physioMedBean = new PhysioAndMedicalBean();
-					Gson gson;
-					String aBean;
-
 					switch (get) {
 					case 1:
-
-						intentValue = 1;
-						startOrderDetails = new Intent(context,
-								MyOrderMed_Hs_Details.class);
-						startOrderDetails.putExtra("intent_value", intentValue);
+						odtBean=odtBeanArr.get(position);
+						gson=new Gson();
+						aBean=gson.toJson(odtBean);
+						startOrderDetails = new Intent(context,MyOrderMed_Hs_Details.class);
 						startOrderDetails.putExtra("position", position);
-						Okler.getInstance().setPostion(position);
+						startOrderDetails.putExtra("MedOrderDetails",aBean);
 						startActivity(startOrderDetails);
-
 						break;
-
 					case 2:
-
-						intentValue = 2;
-						startOrderDetails = new Intent(context,
-								MyOrderMed_Hs_Details.class);
-						startOrderDetails.putExtra("intent_value", intentValue);
-						startOrderDetails.putExtra("position", pos);
-						Okler.getInstance().setPostion(position);
-						startActivity(startOrderDetails);
-
+						Intent startDiagno = new Intent(context,DiagnoOrderSummary.class);
+						startDiagno.putExtra("isFromOrder", true);
+						startDiagno.putExtra("position", position);
+						startActivity(startDiagno);
 						break;
-
 					case 3:
+					case 4:	
 						physioMedBean = physio.get(position);
 						gson = new Gson();
 						aBean = gson.toJson(physioMedBean);
-
-						startOrderDetails = new Intent(context,
-								MyOrderMS_History.class);
-						startOrderDetails.putExtra("value", 4);
-						startOrderDetails.putExtra("position", pos);
+						startOrderDetails = new Intent(context,MyOrderMS_History.class);
+						startOrderDetails.putExtra("value",get);
 						startOrderDetails.putExtra("physiobean", aBean);
-						Okler.getInstance().setPostion(position);
 						startActivity(startOrderDetails);
-
-						break;
-
-					case 4:
-						physioMedBean = physio.get(position);
-						gson = new Gson();
-						aBean = gson.toJson(physioMedBean);
-
-						startOrderDetails = new Intent(context,
-								MyOrderMS_History.class);
-						startOrderDetails.putExtra("value", 3);
-						startOrderDetails.putExtra("position", pos);
-						startOrderDetails.putExtra("physiobean", aBean);
-						Okler.getInstance().setPostion(position);
-						startActivity(startOrderDetails);
-
 						break;
 					}
 				}
-			}
-
 		});
-		// webService();
-
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
-		if (get == 2) {
-			Utilities.writeToLogFIle("get =2 ");
-			diagnoAdp = new MyOrderDiagnoOrderAdapter(context, diagnoOdtBeanArr);
-			myOrderList.setAdapter(diagnoAdp);
-			Utilities.writeToLogFIle("my ord lst");
-		} else {
-			Utilities.writeToLogFIle("get != 2 ");
-			ordAdapter = new MyOrdersAdapter(context, odtBeanArr);
+		
+		if(get==3 || get==4)
+		{
+			ordAdapter = new MyOrdersAdapter(context,physio,true);
 			myOrderList.setAdapter(ordAdapter);
 			ordAdapter.notifyDataSetChanged();
-			Utilities.writeToLogFIle("My ord lisr ewlse");
 		}
-		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
-		back_layout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if (fromOrder) {
-					Intent intent = new Intent(MyOrderHome.this,
-							ServiceCategoryActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(intent);
-					finish();
-				}
-				finish();
-			}
-		});
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
@@ -286,9 +225,7 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 				}
 				finish();
 			}
-
 		});
-
 	}
 
 	@Override
@@ -296,7 +233,6 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 		// TODO Auto-generated method stub
 		super.onResume();
 		showProgress(false);
-		Utilities.writeToLogFIle("in on resume");
 		switch (get) {
 		case 1:
 			text_name.setText("MEDICINES & HEALTHSHOP");
@@ -304,14 +240,12 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 			ordAdapter.notifyDataSetChanged();
 			myOrderUrl = myMedUrl;
 			webService(myMedUrl);
-
 			break;
 
 		case 2:
 			text_name.setText("DIAGNOSTIC SERVICES");
 			diagnoOdtBeanArr.clear();
 			diagnoAdp.notifyDataSetChanged();
-			Utilities.writeToLogFIle("in on resume get 2");
 			myOrderUrl = digno_url;
 			webService(digno_url);
 
@@ -319,29 +253,31 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 
 		case 3:
 			text_name.setText("MEDICAL SERVICES");
-			odtBeanArr.clear();
+			physio.clear();
 			ordAdapter.notifyDataSetChanged();
 
 			if (!isAllNurse) {
 				service_type = 2;
 				nursepgno = 0;
 				attpgno = 0;
+				nurseTotal=0;
+				attendantTotal=0;
+				isCalledOnce=false;
+				isAllNurse = false;
+				isAllAtt = false;
 				mURL = setMedPhysioUrl(cust_id, order_id, nursepgno,
 						service_type);
 				webService(mURL);
 			}
-
 			break;
 
 		case 4:
 			text_name.setText("PHYSIOTHERAPY");
-			odtBeanArr.clear();
+			physio.clear();
 			ordAdapter.notifyDataSetChanged();
 			pageNo = 0;
 			myOrderUrl = setMedPhysioUrl(cust_id, order_id, pageNo, 3);
 			webService(myOrderUrl);
-
-			// myPhysioUrl+3;
 			break;
 
 		default:
@@ -378,108 +314,61 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 
 					@Override
 					public void onResponse(JSONObject response) {
-						Utilities
-								.writeToLogFIle("in web service. Order URLin on response");
+						Utilities.writeToLogFIle("in web service. Order URLin on response");
 						showProgress(false);
-						Utilities
-								.writeToLogFIle("in web service. Order URL after show progress");
+						Utilities.writeToLogFIle("in web service. Order URL after show progress");
 						JSONObject ajobj = (JSONObject) response;
-						Utilities
-								.writeToLogFIle("in web service. Order URL after show progress. response"
+						Utilities.writeToLogFIle("in web service. Order URL after show progress. response"
 										+ ajobj.toString());
 						JSONArray ajobj1 = new JSONArray();
 						JSONObject ajobj2 = new JSONObject();
 						JSONObject ajobj3 = new JSONObject();
 						JSONArray ajArray = new JSONArray();
 						try {
-
 							if (ajobj.getString("message").equals(
 									"No data found.")) {
-								Utilities
-										.writeToLogFIle("in web service. in if no data found");
+								Utilities.writeToLogFIle("in web service. in if no data found");
 								if (get == 3 || get == 4)
 									if (physio.size() <= 0)
 										Toast.makeText(MyOrderHome.this,
 												"You dont have any order ...",
 												Toast.LENGTH_LONG).show();
-
-								Utilities
-										.writeToLogFIle("in web service. physio"
+								Utilities.writeToLogFIle("in web service. physio"
 												+ physio.size());
-
 							} else {
 								if (get == 1) {
-									// ajobj2 = ajobj.getJSONObject("result");
-									Utilities
-											.writeToLogFIle("in web service. get ==1");
+									Utilities.writeToLogFIle("in web service. get ==1");
 								} else {
 									ajobj1 = ajobj.getJSONArray("result");
 									for (int tempi = 0; tempi < ajobj1.length(); tempi++)
 										Utilities.writeToLogFIle("in web service. ajobj"
 												+ ajobj1.getString(tempi));
 								}
-
 								switch (get) {
 								case 1:
-									Utilities
-											.writeToLogFIle("in web service. in case1");
 									setMedHSOrders(ajobj);
-									Utilities
-											.writeToLogFIle("in web service. in case1 set called");
 									break;
-
 								case 2:
-									Utilities
-											.writeToLogFIle("in web service. in case2");
 									setDiagnoOrder(ajobj);
-									Utilities
-											.writeToLogFIle("in web service. in case2 set called");
 									break;
 								case 3:
-									Utilities
-											.writeToLogFIle("in web service. in case3");
 									setMedServies(ajobj);
-									Utilities
-											.writeToLogFIle("in web service. in case3 set called");
-									/*
-									 * if(!isAllAtt){ if(!wsCalled) {
-									 * 
-									 * wsCalled=true; webService(myOrderUrl);
-									 * 
-									 * } }
-									 */
 									break;
-
 								case 4:
-									Utilities
-											.writeToLogFIle("in web service. in case4");
 									setPhysioOrders(ajobj1);
-									Utilities
-											.writeToLogFIle("in web service. in case4 set called");
 									break;
 								}
-								Utilities
-										.writeToLogFIle("in web service. before notify ds changed");
-								// odtBean.setPrice(ajobj2.optString("total"));
 								ordAdapter.notifyDataSetChanged();
-								Utilities
-										.writeToLogFIle("in web service. in case2");
-
 							}
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							String resp2 = String.valueOf(e);
-							// Toast.makeText(getApplicationContext(), resp2,
-							// Toast.LENGTH_LONG).show();
 							e.printStackTrace();
-							Utilities
-									.writeToLogFIle("in web service. in exception"
+							Utilities.writeToLogFIle("in web service. in exception"
 											+ e.getStackTrace());
 							showProgress(false);
 						}
-						Okler.getInstance().setUsersOrders(odtBeanArr);
-						Utilities
-								.writeToLogFIle("in web service. set users orders");
+						
 					}
 				}, new Response.ErrorListener() {
 					@Override
@@ -489,27 +378,14 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 								+ error.getLocalizedMessage());
 					}
 				});
-
-		Utilities.writeToLogFIle("in web service. before set cache");
-		// put that response in odtBean
 		alJson.setShouldCache(false);
-		Utilities.writeToLogFIle("in web service. after set cache");
 		DefaultRetryPolicy defRetryPol = new DefaultRetryPolicy(10000, 2, 1);
-		Utilities.writeToLogFIle("in web service. after retry policy");
 		alJson.setRetryPolicy(defRetryPol);
-		Utilities.writeToLogFIle("in web service. afteer set policy");
 		if (VolleyRequest.addJsonObjectRequest(getApplicationContext(), alJson)) {
 			showProgress(true);
-			Utilities.writeToLogFIle("in web service. web service called");
-			// Toast.makeText(getApplicationContext(), "got response",
-			// Toast.LENGTH_LONG).show();
 		} else {
 			showProgress(false);
-			// Toast.makeText(getApplicationContext(), "value not found",
-			// Toast.LENGTH_LONG).show();
-			Utilities.writeToLogFIle("in web service. no netwok");
 		}
-
 	}
 
 	private void setMedServies(JSONObject ajobj) {
@@ -521,120 +397,76 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 				nurseTotal = ajobj.optInt("service_booking_count");
 				nursepgcnt = ajobj.optInt("page_count");
 				nursepgno = ajobj.optInt("current_page");
-				// attendantTotal = 0;
 			}
-
 			else {
 				attendantTotal = ajobj.optInt("service_booking_count");
 				attpgcnt = ajobj.optInt("page_count");
 				attpgno = ajobj.optInt("current_page");
 				totalResultsFromWebService = nurseTotal + attendantTotal;
-				// nurseTotal = 0;
 			}
-
 			for (int ai = 0; ai < ((ajobj1.length())); ai++) {
 				Log.i("in loop", "in loop");
-
 				ajobj2 = ajobj1.getJSONObject(ai);
-
-				OrdersDataBean odtBean = new OrdersDataBean();
 				PhysioAndMedicalBean pnmBean = new PhysioAndMedicalBean();
-
-				odtBean = new OrdersDataBean();
-				odtBean.setDate(ajobj2.optString("start_date"));
-				odtBean.setOrderId(ajobj2.optString("booking_id"));
-				odtBean.setOrderStatus(ajobj2.optString("booking_status_name"));
-
 				pnmBean.setfrom(ajobj2.optString("start_date"));
 				pnmBean.setto(ajobj2.optString("end_date"));
 				pnmBean.setOrder_id(ajobj2.optString("booking_id"));
 				pnmBean.setBooking_id(ajobj2.optString("booking_id"));
-				pnmBean.setBooking_status(ajobj2
-						.optString("booking_status_name"));
+				pnmBean.setBooking_status(ajobj2.optString("booking_status_name"));
 				addressobj = ajobj2.getJSONObject("address_details");
+				if (addressobj != null)
+					if (addressobj.length() > 0) {
 				pnmBean.setCity(ajobj2.optString("city_name"));
-				pnmBean.setFirstname(addressobj.optString("firstname"));
-				pnmBean.setsurname(addressobj.optString("lastname"));
-				pnmBean.setAddress(addressobj.optString("street_address"));
-				pnmBean.setphoneno(addressobj.optString("phone"));
-				pnmBean.setemail(addressobj.optString("email"));
+				pnmBean.setFirstname(addressobj.optString("first_name"));
+				pnmBean.setsurname(addressobj.optString("last_name"));
+				pnmBean.setAddress(addressobj.optString("address"));
 				pnmBean.setPincode(addressobj.optString("pincode"));
+				pnmBean.setphoneno(addressobj.optString("mobile"));
+				pnmBean.setemail(addressobj.optString("email_id"));
+					}
 				pnmBean.setRelation(ajobj2.optString("booking_for_relation"));
 				pnmBean.setService(ajobj2.optString("service_name"));
-				pnmBean.setBooking_status(ajobj2
-						.optString("booking_status_name"));
-				odtBeanArr.add(odtBean);
+pnmBean.setService_required_for(ajobj2.optString("service_required_for"));
+				pnmBean.setBooking_status(ajobj2.optString("booking_status_name"));
 				physio.add(pnmBean);
 			}
 		} catch (Exception ex) {
-
+			Log.e("error",ex.toString());
 		}
 	}
 
 	private void setPhysioOrders(JSONArray ajobj1) {
-		Utilities.writeToLogFIle("in set physio odr");
 		try {
 			JSONObject ajobj2;
-			Utilities.writeToLogFIle("in set physio odr in try");
 			for (int ai = 0; ai < ((ajobj1.length())); ai++) {
 				Log.i("in loop", "in loop");
-				Utilities.writeToLogFIle("in set physio odr. in loop");
 				ajobj2 = ajobj1.getJSONObject(ai);
-				Utilities.writeToLogFIle("in set physio odr. got ajobj2");
-				OrdersDataBean odtBean = new OrdersDataBean();
 				PhysioAndMedicalBean pnmBean = new PhysioAndMedicalBean();
-				Utilities.writeToLogFIle("in set physio odr. got objects");
-				odtBean = new OrdersDataBean();
-				odtBean.setDate(ajobj2.optString("start_date"));
-				Utilities.writeToLogFIle("in set physio odr. date set");
-				odtBean.setOrderId(ajobj2.optString("booking_id"));
-				Utilities.writeToLogFIle("in set physio odr. order id set");
-				odtBean.setOrderStatus(ajobj2.optString("booking_status_name"));
-				Utilities
-						.writeToLogFIle("in set physio odr. booking status set");
 				pnmBean.setfrom(ajobj2.optString("start_date"));
-				Utilities.writeToLogFIle("in set physio odr. start date set");
 				pnmBean.setto(ajobj2.optString("end_date"));
-				Utilities.writeToLogFIle("in set physio odr. end set");
 				pnmBean.setOrder_id(ajobj2.optString("booking_id"));
-				Utilities.writeToLogFIle("in set physio odr. booking id set");
 				pnmBean.setBooking_id(ajobj2.optString("booking_id"));
 				addressobj = new JSONObject();
 				try {
-
 					addressobj = ajobj2.optJSONObject("address_details");
 				} catch (Exception e) {
 					Utilities.writeToLogFIle("in set physio odr. date set"
 							+ e.getStackTrace());
 				}
-				if (addressobj == null)
-					addressobj = new JSONObject();
+				if (addressobj != null)
 				if (addressobj.length() > 0) {
 					pnmBean.setCity(ajobj2.optString("city_name"));
-					Utilities
-							.writeToLogFIle("in set physio odr. city name set");
-					pnmBean.setFirstname(addressobj.optString("firstname"));
-					Utilities
-							.writeToLogFIle("in set physio odr. first name set");
-					pnmBean.setsurname(addressobj.optString("lastname"));
-					Utilities.writeToLogFIle("in set physio odr. lastnmae set");
-					pnmBean.setAddress(addressobj.optString("street_address"));
-					Utilities
-							.writeToLogFIle("in set physio odr. street addr set");
-					
-					pnmBean.setphoneno(addressobj.optString("phone"));
-					pnmBean.setemail(addressobj.optString("email"));
+					pnmBean.setFirstname(addressobj.optString("first_name"));
+					pnmBean.setsurname(addressobj.optString("last_name"));
+					pnmBean.setAddress(addressobj.optString("address"));
+					pnmBean.setphoneno(addressobj.optString("mobile"));
 					pnmBean.setPincode(addressobj.optString("pincode"));
+					pnmBean.setemail(addressobj.optString("email_id"));
 				}
 				pnmBean.setRelation(ajobj2.optString("booking_for_relation"));
-				Utilities.writeToLogFIle("in set physio odr. relation set");
 				pnmBean.setService(ajobj2.optString("service_name"));
-				Utilities.writeToLogFIle("in set physio odr. service set");
-				pnmBean.setBooking_status(ajobj2
-						.optString("booking_status_name"));
-				Utilities
-						.writeToLogFIle("in set physio odr. booking status set");
-				odtBeanArr.add(odtBean);
+pnmBean.setService_required_for(ajobj2.optString("service_required_for"));
+				pnmBean.setBooking_status(ajobj2.optString("booking_status_name"));
 				physio.add(pnmBean);
 			}
 		} catch (Exception ex) {
@@ -646,126 +478,53 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 
 	private void setMedHSOrders(JSONObject ajobj1) {
 		try {
-			Utilities.writeToLogFIle("In Set Med HS Orders");
-			// JSONObject ajobj3 = ajobj1.getJSONObject("result");
 			JSONArray ajobj3 = ajobj1.getJSONArray("result");
-			Utilities.writeToLogFIle("In Set Med HS Orders. Results");
 			JSONObject ajobj2;
-			Utilities.writeToLogFIle("In Set Med HS Orders. ajboj2");
 			int length = ajobj3.length() - 1;
 			for (int ai = 0; ai <= length; ai++) {
 				Log.i("in loop", "in loop");
-				Utilities.writeToLogFIle("in loop");
-
 				ajobj2 = ajobj3.getJSONObject(ai);
-
 				OrdersDataBean odtBean = new OrdersDataBean();
-				// PhysioAndMedicalBean pnmBean = new PhysioAndMedicalBean();
-
 				ProductDataBean pbean = null;
 				AddressDataBean add = null;
 				add = new AddressDataBean();
-
 				odtBean.setDate(ajobj2.optString("ordered_on"));
-				Utilities.writeToLogFIle("In Set Med HS Orders"
-						+ ajobj2.optString("ordered_on"));
-				// odtBean.setOrderId(ajobj2.optString("order_number"));
 				odtBean.setOrderId(ajobj2.optString("id"));
-				Utilities.writeToLogFIle("In Set Med HS Orders"
-						+ ajobj2.optString("id"));
 				odtBean.setOrderStatus(ajobj2.optString("status"));
-				Utilities.writeToLogFIle("In Set Med HS Orders"
-						+ ajobj2.optString("status"));
 				odtBean.setPrice(ajobj2.optString("total"));
-				Utilities.writeToLogFIle("In Set Med HS Orders"
-						+ ajobj2.optString("total"));
-				odtBean.setShipping_charges(ajobj2
-						.optString("shipping_charges"));
-				Utilities.writeToLogFIle("In Set Med HS Orders"
-						+ ajobj2.optString("shipping_charges"));
+				odtBean.setShipping_charges(ajobj2.optString("shipping_charges"));
 				totalResultsFromWebService = ajobj1.optInt("total");
-				Utilities.writeToLogFIle("In Set Med HS Orders"
-						+ totalResultsFromWebService);
 				pageCount = ajobj1.optInt("page_count");
 				pageNo = ajobj1.optInt("current_page");
-
-				Utilities.writeToLogFIle("Page count" + pageCount);
-				Utilities.writeToLogFIle("Page count" + pageNo);
-
 				add.setShip_fname(ajobj2.optString("ship_firstname"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("ship_firstname"));
 				add.setShip_lname(ajobj2.optString("ship_lastname"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("ship_lastname"));
 				add.setShip_add1(ajobj2.optString("ship_address1"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("ship_address1"));
 				add.setShip_add2(ajobj2.optString("ship_address2"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("ship_address2"));
 				add.setShip_city(ajobj2.optString("ship_city_name"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("ship_city_name"));
 				add.setShip_state(ajobj2.optString("ship_state"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("ship_state"));
 				add.setShip_zip(ajobj2.optString("ship_zip"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("ship_zip"));
 				add.setBill_fname(ajobj2.optString("bill_firstname"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("bill_firstname"));
 				add.setBill_lname(ajobj2.optString("bill_lastname"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("bill_lastname"));
 				add.setBill_add1(ajobj2.optString("bill_address1"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("bill_address1"));
 				add.setBill_add2(ajobj2.optString("bill_address2"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("bill_address2"));
 				add.setBill_city(ajobj2.optString("bill_city_name"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("bill_city_name"));
 				add.setBill_state(ajobj2.optString("bill_state"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("bill_state"));
 				add.setBill_zip(ajobj2.optString("bill_zip"));
-				Utilities.writeToLogFIle("first name"
-						+ ajobj2.optString("bill_zip"));
-
+				add.setPreferred_del_time(ajobj2.optString("ship_delivery_slots_timings"));
 				JSONArray prodlist = ajobj2.getJSONArray("order_items");
-				Utilities.writeToLogFIle("length" + prodlist.length());
 				parray = new ArrayList<ProductDataBean>();
 				ArrayList<AddressDataBean> add2 = new ArrayList<AddressDataBean>();
-
 				for (int j = 0; j < prodlist.length(); j++) {
 					JSONObject docObj = prodlist.getJSONObject(j);
-
 					pbean = new ProductDataBean();
-					Utilities.writeToLogFIle("in for loop");
 					pbean.setProdId(docObj.optInt("product_id"));
-					Utilities.writeToLogFIle("product id"
-							+ docObj.optInt("product_id"));
 					pbean.setProdName(docObj.getString("name"));
-					Utilities.writeToLogFIle("product name"
-							+ docObj.optInt("name"));
 					pbean.setDesc(docObj.getString("description"));
-					Utilities.writeToLogFIle("product description"
-							+ docObj.optInt("description"));
 					pbean.setMrp(docObj.getInt("price"));
-					Utilities.writeToLogFIle("product price"
-							+ docObj.optInt("price"));
 					pbean.setOklerPrice(docObj.getInt("saleprice"));
-					Utilities.writeToLogFIle("saleprice"
-							+ docObj.optInt("saleprice"));
 					pbean.setDiscount(docObj.getInt("discount"));
-					Utilities.writeToLogFIle("discountd"
-							+ docObj.optInt("discount"));
 					if (docObj.has("company_name"))
 						pbean.setCompany(docObj.optString("company_name"));
-
 					if (docObj.has("generic_val"))
 						pbean.setGeneric_name(docObj.optString("generic_val"));
 					if (docObj.optString("prescription_need").equals("")
@@ -779,14 +538,12 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 								.optString("prescription_need")));
 					}
 					pbean.setTax(Float.parseFloat(docObj.optString("tax")));
-					pbean.setProdType(Integer.parseInt(docObj
-							.optString("pro_type")));
+					pbean.setProdType(Integer.parseInt(docObj.optString("pro_type")));
 					if (docObj.optString("quantity").equals(null)
 							|| docObj.optString("quantity").equals("null")) {
 						pbean.setUnits(01);
 					} else {
-						pbean.setUnits(Integer.parseInt(docObj
-								.optString("quantity")));
+						pbean.setUnits(Integer.parseInt(docObj.optString("quantity")));
 					}
 					String jimg = docObj.getString("images");
 					String url2;
@@ -799,7 +556,6 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 							String sec = arr1[2];
 							String arr2[] = sec.split("\"");
 							url2 = arr2[1];
-
 						} else {
 							url2 = jimg;
 						}
@@ -807,7 +563,6 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 					String image_name = "";
 					try {
 						image_name = URLEncoder.encode(url2, "UTF-8");
-
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -815,29 +570,17 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 					pbean.setImgUrl(image_name);
 					JSONObject uobj = new JSONObject();
 					uobj = ajobj1.getJSONObject("productimage_url");
-					pbean.setMediumUrl(uobj
-							.optString("productimage_url_medium"));
+					pbean.setMediumUrl(uobj.optString("productimage_url_medium"));
 					pbean.setSmallUrl(uobj.optString("productimage_url_small"));
-					pbean.setThumbUrl(uobj
-							.optString("productimage_url_thumbnail"));
-					pbean.setClipArtUrl(uobj
-							.optString("productimage_clipArt_images"));
-
+					pbean.setThumbUrl(uobj.optString("productimage_url_thumbnail"));
+					pbean.setClipArtUrl(uobj.optString("productimage_clipArt_images"));
 					parray.add(pbean);
 					add2.add(add);
-
 				}
-
 				odtBeanArr.add(odtBean);
-				// physio.add(pnmBean);
 				odtBean.setProd_list(parray);
 				odtBean.setAddbean(add2);
 				odtBean.setAddressDataBean(add);
-
-				ArrayList<OrdersDataBean> order = new ArrayList<OrdersDataBean>();
-				order.add(odtBean);
-
-				Okler.getInstance().setUsersOrders(order);
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -861,64 +604,94 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 
 				ajobj2 = ajobj1.getJSONObject(ai);
 
-				DiagnoOrderDataBean odtBean = new DiagnoOrderDataBean();
+				DiagnoOrder odtBean = new DiagnoOrder();
+				
+				//ProductDataBean pbean1 = null;
 
-				ProductDataBean pbean1 = null;
-
-				odtBean.setAp_date(ajobj2.optString("lab_booked_date"));
+				odtBean.setApptDt(ajobj2.optString("lab_booked_date"));
 				// odtBean.setOrderId(ajobj2.optString("order_number"));
 				odtBean.setOrderId(ajobj2.optString("book_order"));
 
 				odtBean.setStatus(ajobj2.optString("order_status"));
-				odtBean.setAmount(ajobj2.optString("amount"));
-				odtBean.setTax(ajobj2.optString("tax"));
-				odtBean.setOklerDiscount(ajobj2.optString("okler_discount_amt"));
-				odtBean.setNetPayable(ajobj2.optString("txn_amount"));
+				String amt = ajobj2.optString("amount");
+				if(amt.equals("null"))
+					amt = "0";
+				odtBean.setMrp(Float.parseFloat(amt));
+				String tx = ajobj2.optString("tax");
+				if(tx.equals("null"))
+					tx="0";
+				odtBean.setTax(Float.parseFloat(tx));
+				String dsc = ajobj2.optString("okler_discount_amt");
+				if(dsc.equals("null"))
+					dsc="0";
+				odtBean.setYouSaveRs(Float.parseFloat(dsc));
+				String okPr = ajobj2.optString("txn_amount");
+				if(okPr.equals("null"))
+					okPr="0";
+				odtBean.setNetPayable(Float.parseFloat(okPr));
+				
 				// odtBean.setCouponDiscount(ajobj2.optString(name))
-				odtBean.setAp_time(ajobj2.optString("slot_period"));
+				odtBean.setAppTime(ajobj2.optString("slot_period"));
 				odtBean.setPickupType(ajobj2.optString("pickup_type"));
 
-				// Set lab for order
-				DiagnoLabsDataBean diagnoLab = new DiagnoLabsDataBean();
-				diagnoLab.setLabId(ajobj2.optInt("lab_id"));
-				diagnoLab.setLab_name(ajobj2.optString("lab_name"));
-				diagnoLab.setLab_address("labBranchAddress");
-
+				
+				
 				// Set test or package - depending on order
-				JSONArray prodlist1 = ajobj2.optJSONArray("test_Array");
-				if (prodlist1 != null) {
+				JSONArray testArray = ajobj2.optJSONArray("test_Array");
+				if (testArray != null) {
+					odtBean.setOrderType(DiagnoOrderType.TEST);
 					// Set test
-					ArrayList<TestDataBean> tests = new ArrayList<TestDataBean>();
-					for (int testCnt = 0; testCnt < prodlist1.length(); testCnt++) {
-						TestDataBean tes = new TestDataBean();
-						JSONObject obj = prodlist1.getJSONObject(testCnt);
+					tests = new ArrayList<DiagnoTestDataBean>();
+					for (int testCnt = 0; testCnt < testArray.length(); testCnt++) {
+						DiagnoTestDataBean tes = new DiagnoTestDataBean();
+						JSONObject obj = testArray.getJSONObject(testCnt);
 						tes.setTestname(obj.optString("test_name"));
 						tes.setOklerTestPrice(obj.optInt("test_price"));
 						tests.add(tes);
 					}
-					diagnoLab.setTestBean(tests);
+					tests.trimToSize();
+					
+					//diagnoLab.setTestBean(tests);
 				} else {
-					prodlist1 = ajobj2.getJSONArray("pkg_Array");
+					JSONArray pkgArray = ajobj2.getJSONArray("pkg_Array");
 
-					if (prodlist1 != null) {
-						/*
-						 * ArrayList<DiagnoPackageDataBean> tests = new
-						 * ArrayList<DiagnoPackageDataBean>(); for(int
-						 * testCnt=0;testCnt<prodlist1.length();testCnt++) {
-						 */
-						DiagnoPackageDataBean pck = new DiagnoPackageDataBean();
-						JSONObject obj = prodlist1.getJSONObject(0);
-						pck.setPackage_name(obj.optString("pkg_name"));
-						pck.setPack_oklerPrice(obj.optInt("pkg_price"));
-						// tests.add(pck);
-						// }
-						diagnoLab.setPackageBean(pck);
+					if (pkgArray != null) {
+						odtBean.setOrderType(DiagnoOrderType.PACKAGE);
+						 pkgs = new ArrayList<DiagnoPackagesDataBean>(); 
+						 for(int testCnt=0;testCnt<pkgArray.length();testCnt++) {
+						
+						DiagnoPackagesDataBean pck = new DiagnoPackagesDataBean();
+						JSONObject obj = pkgArray.getJSONObject(testCnt);
+						pck.setPackageName(obj.optString("pkg_name"));
+						pck.setPackOklerPrice(obj.optInt("pkg_price"));
+						 pkgs.add(pck);
+						 }
+						 pkgs.trimToSize();
+						//diagnoLab.setPackageBean(pck);
 					}
 				}
-
-				UsersDataBean udb = new UsersDataBean();
-				udb.setId(ajobj2.optInt("cust_id"));
-				ArrayList<AddressDataBean> patAddr = new ArrayList<AddressDataBean>();
+				
+				// Set lab for order
+				DiagnoLabBranchDataBean diagnoLab = new DiagnoLabBranchDataBean();
+				diagnoLab.setLabId(ajobj2.optInt("lab_id"));
+				diagnoLab.setLab_name(ajobj2.optString("lab_name"));
+				diagnoLab.setAddr1(ajobj2.optString("labBranchAddress"));
+				
+				if(testArray!=null){
+					dLTbean = new DiagnoLabTestDataBean();
+					dLTbean.setCurrentLab(diagnoLab);
+					dLTbean.setCurrentTests(tests);
+					odtBean.setLabTestDataBean(dLTbean);
+				}else{
+					dLPbean = new DiagnoLabPackageDataBean();
+					dLPbean.setCurrentLab(diagnoLab);
+					dLPbean.setCurrentPkgs(pkgs);
+					odtBean.setLabPkgDataBean(dLPbean);
+				}
+				
+				//UsersDataBean udb = new UsersDataBean();
+				//udb.setId(ajobj2.optInt("cust_id"));
+				AddressDataBean patAddr = new AddressDataBean();
 				AddressDataBean adr1 = new AddressDataBean();
 				adr1.setAddress1(ajobj2.optString("pat_addr1"));
 				adr1.setAddress2(ajobj2.optString("pat_addr2"));
@@ -926,14 +699,16 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 				adr1.setGender(ajobj2.optString("pat_gender"));
 				adr1.setPhone(ajobj2.optString("pat_mobile"));
 				adr1.setCity(ajobj2.optString("pat_city"));
+				adr1.setLandmark(ajobj2.optString("pat_landmark"));
 				adr1.setZip(ajobj2.optString("pat_zip"));
 				adr1.setDob(ajobj2.optString("pat_dob"));
 				adr1.setRelation(ajobj2.optString("pat_relation"));
-				patAddr.add(adr1);
-				udb.setPatAddList(patAddr);
-				odtBean.setUserBean(udb);
-				odtBean.setSelectedLab(diagnoLab);
-
+				adr1.setAddr_id(ajobj2.optString("pat_id"));
+				//patAddr.add(adr1);
+				//udb.setPatAddList(patAddr);
+				//odtBean.setUserBean(udb);
+				odtBean.setPatientAddr(adr1);
+				//odtBean.setSelectedLab(diagnoLab);
 				diagnoOdtBeanArr.add(odtBean);
 			}
 			diagnoAdp.notifyDataSetChanged();
@@ -1007,19 +782,19 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 				break;
 
 			case 3:
-				size = odtBeanArr.size();
+				size = physio.size();
 				if (nurseTotal > 0) {
 					if (nurseTotal > size) {
 
 						if (((nurseTotal / 10) + 1) == nursepgno) {
 							isAllNurse = true;
-							// return;
+							
 						}
 						service_type = 2;
 						nursepgno++;
 						myOrderUrl = setMedPhysioUrl(cust_id, order_id,
 								nursepgno, service_type);
-						// wsCalled=false;
+						
 						isAllNurse = false;
 						webService(myOrderUrl);
 					} else {
@@ -1029,12 +804,11 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 								isAllAtt = true;
 								return;
 							} else {
-								// nursepgno++;
+								
 								attpgno++;
 								service_type = 4;
 								myOrderUrl = setMedPhysioUrl(cust_id, order_id,
 										attpgno, service_type);
-								// wsCalled=false;
 								isAllAtt = false;
 								webService(myOrderUrl);
 							}
@@ -1051,11 +825,11 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 
 					}
 				}
-				// myOrderUrl = myPhysioUrl;
+				
 				break;
 
 			case 4:
-				size = odtBeanArr.size();
+				size = physio.size();
 				if (totalResultsFromWebService != size) {
 					if (((totalResultsFromWebService / 10) + 1) == pageNo)
 						return;
@@ -1066,7 +840,7 @@ public class MyOrderHome extends BaseActivity implements OnScrollListener {
 						webService(myOrderUrl);
 					}
 				}
-				// myOrderUrl = myPhysioUrl+3;
+				
 				break;
 
 			default:

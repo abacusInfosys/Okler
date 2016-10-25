@@ -12,6 +12,7 @@ import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 
 import com.android.volley.Response;
+import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.Request.Method;
 import com.google.gson.Gson;
@@ -26,6 +27,7 @@ import com.okler.databeans.UsersDataBean;
 import com.okler.helpnsupport.SupportHelpActivity;
 import com.okler.diagnostics.EnterPatientInfoActivity;
 import com.okler.diagnostics.SelectPatientInfoActivity;
+import com.okler.dialogs.ChangePasswordDialog;
 import com.okler.dialogs.EmailPhoneDialog;
 import com.okler.dialogs.VerifyPhoneNumDialog;
 import com.okler.network.VolleyRequest;
@@ -41,6 +43,7 @@ import com.okleruser.R;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -54,6 +57,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +87,8 @@ public class NewSignIn extends BaseActivity {
 	UsersDataBean ubean2 = new UsersDataBean();
 	UsersDataBean ubean = new UsersDataBean();
 	String msg;
+	public static LinearLayout progressLinLayout;
+	ArrayList<ProductDataBean> myfav = new ArrayList<ProductDataBean>();
 
 	// end
 	@Override
@@ -99,8 +105,11 @@ public class NewSignIn extends BaseActivity {
 		facebook_Login = (LoginButton) findViewById(R.id.facebook_Login);
 		fbNew = (Button) findViewById(R.id.fbNewBtn);
 		google_login = (ImageView) findViewById(R.id.google_Login);
+		progressLinLayout = (LinearLayout)findViewById(R.id.progressLinLayout);
 		ack = this;
 		SocialMediaUtils.signOutOfFB(ack);
+	UserStatusEnum userstatus = Utilities.getUserStatusFromSharedPref(ack);
+    	//Toast.makeText(ack, ""+userstatus, Toast.LENGTH_SHORT).show();
 		// for google login
 
 		google_login.setOnClickListener(new OnClickListener() {
@@ -144,6 +153,7 @@ public class NewSignIn extends BaseActivity {
 
 				Intent i = new Intent(NewSignIn.this, SignUp.class);
 				startActivity(i);
+				finish();
 			}
 		});
 
@@ -155,18 +165,20 @@ public class NewSignIn extends BaseActivity {
 				flag = validateEmail();
 				if (flag == true) {
 					email = et_email.getText().toString();
+					flag = validatePassword();
+					if (flag == true) {
+						password = et_passWord.getText().toString();
+						nameValuePairs.clear();
+						nameValuePairs.add(new BasicNameValuePair("user", email));
+						nameValuePairs
+								.add(new BasicNameValuePair("password", password));
+						new SignInAsyncTask().execute("");
+					}
 				}
-				flag = validatePassword();
-				if (flag == true) {
-					password = et_passWord.getText().toString();
-				}
+				
 				// String
 				// url=getString(R.string.signinUser1)+email+getString(R.string.signinUser2);
-				nameValuePairs.clear();
-				nameValuePairs.add(new BasicNameValuePair("email", email));
-				nameValuePairs
-						.add(new BasicNameValuePair("password", password));
-				new SignInAsyncTask().execute("");
+				
 
 			}
 		});
@@ -248,12 +260,14 @@ public class NewSignIn extends BaseActivity {
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
+			NewSignIn.showProgress(true);
 		}
 
 		@Override
 		protected Object doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			String url = getString(R.string.signinUser1);
+			NewSignIn.showProgress(true);
 			String Result = String.valueOf(Utilities.RegisterNewUser(url,
 					nameValuePairs));
 			return Result;
@@ -269,15 +283,43 @@ public class NewSignIn extends BaseActivity {
 				JSONArray jarr = new JSONArray(res);
 				msg = jarr.getJSONObject(0).optString("message");
 				if (msg.equals("User authentcation is successfull.")) {
+					
 					JSONObject jobj1 = jarr.getJSONObject(0).getJSONObject(
 							"result");
+					if(jobj1.optString("fp_status").equals("1")){
+						UsersDataBean ubean = new UsersDataBean();
+						ubean.setId(jobj1.optInt("id"));
+						Utilities.writeCurrentUserToSharedPref(ack, ubean);
+						JSONArray jarr3 = jobj1.getJSONArray("cart_items");
+						setUserData(jobj1);
+						setUserCart(jarr3);
+						setUserAddress();
+						getAllFavourites();
+						ChangePasswordDialog chDlg = new ChangePasswordDialog(ack);
+						chDlg.setCancelable(false);
+						//chDlg.setTitle("Change Password");
+						chDlg.show(getFragmentManager(), "Change Password");
+						NewSignIn.showProgress(false);
+						
+						//Toast.makeText(getApplicationContext(),
+							//	"Logged in Successfully", Toast.LENGTH_LONG).show();
+						//navigation();
+					}else{
 					JSONArray jarr3 = jobj1.getJSONArray("cart_items");
 					setUserData(jobj1);
 					setUserCart(jarr3);
 					setUserAddress();
-					Toast.makeText(getApplicationContext(),
-							"Logged in Successfully", Toast.LENGTH_LONG).show();
+					getAllFavourites();
+					
+					if (msg.equals("User authentcation is successfull.")){
+						Utilities.writeUserStatusToSharedPref(NewSignIn.this,
+								UserStatusEnum.LOGGED_IN);
+						Toast.makeText(getApplicationContext(),
+								"Logged in Successfully", Toast.LENGTH_LONG).show();
+						NewSignIn.showProgress(false);
 					navigation();
+					}
+					}
 				} else if (msg
 						.equals("User registration is not Approved (OTP).")) {
 					JSONObject jobj1 = jarr.getJSONObject(0).getJSONObject(
@@ -287,10 +329,15 @@ public class NewSignIn extends BaseActivity {
 					UsersDataBean curUsr = Utilities
 							.getCurrentUserFromSharedPref(ack);
 					String phoneNum = curUsr.getPhone();
+					NewSignIn.showProgress(false);
 					// Toast.makeText(getApplicationContext(),"Login unsuccessful,Please Complete Registration Process",Toast.LENGTH_LONG).show();
 					new VerifyPhoneNumDialog(ack, phoneNum, true).show(
 							getFragmentManager(), "");
+				}else if(msg.equals("Your account has been deactivated.")){
+					NewSignIn.showProgress(false);
+					Toast.makeText(ack, msg, Toast.LENGTH_LONG).show();
 				} else {
+					NewSignIn.showProgress(false);
 					Toast.makeText(
 							getApplicationContext(),
 							"Failed to authenticate user, The email and password you entered does not match.",
@@ -299,6 +346,7 @@ public class NewSignIn extends BaseActivity {
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				NewSignIn.showProgress(false);
 			}
 			System.out.println("IN Post execute" + result);
 		}
@@ -310,6 +358,7 @@ public class NewSignIn extends BaseActivity {
 			ubean.setId(Integer.parseInt(jobj1.optString("id")));
 			ubean.setFname(jobj1.optString("firstname"));
 			ubean.setLname(jobj1.optString("lastname"));
+			
 			ubean.setEmail(jobj1.optString("email"));
 			ubean.setPhone(jobj1.optString("phone"));
 			ubean.setUserName(jobj1.optString("username"));
@@ -324,7 +373,7 @@ public class NewSignIn extends BaseActivity {
 					.optString("curr_balance")));
 			ubean.setAge(Integer.parseInt(jobj1.optString("age")));
 			ubean.setBlood_group(jobj1.optString("blood_group"));
-
+			ubean.setApprove_status(Integer.parseInt(jobj1.optString("approved_status")));
 			ArrayList<AddressDataBean> addList = new ArrayList<AddressDataBean>();
 			AddressDataBean adbean;
 			JSONObject jobj2;
@@ -361,11 +410,10 @@ public class NewSignIn extends BaseActivity {
 			}
 			Okler.getInstance().setuDataBean(ubean);
 			Utilities.writeCurrentUserToSharedPref(NewSignIn.this, ubean);
-			if (msg.equals("User authentcation is successfull."))
-				Utilities.writeUserStatusToSharedPref(NewSignIn.this,
-						UserStatusEnum.LOGGED_IN);
+			
 		} catch (Exception e) {
 			// TODO: handle exception
+			NewSignIn.showProgress(false);
 			Log.d("Exception", e.getStackTrace().toString());
 		}
 	}
@@ -430,6 +478,7 @@ public class NewSignIn extends BaseActivity {
 			Okler.getInstance().setMainCart(mainCart);
 		} catch (Exception e) {
 			// TODO: handle exception
+			NewSignIn.showProgress(false);
 			Log.d("Exception", "Ex");
 		}
 	}
@@ -483,6 +532,7 @@ public class NewSignIn extends BaseActivity {
 
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
+							NewSignIn.showProgress(false);
 							e.printStackTrace();
 						}
 						ubean.setPatAddList(paList);
@@ -495,6 +545,7 @@ public class NewSignIn extends BaseActivity {
 					public void onErrorResponse(VolleyError error) {
 						// TODO Auto-generated method stub
 						// setUi();
+						NewSignIn.showProgress(false);
 					}
 				});
 		VolleyRequest.addJsonObjectRequest(ack, pjson);
@@ -697,6 +748,15 @@ public class NewSignIn extends BaseActivity {
 			finish();
 			break;
 		}
+		case 24:
+		{
+			Intent startFav = new Intent(NewSignIn.this,ProductDetailsActivity.class);
+			startFav.putExtra("isMedPres", false);
+			Okler.getInstance().setBookingType(UIUtils.getBookingType("Favorites"));
+			startActivity(startFav);
+			finish();
+		}
+		
 
 		}
 
@@ -705,8 +765,7 @@ public class NewSignIn extends BaseActivity {
 	public boolean validateEmail() {
 		this.editTextToValidate = et_email;
 		text = new TextValidations(editTextToValidate);
-		text.ValidateEmailId();
-		return true;
+		return text.validateText("Please enter email or mobile");
 	}
 
 	public boolean validatePassword() {
@@ -742,5 +801,117 @@ public class NewSignIn extends BaseActivity {
 		} catch (ActivityNotFoundException e) {
 			return false;
 		}
+	}
+	
+	private void getAllFavourites()
+	{
+		
+			if (Utilities.getUserStatusFromSharedPref(this) == UserStatusEnum.LOGGED_IN ||
+					(Utilities.getUserStatusFromSharedPref(this) == UserStatusEnum.LOGGED_IN_FB) ||
+					(Utilities.getUserStatusFromSharedPref(this) == UserStatusEnum.LOGGED_IN_GOOGLE))
+			{
+				UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(this);
+				int uid = ubean.getId();
+	    	  String get_fav = getString(R.string.get_fav_url)+uid;
+	 	     
+	 	     
+	 	     WebJsonObjectRequest webjson=new WebJsonObjectRequest(Method.GET, get_fav, new JSONObject(),new Listener<JSONObject>() 
+	 					{
+	 						@Override
+	 						public void onResponse(JSONObject response) 
+	 						{
+	 							// TODO Auto-generated method stub
+	 							
+	 							ProductDataBean pbean;
+	 							
+	 							try
+	 							{
+	 							JSONObject responseObj =(JSONObject)response;
+	 							String result = responseObj.getString("result");
+	 					//		Toast.makeText(getApplicationContext(), "result" + result, Toast.LENGTH_LONG).show();
+	 							
+	 							JSONArray doctorsArr = responseObj.getJSONArray("result");
+	 							//docCount=responseObj.getInt("TotalCount");
+	 							myfav = new ArrayList<ProductDataBean>();
+	 							for(int i = 0 ; i < doctorsArr.length();i++)
+	 							{
+	 								pbean = new ProductDataBean();
+	 								try
+	 								{
+	 									JSONObject docObj =(JSONObject) doctorsArr.get(i);
+	 									pbean.setProdName(docObj.getString("name"));
+	 									pbean.setProdId(docObj.getInt("id"));
+	 									pbean.setDesc(docObj.getString("description"));
+	 									pbean.setMrp(docObj.getInt("price"));
+	 									pbean.setOklerPrice(docObj.getInt("saleprice"));
+	 									Float discount = Float.parseFloat(docObj.getString("discount"));
+	 									pbean.setDiscount(discount);
+	 									
+	 									String jimg = docObj.getString("images");
+	 									String url2;
+	 									if(jimg.equals(null)||jimg.equals("null")||jimg.equals("")){
+	 										url2 = "drawable://" + R.drawable.tempcuff;
+	 									}else{
+	 									String j1[] =jimg.split(",");
+	 									String j2=j1[0];
+	 									String colon = ":";
+	 									String j3[]=j2.split(colon);
+	 									String url = j3[2];
+	 									//String url1 = url.substring(1);
+	 									int length = url.length();
+	 									url2 = url.substring(1, (length-1));
+	 									}
+	 									//JSONObject jimg2 = jimg.getJSONObject("");
+	 									//JSONObject jimg3 = jobj2.getJSONObject("images");
+	 									//pdBean.setImgUrl(jobj2.getJSONObject("images").getJSONObject("").getString("filename"));
+	 									pbean.setImgUrl(url2);
+	 									
+	 									Log.i("tag", "json object" + docObj);
+	 									}catch (JSONException e) {
+	 										// TODO: handle exception
+	 										NewSignIn.showProgress(false);
+	 										Log.e("JSON Exception", e.getMessage());
+	 									}
+	 								
+	 								myfav.add(pbean);
+	 								
+	 							 }
+	 								Utilities.writeFavouritesToSharedPref(ack, myfav);
+	 								//Okler.getInstance().setFavourites(myfav);
+	 								
+	 							}catch(JSONException jsonEx)
+	 							{
+	 								Log.e("Exception json", jsonEx.getStackTrace().toString());
+	 							}
+	 					
+	 						}}, 
+	 						new Response.ErrorListener() 
+	 						{
+
+	 							@Override
+	 							public void onErrorResponse(VolleyError error) 
+	 							{
+	 								NewSignIn.showProgress(false);
+	 								// TODO Auto-generated method stub
+	 					
+	 							}
+	 						}
+	 			);
+	 		
+	 	VolleyRequest.addJsonObjectRequest(getApplicationContext(),webjson);
+			}
+	      
+	      {
+	    	  ProductDataBean pbean = new ProductDataBean();
+	    	  //pbean = Utilities.getFavouritesFromSharedPref(this);
+	    	  Log.i("product", ""+pbean);
+	      }
+	}
+	public static void showProgress(boolean paramBoolean) {
+		if (paramBoolean) {
+			progressLinLayout.setVisibility(View.VISIBLE);
+			return;
+		}
+		progressLinLayout.setVisibility(View.INVISIBLE);
 	}
 }

@@ -2,11 +2,9 @@ package com.okler.databeans;
 
 import java.util.ArrayList;
 
-import android.graphics.Bitmap;
-
 public class PrescriptionsDataBean {
-	String patientName,patientSirName,docName,docSirname,mobileNumber,presType,presId,prescStatus;
-	ArrayList<PrescriptionImagesDataBean> presImages;
+	String patientName="",patientSirName="",docName="",docSirname="",mobileNumber="",presType="",presId="",prescStatus="";
+	ArrayList<PrescriptionImagesDataBean> presImages = new ArrayList<PrescriptionImagesDataBean>();
 	public String getPrescStatus() {
 		return prescStatus;
 	}

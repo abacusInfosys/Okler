@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ import com.okler.network.VolleyRequest;
 import com.okler.utils.CameraGalleryImageInfo;
 import com.okler.utils.Okler;
 import com.okler.utils.RoundedImageView;
-import com.okler.utils.UIUtils;
+import com.okler.utils.TextValidations;
 import com.okler.utils.UserStatusEnum;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
@@ -75,7 +76,9 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 	ImageLoader imgLoader;
 	String base64string;
 	int uid;
+	TextValidations text;
 	Activity ack;
+	static LinearLayout progressLinLayout;
 	
 
 	@Override
@@ -93,6 +96,7 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 		handleMapping(bottomBarLayout);
 
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
+		progressLinLayout = (LinearLayout) findViewById(R.id.progressLinLayout);
 		setSupportActionBar(toolBar);
 		final ActionBar ab = getSupportActionBar();
 		// ab.setDisplayHomeAsUpEnabled(true);
@@ -109,9 +113,7 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 		profile_photo = (RoundedImageView) findViewById(R.id.NetworkImageView01);
 
 		UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(this);
-		int userid = ubean.getId();
 		String phone = ubean.getPhone();
-		String email = ubean.getEmail();
 		String firstname = ubean.getFname();
 		String surname = ubean.getLname();
 		String dob = ubean.getDob();
@@ -121,16 +123,26 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 		} else {
 			txtdob.setText(dob);
 		}
-
-		textemail.setText(email);
-		textphone.setText(phone);
+		
+		String email = ubean.getEmail();
+		Toast.makeText(getApplicationContext(), email, Toast.LENGTH_SHORT);
+		
+		
+		if(ubean.getEmail() == null || ubean.getEmail().equals("null") || ubean.getEmail().equals(null))
+		{
+			textemail.setText("Email:");
+		}
+		else
+		{
+			textemail.setText("Email:"+email);
+		}		
+		textphone.setText("Phone:"+phone);
 		fname.setText(firstname);
 		lname.setText(surname);
 
 		imgLoader = VolleyRequest.getInstance(this).getImageLoader();
 
 		String First = ubean.getUserAvatarUrl();
-		// "http://183.82.110.105:8081/oklerdevv2/uploads/user_avatar/";
 		String Second = ubean.getUser_image();
 		String photo_url = First + Second;
 
@@ -161,16 +173,22 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 		});
 
 		submit.setOnClickListener(new OnClickListener() {
+			
+			boolean yes = false;
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-
-				String name = fname.getText().toString();
-				String lastname = lname.getText().toString();
-				String dob = txtdob.getText().toString();
-
-				Gson gson = new Gson();
+				
+				yes = validateFirstName();
+				if(yes)
+				{
+					String name = fname.getText().toString();
+					yes = validateSurnmae();
+					if(yes)
+					{
+						String lastname = lname.getText().toString();
+						String dob = txtdob.getText().toString();
 				nameValuePairs.add(new BasicNameValuePair("user_id", String
 						.valueOf(uid)));
 				nameValuePairs.add(new BasicNameValuePair("name", name));
@@ -180,8 +198,10 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 				nameValuePairs.add(new BasicNameValuePair("imgtype", "jpeg"));
 				nameValuePairs
 						.add(new BasicNameValuePair("image", base64string));
-
+				EditProfile.showProgress(true);
 				new EditInfo().execute("");
+					}
+				}
 
 			}
 		});
@@ -189,8 +209,6 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
 				Intent in = new Intent(getApplicationContext(),
 						ProfileChangePassword.class);
 				startActivity(in);
@@ -200,7 +218,6 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -209,10 +226,7 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
 				DatePickerDialog fromDatePickerDialog;
-				DatePickerDialog toDatePickerDialog;
 				final SimpleDateFormat dateFormatter;
 				dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 				Calendar newCalendar = Calendar.getInstance();
@@ -247,61 +261,62 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 			}
 		});
 
-		/*imgBack.setOnClickListener(new OnClickListener() {
+		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				finish();
 			}
-		});*/
-		UIUtils.setBackClick(toolBar, ack);
+		});
 		Utilities.setTitleText(toolBar, "My Profile");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(arg0, arg1, arg2);
 
 		if (arg1 == RESULT_OK) {
+			
 
 			CameraGalleryImageInfo imgInfo = Utilities.getImageInfo(arg0, arg1,
 					this, arg2);
 			iBitmap = imgInfo.getImgBitmap();
+			if(iBitmap!=null){
 			base64string = Utilities.convertImageToBase64(iBitmap);
 
 			AlertDialog alertDialog = new AlertDialog.Builder(EditProfile.this)
 					.create();
-			alertDialog
-					.setMessage("Do you want to keep this as your profile picture?");
-
-			alertDialog.setButton("Cancel",
+			
+					alertDialog.setMessage("Do you want to keep this as your profile picture?");
+					alertDialog.setButton("Cancel",
 					new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							finish();
 						}
 					});
+			
+					alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
 
-			alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-
-					nameValuePairs.add(new BasicNameValuePair("user_id", String
+							nameValuePairs.add(new BasicNameValuePair("user_id", String
 							.valueOf(uid)));
-					nameValuePairs
+							nameValuePairs
 							.add(new BasicNameValuePair("imgtype", "jpeg"));
-					nameValuePairs.add(new BasicNameValuePair("image",
+							nameValuePairs.add(new BasicNameValuePair("image",
 							base64string));
-
-					new EditInfo().execute("");
+							EditProfile.showProgress(true);
+							new EditInfo().execute("");
 
 				}
 			});
 
-			alertDialog.show();
-
+					alertDialog.show();
+			}else{
+				Toast.makeText(ack, "Unable to locate image file.", Toast.LENGTH_SHORT).show();
+			}
 		}
 
 	}
@@ -340,6 +355,7 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			try {
+				submit.setEnabled(false);
 				System.out.println("in postexecute");
 				JSONObject json = new JSONObject(result.toString());
 				String messageReceived = json.getString("message");
@@ -366,30 +382,52 @@ public class EditProfile extends BaseActivity implements OnClickListener {
 							+ userBean.getFname());
 					Log.i("lname", "lname is" + lname + "User Bean lname:"
 							+ userBean.getLname());
-					Utilities.writeUserStatusEnumToSharedPref(EditProfile.this,
-							UserStatusEnum.LOGGED_IN);
+					/*Utilities.writeUserStatusEnumToSharedPref(EditProfile.this,
+							UserStatusEnum.LOGGED_IN);*/
 					Utilities.writeCurrentUserToSharedPref(EditProfile.this,
 							userBean);
 					Toast.makeText(getApplicationContext(),
 							"Profile Updated Successfully", Toast.LENGTH_LONG)
 							.show();
-
+					EditProfile.showProgress(false);
 					Intent in = new Intent(EditProfile.this, MyAccount.class);
 					in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(in);
 
 				} else {
-
+					submit.setEnabled(true);
+					EditProfile.showProgress(false);
 					Toast.makeText(getApplicationContext(), messageReceived,
 							Toast.LENGTH_LONG).show();
 				}
 
 			} catch (JSONException e) {
+				submit.setEnabled(true);
 				// TODO Auto-generated catch block
+				EditProfile.showProgress(false);
 				e.printStackTrace();
 			}
 
 		}
 	}
+	
+	public boolean validateFirstName() {
+		//this.editTextToValidate = fname;
+		text = new TextValidations(fname);
+		return text.ValidateMinimumChars("Please enter first name", 3);
+	}
 
+	public boolean validateSurnmae() {
+		//this.editTextToValidate = edt_surname;
+		text = new TextValidations(lname);
+		return text.ValidateMinimumChars("Please enter surname", 3);
+	}
+
+	public static void showProgress(boolean paramBoolean) {
+		if (paramBoolean) {
+			progressLinLayout.setVisibility(View.VISIBLE);
+			return;
+		}
+			progressLinLayout.setVisibility(View.INVISIBLE);
+	}
 }

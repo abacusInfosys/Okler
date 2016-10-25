@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.Request.Method;
 import com.android.volley.Response.Listener;
 import com.google.gson.Gson;
-
+import com.okler.android.NewSignIn;
 import com.okler.android.OtpConfirmationActivity;
 import com.okleruser.R;
 import com.okler.android.SignUp;
@@ -45,13 +46,15 @@ public class EmailPhoneDialog extends Dialog implements
 	public Dialog d;
 	String cancel_order;
 
-	EditText edt_email, edt_phone;
+	EditText edt_email;
+	//edt_phone;
 	TextView txt_submit;
 	private EditText editTextToValidate;
 	TextValidations text;
 	boolean flag;
 	public static String email, phone;
 	public static String id;
+	LinearLayout progressLinLayout;
 
 	public EmailPhoneDialog(Activity a) {
 		super(a);
@@ -65,139 +68,131 @@ public class EmailPhoneDialog extends Dialog implements
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.dialog_email_phone);
 		edt_email = (EditText) findViewById(R.id.edt_email);
-		edt_phone = (EditText) findViewById(R.id.edt_phone);
+		progressLinLayout = (LinearLayout)findViewById(R.id.progressLinLayout);
+		//edt_phone = (EditText) findViewById(R.id.edt_phone);
 		txt_submit = (TextView) findViewById(R.id.text_submit);
 		txt_submit.setOnClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
-
-		flag = validateEmail();
-		if (flag == true) {
-			phone = edt_phone.getText().toString();
+		TextValidations tval;
+		tval = new TextValidations(edt_email);
+		
+		flag = tval.validateEmailPhone("Please enter email or mobile number");
+		
+		/*tval = new TextValidations(edt_phone);
+		if(edt_phone.getText().toString().trim().length()>0)
+		flag = tval.validateMobile("Please enter valid mobile number");*/
+		
+		if (flag) {
+			//phone = edt_phone.getText().toString();
 			email = edt_email.getText().toString();
-			// flag=validatePhoneNo();
+			String url1, url2, forgotPassUrl;
+			//	Utilities.writeToLogFIle("String");
+				url1 = c.getString(R.string.serverUrl);
+				Utilities
+						.writeToLogFIle("Got response from msg. URL1:"
+								+ url1);
+				url2 = c.getString(R.string.forget_password);
+				Utilities
+						.writeToLogFIle("Got response from msg URL2:"
+								+ url2);
+				forgotPassUrl = url1 + url2 + email;
+				Utilities
+						.writeToLogFIle("Got response from msg.Forgot PWD:"
+								+ forgotPassUrl);
+				showProgress(true);
+				WebJsonObjectRequest forgotjson = new WebJsonObjectRequest(
+						Method.GET,
+						forgotPassUrl,
+						new JSONObject(),
+						new Response.Listener<JSONObject>() {
 
-			Utilities.writeToLogFIle("Got response. Phone " + phone + " Email"
-					+ email);
-			String isUserExist = c.getString(R.string.is_user_exists_url)
-					+ phone + c.getString(R.string.mail) + email;
+							@Override
+							public void onResponse(
+									JSONObject response) {
 
-			WebJsonObjectRequest webjson = new WebJsonObjectRequest(Method.GET,
-					isUserExist, new JSONObject(), new Listener<JSONObject>() {
-						@Override
-						public void onResponse(JSONObject response) {
-							// TODO Auto-generated method stub
+								JSONObject job1 = response.optJSONObject("result");
+								
+								
+									String result = job1
+											.optString("resp_code");
+									if (result
+											.equals("FP_SentSMS")) {
+										Toast.makeText(c, "Password sent to mobile successfully.", Toast.LENGTH_SHORT).show();
+										showProgress(false);
+										dismiss();
+									}
+									else if(result.equals("FP_SendEmail")){	// salutation=Mr&customer_name=mark&email=testmail@gmail.com
+										Utilities
+												.writeToLogFIle("Got response from msg.Result true");
+										String isUserExist = c.getString(R.string.is_user_exists_url)
+												+ c.getString(R.string.mail) + email;
+						WebJsonObjectRequest isuserjson = new WebJsonObjectRequest(Method.GET, isUserExist, new JSONObject(), new Response.Listener<JSONObject>() {
 
-							try {
-								JSONObject responseObj = (JSONObject) response;
-								Utilities.writeToLogFIle("Got response");
-
-								String message = responseObj
-										.getString("message");
+							@Override
+							public void onResponse(JSONObject response) {
+								JSONArray jarr = response.optJSONArray("result");
+								JSONObject job1 = jarr.optJSONObject(0);
+								String salutation = job1.optString("salutation"); 
+										try {
+									salutation = URLEncoder
+											.encode(salutation,
+													"UTF-8");
+								} catch (UnsupportedEncodingException e1) {
+									// TODO Auto-generated catch block
+									showProgress(false);
+									e1.printStackTrace();
+								}
 								Utilities
-										.writeToLogFIle("Got response from msg");
-								if (message.equals("User Available")) {
-									Utilities
-											.writeToLogFIle("Got response, User available");
-									JSONArray jrray = responseObj
-											.optJSONArray("result");
-									Utilities.writeToLogFIle("Get json arr");
-									JSONObject resObject = jrray
-											.getJSONObject(0);
-									Utilities
-											.writeToLogFIle("Got response respo obj");
-									setUserData(resObject);
-									Utilities
-											.writeToLogFIle("after set user data");
-
-									String url1, url2, forgotPassUrl;
-									Utilities.writeToLogFIle("String");
-									url1 = c.getString(R.string.serverUrl);
-									Utilities
-											.writeToLogFIle("Got response from msg. URL1:"
-													+ url1);
-									url2 = c.getString(R.string.forget_password);
-									Utilities
-											.writeToLogFIle("Got response from msg URL2:"
-													+ url2);
-									forgotPassUrl = url1 + url2 + email;
-									Utilities
-											.writeToLogFIle("Got response from msg.Forgot PWD:"
-													+ forgotPassUrl);
-									WebJsonObjectRequest forgotjson = new WebJsonObjectRequest(
-											Method.GET,
-											forgotPassUrl,
-											new JSONObject(),
-											new Response.Listener<JSONObject>() {
-
-												@Override
-												public void onResponse(
-														JSONObject response) {
-
-													JSONObject responseObj = (JSONObject) response;
-													try {
-														String result = responseObj
-																.getString("result");
-														if (result
-																.equals("true")) {
-															// salutation=Mr&customer_name=mark&email=testmail@gmail.com
-															Utilities
-																	.writeToLogFIle("Got response from msg.Result true");
-															UsersDataBean ubean = Utilities
-																	.getCurrentUserFromSharedPref(c);
-															Utilities
-																	.writeToLogFIle("Got response from msg.Result true. Ubean");
-															String salutation = ubean
-																	.getSalutation();
-															salutation = URLEncoder
-																	.encode(salutation,
-																			"UTF-8");
-															Utilities
-																	.writeToLogFIle("Got response from msg.Result true. Salutation:"
-																			+ salutation);
-															String name = ubean
-																	.getFname();
-															name = URLEncoder
-																	.encode(name,
-																			"UTF-8");
-															Utilities
-																	.writeToLogFIle("Got response from msg.Result true. Name:"
-																			+ name);
-															String email = ubean
-																	.getEmail();
-															Utilities
-																	.writeToLogFIle("Got response from msg.Result true. emial:"
-																			+ email);
-															Utilities
-																	.writeToLogFIle("Got response from msg.ID:"
-																			+ ubean.getId());
-															String forgotpassUrl = c
-																	.getString(R.string.serverUrl)
-																	+ c.getString(R.string.forgotPasswordUrl)
-																	+ "salutation="
-																	+ salutation
-																	+ "&customer_name="
-																	+ name
-																	+ "&email="
-																	+ email;
-															Utilities
-																	.writeToLogFIle("Got response from msg. Forgot pass url:"
-																			+ forgotpassUrl);
-															WebJsonObjectRequest webObjReq = new WebJsonObjectRequest(
-																	Method.GET,
-																	forgotpassUrl,
-																	new JSONObject(),
-																	new Response.Listener<JSONObject>() {
-																		@Override
-																		public void onResponse(
-																				JSONObject response) {
-																			Log.i("contact us",
-																					"*****  mail sent*****");
-																			Utilities
-																					.writeToLogFIle("Got response from msg. Forgot pass on response");
-																		}
+										.writeToLogFIle("Got response from msg.Result true. Salutation:"
+												+ salutation);
+								String name = job1.optString("firstname");
+								try {
+									name = URLEncoder
+											.encode(name,
+													"UTF-8");
+								} catch (UnsupportedEncodingException e) {
+									// TODO Auto-generated catch block
+									showProgress(false);
+									e.printStackTrace();
+								}
+								Utilities
+										.writeToLogFIle("Got response from msg.Result true. Name:"
+												+ name);
+								Utilities
+								.writeToLogFIle("Got response from msg.Result true. emial:"
+										+ email);
+								String forgotpassUrl = c
+										.getString(R.string.serverUrl)
+										+ c.getString(R.string.forgotPasswordUrl)
+										+ "salutation="
+										+ salutation
+										+ "&customer_name="
+										+ name
+										+ "&email="
+										+ email;
+								Utilities
+										.writeToLogFIle("Got response from msg. Forgot pass url:"
+												+ forgotpassUrl);
+								
+								WebJsonObjectRequest webObjReq = new WebJsonObjectRequest(
+										Method.GET,
+										forgotpassUrl,
+										new JSONObject(),
+										new Response.Listener<JSONObject>() {
+											@Override
+											public void onResponse(
+													JSONObject response) {
+												Log.i("contact us",
+														"*****  mail sent*****");
+												Utilities
+														.writeToLogFIle("Got response from msg. Forgot pass on response");
+												Toast.makeText(c, "password sent to email successfully.", Toast.LENGTH_SHORT).show();
+												showProgress(false);
+												dismiss();
+											}
 
 																	},
 																	new Response.ErrorListener() {
@@ -209,16 +204,20 @@ public class EmailPhoneDialog extends Dialog implements
 																			// new
 																			// String(error.networkResponse.data));
 
-																			Log.i("error",
-																					""
-																							+ error.getStackTrace());
-
-																			Log.i("contact us",
-																					"***** fail to send mail****");
-																			Utilities
-																					.writeToLogFIle("Got response from msg. Error response"
-																							+ error.getStackTrace());
-																		}
+												/*Log.i("error",
+														""
+																+ error.getStackTrace());
+*/			
+												Log.e("Error", error.toString());
+												Log.i("contact us",
+														"***** fail to send mail****");
+												Utilities
+														.writeToLogFIle("Got response from msg. Error response"
+																+ error.getStackTrace());
+												Toast.makeText(c, "password sent to email successfully.", Toast.LENGTH_SHORT).show();
+												showProgress(false);
+												dismiss();
+											}
 
 																	});
 
@@ -227,67 +226,65 @@ public class EmailPhoneDialog extends Dialog implements
 																			c,
 																			webObjReq);
 
-														}
-													} catch (JSONException e) {
-														// TODO Auto-generated
-														// catch block
-														e.printStackTrace();
-													} catch (UnsupportedEncodingException e) {
-														// TODO Auto-generated
-														// catch block
-														e.printStackTrace();
-													}
-
-													Utilities
-															.writeToLogFIle("Got response. before Password confirmation dialog");
-
-													PasswordConfirmationDialog newpass = new PasswordConfirmationDialog(
-															c);
-													newpass.show();
-													Utilities
-															.writeToLogFIle("Got response. after Password confirmation dialog");
-													Log.e("Response", String
-															.valueOf(response));
-
-												}
-											}, new Response.ErrorListener() {
-
-												@Override
-												public void onErrorResponse(
-														VolleyError error) {
-													// TODO Auto-generated
-													// method stub
-													Log.e("ERROR", String
-															.valueOf(error));
-													Utilities
-															.writeToLogFIle("Got response. on error response");
-												}
-											}, true);
-									VolleyRequest.addJsonObjectRequest(c,
-											forgotjson);
-
-								} else {
-									Toast.makeText(c, "User Not Available",
-											Toast.LENGTH_LONG).show();
-								}
-							} catch (JSONException jsonEx) {
-								Log.e("Exception json", jsonEx.getStackTrace()
-										.toString());
+								
 							}
+						}, new Response.ErrorListener() {
 
-						}
-					}, new Response.ErrorListener() {
+							@Override
+							public void onErrorResponse(VolleyError error) {
+								Log.e("Error", error.toString());
+								Toast.makeText(c, "Some error occurred, Please try again.", Toast.LENGTH_SHORT).show();
+								Utilities
+										.writeToLogFIle("EmailphoneDialog "+error.toString());
+								Utilities
+								.writeToLogFIle("EmailphoneDialog "+error.getStackTrace());
+								showProgress(false);
+								
+							}
+						});
+						VolleyRequest.addJsonObjectRequest(c, isuserjson);
+									}else if(result.equals("FP_UserUnavailable")){
+										showProgress(false);
+										Toast.makeText(c, "User doesnot exists", Toast.LENGTH_SHORT).show();
+									}else if(result.equals("FP_InactiveUser")){
+										showProgress(false);
+										Toast.makeText(c, "Your account has been deactivated.", Toast.LENGTH_SHORT).show();
+									}
+								
 
-						@Override
-						public void onErrorResponse(VolleyError error) {
-							Log.i("error", String.valueOf(error));
-							// TODO Auto-generated method stub
-							Utilities.writeToLogFIle("on err resposne");
-						}
-					});
+								/*Utilities
+										.writeToLogFIle("Got response. before Password confirmation dialog");
 
-			VolleyRequest.addJsonObjectRequest(c, webjson);
-			dismiss();
+								PasswordConfirmationDialog newpass = new PasswordConfirmationDialog(
+										c);
+								newpass.show();
+								Utilities
+										.writeToLogFIle("Got response. after Password confirmation dialog");
+								Log.e("Response", String
+										.valueOf(response));*/
+
+							}
+						}, new Response.ErrorListener() {
+
+							@Override
+							public void onErrorResponse(
+									VolleyError error) {
+								// TODO Auto-generated
+								// method stub
+								showProgress(false);
+								Log.e("ERROR", String
+										.valueOf(error));
+								Utilities
+										.writeToLogFIle("Got response. on error response");
+								Toast.makeText(c, "Some error occurred, Please try again.", Toast.LENGTH_SHORT).show();
+								Utilities
+										.writeToLogFIle("EmailphoneDialog "+error.toString());
+								Utilities
+								.writeToLogFIle("EmailphoneDialog "+error.getStackTrace());
+							}
+						});
+				VolleyRequest.addJsonObjectRequest(c,forgotjson);
+				
 		}
 	}
 
@@ -299,7 +296,7 @@ public class EmailPhoneDialog extends Dialog implements
 		try {
 			ubean = new UsersDataBean();
 			ubean.setId(Integer.parseInt(jobj1.optString("id")));
-			Utilities.writeToLogFIle("In SetUserData() ID:" + ubean.getId());
+	//		Utilities.writeToLogFIle("In SetUserData() ID:" + ubean.getId());
 			ubean.setSalutation(jobj1.optString("salutation"));
 			Utilities.writeToLogFIle("In SetUserData() salutation:"
 					+ ubean.getSalutation());
@@ -350,7 +347,7 @@ public class EmailPhoneDialog extends Dialog implements
 			AddressDataBean adbean;
 			JSONObject jobj2;
 			if (!jobj1.isNull("userAddr")) {
-				Utilities.writeToLogFIle("In SetUserData() Got user address");
+			//	Utilities.writeToLogFIle("In SetUserData() Got user address");
 				JSONArray jarr2 = jobj1.getJSONArray("userAddr");
 				int length = jarr2.length();
 
@@ -421,17 +418,17 @@ public class EmailPhoneDialog extends Dialog implements
 					addList.add(adbean);
 				}
 				ubean.setAddDatabean(addList);
-				Utilities.writeToLogFIle("In SetUserData() Addresses Set");
+			//	Utilities.writeToLogFIle("In SetUserData() Addresses Set");
 			}
-			Utilities.writeToLogFIle("After if");
+		//	Utilities.writeToLogFIle("After if");
 			Okler.getInstance().setuDataBean(ubean);
-			Utilities.writeToLogFIle("In set ubean");
+	//		Utilities.writeToLogFIle("In set ubean");
 			Utilities.writeCurrentUserToSharedPref(c, ubean);
-			Utilities.writeToLogFIle("User current ");
+		//	Utilities.writeToLogFIle("User current ");
 		} catch (Exception e) {
 			// TODO: handle exception
 			Log.d("Exception", e.getStackTrace().toString());
-			Utilities.writeToLogFIle("Got exception." + e.getStackTrace());
+	//		Utilities.writeToLogFIle("Got exception." + e.getStackTrace());
 		}
 	}
 
@@ -463,7 +460,14 @@ public class EmailPhoneDialog extends Dialog implements
 		return text.ValidateEmailId();
 	}
 
-	public boolean validatePhoneNo() {
+	public void showProgress(boolean paramBoolean) {
+		if (paramBoolean) {
+			progressLinLayout.setVisibility(View.VISIBLE);
+			return;
+		}
+		progressLinLayout.setVisibility(View.INVISIBLE);
+	}
+	/*public boolean validatePhoneNo() {
 		this.editTextToValidate = edt_phone;
 		if (editTextToValidate.length() < 10
 				|| editTextToValidate.length() > 10) {
@@ -478,6 +482,6 @@ public class EmailPhoneDialog extends Dialog implements
 		}
 
 		return true;
-	}
+	}*/
 
 }

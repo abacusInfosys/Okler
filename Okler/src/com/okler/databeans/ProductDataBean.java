@@ -1,20 +1,15 @@
 package com.okler.databeans;
 
 public class ProductDataBean {
-	int prodId,presc_needed,units,prodType;
-	String prodName,desc,side_effect,company,dosage,imgUrl,indications,contraIndi,caution,weight,generic_name,interacions,diet_rest,composition,packing_size,	key_feature,
-			specfic,
-			brandInfo,
-			warranty;
-	float mrp,oklerPrice,discount;
-	int cart_item_id;
-	float tax;
-	String presc_id;
-	int is_presc_upped;
-	String cart_id;
-	String cart_num;
-	boolean isFavourite;
-	String mediumUrl,thumbUrl,SmallUrl,clipArtUrl;
+	int prodId=0,presc_needed=0,units=0,prodType=0,cart_item_id=0,is_presc_upped=0;
+	String prodName="",desc="",side_effect="",company="",dosage="",imgUrl=""
+			,indications="",contraIndi="",caution="",weight="",generic_name=""
+			,interacions="",diet_rest="",composition="",packing_size="",key_feature=""
+			,specfic="",brandInfo="",warranty="",presc_id="",cart_id="",cart_num=""
+			,mediumUrl="",thumbUrl="",SmallUrl="",clipArtUrl="";
+	float mrp=0,oklerPrice=0,discount=0,tax=0;
+	boolean isFavourite=false;
+	
 	
 	
 	

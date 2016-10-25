@@ -66,14 +66,16 @@ public class Physiotherapy extends BaseActivity {
 	public static int web_param;
 	
 	String From, to;
-	
+	String relation_id;
 	EditText edt_firstname,edt_surname, edt_email, edt_phoneno, edt_address, edt_pincode, edt_weight;
 	AutoCompleteTextView edt_state, edt_city;
 	Spinner spinner_relation, spinner_service;
 	TextView txtcity, txtstate, txtrelation, txtservice, edt_From, edt_To;
 	LinearLayout progressLinLayout;
 	String response_from;
-	static String rel_id,sev_id, relation, service;
+	static String sev_id, relation, service,rel_id;
+	 static String rel_myself="",service_newreq;
+	String fname, sname;
 	
 int currStatus=0;
 	ImageView imgBack;
@@ -112,13 +114,11 @@ static String city1;
 		});*/
 		UIUtils.setBackClick(toolBar, currActivity);
 	      Utilities.setTitleText(toolBar, "Physiotherapy Services");
-	      fragmentManager = getFragmentManager();
-	      fragmentTransaction = fragmentManager.beginTransaction();
-	      
+	     // fragmentManager = getFragmentManager();
+	      /*fragmentTransaction = fragmentManager.beginTransaction();
 	      PersonalInfo info_fragment = new PersonalInfo();
-	      
 	      fragmentTransaction.add(info_fragment, "info_frag");
-	      fragmentTransaction.commit();
+	      fragmentTransaction.commit();*/
 	      
 	      	// values from fragment personal info
 	      	view = findViewById(R.id.fragment_info);
@@ -215,6 +215,7 @@ static String city1;
 	{
 		boolean yes=false;
 		boolean flag = true;	
+		boolean f=(boolean) edt_city.getTag();
 		
 		
 		
@@ -253,12 +254,12 @@ static String city1;
 									edt_pincode.setError("Enter Valid Pincode");
 									yes =false;
 								}
-								long mobile_no = Long.parseLong(pin);
+								/*long mobile_no = Long.parseLong(pin);
 								if(mobile_no == 0)
 								{
 									edt_pincode.setError("Enter Valid pincode");
 									yes =false;
-								}
+								}*/
 							}
 							if(yes){
 								String weight = edt_weight.getText().toString();
@@ -289,6 +290,9 @@ static String city1;
 											yes=true;
 										}
 										if(yes){
+											if(f==false)
+												Toast.makeText(getApplicationContext(), "Please enter valid city", Toast.LENGTH_LONG).show();
+											else
 											callWebService();
 											}
 									}
@@ -318,9 +322,9 @@ static String city1;
 		
 		PhysioAndMedicalBean pDatabean = new PhysioAndMedicalBean();
 		String fstname= edt_firstname.getText().toString();
+		String famiName= edt_surname.getText().toString();
 		
-		String fname=null;
-		try {
+		/*try {
 			fname = URLEncoder.encode(fstname, "utf-8");
 		} catch (UnsupportedEncodingException e2) {
 			// TODO Auto-generated catch block
@@ -333,7 +337,7 @@ static String city1;
 		} catch (UnsupportedEncodingException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
-		}
+		}*/
 		String email = edt_email.getText().toString();
 		String phoneNumber = edt_phoneno.getText().toString();
 		String state = edt_state.getText().toString();
@@ -351,12 +355,14 @@ static String city1;
 		
    		String pincode = edt_pincode.getText().toString();
    		relation = spinner_relation.getSelectedItem().toString();
+   		if(relation.equalsIgnoreCase("Relation"))
+   			relation = rel_myself;
    		service = spinner_service.getSelectedItem().toString();
    		String weight = edt_weight.getText().toString();
-   		
+   		service_newreq=service;
    		try {
-			fname =  URLEncoder.encode(fname, "UTF-8");
-			sname =  URLEncoder.encode(sname, "UTF-8");
+			fname =  URLEncoder.encode(fstname, "UTF-8");
+			sname =  URLEncoder.encode(famiName, "UTF-8");
 			state = URLEncoder.encode(state,"UTF-8");
 			city = URLEncoder.encode(city,"UTF-8");
 			address = URLEncoder.encode(address, "utf-8");
@@ -377,7 +383,7 @@ static String city1;
    		pDatabean.setto(to);
    		pDatabean.setAddress(address);
    		pDatabean.setRelation(relation);
-   		pDatabean.setService(service);
+   		pDatabean.setService(service_newreq);
    		pDatabean.setCustId(""+uid);
 		Okler.getInstance().setPhysioMedBean(pDatabean);
 		
@@ -396,11 +402,11 @@ static String city1;
 		}
 	    
 	    
-		String book_appointment_url = getResources().getString(R.string.bookAppointment)+"user_id="+uid+"&email="+ email 
-				+"&firstname="+ fname
-				+"&lastname="+ sname
-				+"&mobile_no="+ phoneNumber
-				+"&addr="+address
+		String book_appointment_url = getResources().getString(R.string.bookAppointment)+"user_id="+uid+"&email_id="+ email 
+				+"&first_name="+ fname
+				+"&last_name="+ sname
+				+"&mobile="+ phoneNumber
+				+"&address="+address
 				+"&city="+ city_id + "&state=" + state_id + "&pincode="+pincode+"&relation="+rel_id 
 				+"&required_type=3" +"&required_for="+ sev_id +"&patient_kgs="+weight+
 				"&start_date="+formatedFromdt+"&end_date="+to;
@@ -440,7 +446,12 @@ static String city1;
 									String relation1, service1;
 									if(relation.equals("Relation"))
 									{
-										relation1 = "";
+									
+										relation1 =rel_myself;
+										/*Toast.makeText(Physiotherapy.this,rel_id,Toast.LENGTH_LONG).show();*/
+
+									/*	relation_id.indexOf(26);*/
+										
 									}
 									else
 									{
@@ -559,9 +570,11 @@ static String city1;
 	    this.progressLinLayout.setVisibility(View.INVISIBLE);
 	  }
 	 
-	 public static void getRelid(String rId){
+	 public static void getRelid(String rId,String rId_myself){
+		 
+		 	
 			rel_id = rId;
-			
+			rel_myself=rId_myself;
 		}
 		public static void getSevid(String sId){
 			sev_id = sId;

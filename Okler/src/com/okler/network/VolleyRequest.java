@@ -50,7 +50,7 @@ public class VolleyRequest {
 			WebJsonObjectRequest jsonObjRequest) {
 		try {
 			if (NetworkUtils.checkNetworkAvailable(paramContext)) {
-				// getRequestQueue(paramContext).getCache().get("https://www.okler.com/api/products/usercart/cartitems?cust_id=1285").serverDate;
+				// getRequestQueue(paramContext).getCache().get("http://183.82.110.105:8081/oklerapi/products/usercart/cartitems?cust_id=1285").serverDate;
 				getRequestQueue(paramContext).add(jsonObjRequest);
 				return true;
 			} else

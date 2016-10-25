@@ -16,17 +16,19 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.okler.android.BaseActivity;
 import com.okler.android.MyAccount;
 import com.okleruser.R;
+import com.okleruser.R.string;
 import com.okler.databeans.AddressDataBean;
+import com.okler.databeans.PrescriptionImagesDataBean;
+import com.okler.databeans.PrescriptionsDataBean;
 import com.okler.databeans.UsersDataBean;
+import com.okler.dialogs.LargePresImageDialog;
 import com.okler.dialogs.SignOut;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
 import com.okler.utils.RoundedImageView;
-import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -63,12 +65,11 @@ public class MyProfileActivity extends BaseActivity implements
 	int user_id;
 	RoundedImageView profile_image;
 	ImageLoader imgLoader;
-
+	String photo_url;
 	ImageView editPencilBlack;
 
 	TextView bill_address, delilvery_address, text_view_bill_add,
 			text_view_delivery_add;
-	Activity ack;
 
 	ArrayList<AddressDataBean> address = new ArrayList<AddressDataBean>();
 
@@ -80,12 +81,12 @@ public class MyProfileActivity extends BaseActivity implements
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_my_profile);
-		ack = this;
+
 		ImageView pencil = (ImageView) findViewById(R.id.edit_red_pencil);
 		pencil.setVisibility(View.GONE);
 		TextView bill = (TextView) findViewById(R.id.addr_title_tv);
 		bill.setText("Billing Address");
-		
+
 		profile_image = (RoundedImageView) findViewById(R.id.profile_photo);
 
 		View view = (View) findViewById(R.id.delivery_address);
@@ -177,7 +178,7 @@ public class MyProfileActivity extends BaseActivity implements
 
 		toolBar.setBackgroundColor(getResources().getColor(R.color.Blue));
 
-		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -185,8 +186,7 @@ public class MyProfileActivity extends BaseActivity implements
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});*/
-		UIUtils.setBackClick(toolBar, ack);
+		});
 		Utilities.setTitleText(toolBar, "My Profile");
 
 		currentUser = Utilities.getCurrentUserFromSharedPref(this);
@@ -200,6 +200,32 @@ public class MyProfileActivity extends BaseActivity implements
 		WebJsonObjectRequest webjson1 = new WebJsonObjectRequest(Method.GET,
 				address_url, new JSONObject(), this, this);
 		VolleyRequest.addJsonObjectRequest(this, webjson1);
+		
+		
+		
+		profile_image.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				PrescriptionImagesDataBean prescriptionImages= new PrescriptionImagesDataBean();
+				String p = photo_url;
+				prescriptionImages.setPresUrl(photo_url);
+				ArrayList<PrescriptionImagesDataBean> prescrptionImagesList = new ArrayList<PrescriptionImagesDataBean>();
+				prescrptionImagesList.add(prescriptionImages);
+				PrescriptionsDataBean prescriptionData = new PrescriptionsDataBean();
+				prescriptionData.setPresImages(prescrptionImagesList);
+				ArrayList<PrescriptionsDataBean> prescriptionDataList = new ArrayList<PrescriptionsDataBean>();
+				prescriptionDataList.add(prescriptionData);
+				LargePresImageDialog largeImage=new LargePresImageDialog(MyProfileActivity.this,0,prescriptionDataList);
+				largeImage.show();
+				           	
+           	 
+			}
+		});
+		
+		
+		
 	}
 
 	public void setFields() {
@@ -213,24 +239,36 @@ public class MyProfileActivity extends BaseActivity implements
 
 		String salutation = currentUser.getSalutation();
 
-		if (salutation == null ||salutation.equals("null")) {
+		if (salutation == null ||salutation.equals("null")|| salutation.equals("")) {
 			txt_name.setText(currentUser.getFname() + " "
 					+ currentUser.getLname());
 		} else {
 			txt_name.setText(salutation + " " + currentUser.getFname() + " "
 					+ currentUser.getLname());
 		}
+		String email = currentUser.getEmail();
+		Toast.makeText(getApplicationContext(), email, Toast.LENGTH_SHORT);
+		
+		
+		if(currentUser.getEmail() == null || currentUser.getEmail().equals("null") || currentUser.getEmail().equals(null))
+		{
+			txt_ph_email.setText(currentUser.getPhone());
+		}
+		else
+		{
+			txt_ph_email.setText(currentUser.getPhone() + "/"
+					+ currentUser.getEmail());
+		}
 
 		// txt_location.setText(udBeans.getState_name());
-		txt_ph_email.setText(currentUser.getPhone() + "/"
-				+ currentUser.getEmail());
+		
 
 		imgLoader = VolleyRequest.getInstance(this).getImageLoader();
 
 		String First = currentUser.getUserAvatarUrl();
 		// "http://183.82.110.105:8081/oklerdevv2/uploads/user_avatar/";
 		String Second = currentUser.getUser_image();
-		String photo_url = First + Second;
+		photo_url = First + Second;
 
 		profile_image.setImageUrl(photo_url, imgLoader);
 

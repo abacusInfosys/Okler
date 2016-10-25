@@ -1,7 +1,6 @@
 package com.okler.android;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.util.ArrayList;
 
 import org.apache.http.NameValuePair;
@@ -12,34 +11,26 @@ import org.json.JSONObject;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 import com.google.gson.Gson;
-import com.okler.databeans.PrescriptionImagesDataBean;
 import com.okler.databeans.UsersDataBean;
 import com.okler.dialogs.CameraGalleryDialog;
 import com.okler.dialogs.VerifyPhoneNumDialog;
 
 import com.okler.utils.CameraGalleryImageInfo;
-import com.okler.utils.MediPhysioTextValidations;
 import com.okler.utils.Okler;
 import com.okler.utils.SocialLoginEnum;
 import com.okler.utils.SocialMediaUtils;
 import com.okler.utils.TextValidations;
-import com.okler.utils.UIUtils;
+import com.okler.utils.UserStatusEnum;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
-
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,8 +50,8 @@ import android.widget.Toast;
 public class SignUp extends BaseActivity {
 
 	Button btnSignup;
-	EditText et_name, et_surName, et_phonenumber, et_emailId, et_password;
-	String firstName, lastName, phoneNumber, emailId, password;
+	EditText et_name, et_surName, et_phonenumber, et_emailId, et_password,et_referal;
+	String firstName, lastName, phoneNumber, emailId, password,referal;
 	Spinner salutation_spiner;
 	String[] salutation_array = new String[] { "Ms.", "Miss.", "Mrs.", "Mr.",
 			"Dr.", "Prof." };
@@ -107,6 +98,8 @@ public class SignUp extends BaseActivity {
 		// setSupportActionBar(toolBar);
 		// ActionBar ab = getSupportActionBar();
 	actr = this;
+	UserStatusEnum userstatus = Utilities.getUserStatusFromSharedPref(actr);
+//	Toast.makeText(actr, ""+userstatus, Toast.LENGTH_SHORT).show();
 		SocialMediaUtils.signOutOfFB(actr);
 		salutation_spiner = (Spinner) findViewById(R.id.salutation_spinner);
 		adapter = new ArrayAdapter<String>(this,
@@ -176,14 +169,17 @@ public class SignUp extends BaseActivity {
 		et_emailId = (EditText) findViewById(R.id.et_emailAdd);
 		et_password = (EditText) findViewById(R.id.et_password);
 		cameraImage = (ImageView) findViewById(R.id.itemIamge);
+		et_referal = (EditText) findViewById(R.id.et_referal_code);
 		TextView tv_elseLogin = (TextView) findViewById(R.id.tv_elseLogin);
 		tv_elseLogin.setOnClickListener(new OnClickListener() {
 
-			@Override
+			@Override 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Intent i = new Intent(SignUp.this, NewSignIn.class);
 				startActivity(i);
+				
+				finish();
 			}
 		});
 		cameraImage.setOnClickListener(new OnClickListener() {
@@ -223,6 +219,8 @@ public class SignUp extends BaseActivity {
 								if(flag==true)
 								{
 									password=et_password.getText().toString();
+									referal = et_referal.getText().toString();
+									userBean.setReferal(referal);
 									salutation1 = salutation;
 									userBean.setPassword(password);
 									userBean.setSalutation(salutation1);

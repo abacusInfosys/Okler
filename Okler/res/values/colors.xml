@@ -174,4 +174,7 @@
 	<color name="lightgrey">#f0f0f0</color>
 	<color name="darkgrey">#e3e3e3</color>
 	<color name="Darkmoderateviolet">#562e86</color>
+	<color name="SuperLightGray">#ededed</color>
+	<color name="LightestGray">#E5E5E5</color>
+	
 </resources>

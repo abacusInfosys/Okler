@@ -28,7 +28,7 @@ public class AddressDataBean {
 			bill_add1, bill_add2, bill_city, bill_state, bill_zip;
 	String ship_fname, ship_lname, bill_fname, bill_lname, shipSalut = "",
 			billSalut = "";
-
+	
 	public String getShipSalut() {
 		return shipSalut;
 	}

@@ -10,7 +10,8 @@
         android:textStyle="bold"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Delivery Address"
+        android:text="@string/delivery_address"
+        android:layout_marginLeft="10dp"
         />
     <ImageView 
         android:id="@+id/edit_red_pencil"
@@ -26,6 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/addr_title_tv"
         android:minLines="1"
+        android:layout_marginLeft="10dp"
         android:text=""
         />
 

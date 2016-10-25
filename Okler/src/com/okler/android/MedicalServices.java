@@ -20,6 +20,7 @@ import com.google.gson.JsonArray;
 import com.okler.databeans.PhysioAndMedicalBean;
 import com.okler.databeans.UsersDataBean;
 import com.okler.fragment.AdditionalInfo;
+import com.okler.fragment.PersonalInfo;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.network.WebStringRequest;
@@ -71,6 +72,7 @@ public class MedicalServices extends BaseActivity {
 	FragmentTransaction fragmentTransaction;
 	View bottomBarLayout;
 	Toolbar toolBar;
+	static String rel_myself="";
 	TextView btn_nurse, btn_attendant;
 	LinearLayout progressLinLayout;
 	String From, to, relation1, service1;
@@ -88,23 +90,24 @@ public class MedicalServices extends BaseActivity {
 	ArrayList<String> relation = new ArrayList<String>();
 	ArrayList<String> relationId = new ArrayList<String>();
 	public static int web_param;
+	Activity act;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_medical_services);
-		currActivity = this;
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
+		currActivity = this;
 		progressLinLayout = (LinearLayout) findViewById(R.id.progressLinLayout);
 	web_param = 2;
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
+		act = this;
 		setSupportActionBar(toolBar);
 		final ActionBar ab = getSupportActionBar();
 		// ab.setDisplayHomeAsUpEnabled(true);
 		ArrayList<String> cities = new ArrayList<String>();
 		ArrayList<String> states = new ArrayList<String>();
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_medi_services);
-
 		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
@@ -118,7 +121,7 @@ public class MedicalServices extends BaseActivity {
 			}
 		});*/
 		UIUtils.setBackClick(toolBar, currActivity);
-		Utilities.setTitleText(toolBar, "Medical Services");
+			Utilities.setTitleText(toolBar, "Medical Services");
 		
 		footer1 = (LinearLayout) findViewById(R.id.layout_footer1);
 		footer2 = (LinearLayout) findViewById(R.id.layout_footer2);
@@ -211,6 +214,7 @@ public class MedicalServices extends BaseActivity {
 				user_type = 4;
 				web_param = 4;
 				AdditionalInfo.webCallServiceRequired(web_param);
+				//PersonalInfo.getStates(act);
 			}
 		});
 
@@ -263,7 +267,7 @@ public class MedicalServices extends BaseActivity {
 	public void showDialog() {
 		boolean yes;
 		boolean flag = true;
-
+		boolean f=(boolean) edt_city.getTag();
 		MediPhysioTextValidations medical = new MediPhysioTextValidations(view);
 		yes = medical.validateFirstName();
 		if (yes) {
@@ -292,12 +296,12 @@ public class MedicalServices extends BaseActivity {
 												.setError("Enter Valid Pincode");
 										yes = false;
 									}
-									long pinVal = Long.parseLong(pin);
+									/*long pinVal = Long.parseLong(pin);
 									if (pinVal == 0) {
 										edt_pincode
 												.setError("Enter Valid pincode");
 										yes = false;
-									}
+									}*/
 								}
 								if (yes) {
 									String weight = edt_weight.getText()
@@ -334,6 +338,9 @@ public class MedicalServices extends BaseActivity {
 												yes = true;
 											}
 											if (yes) {
+												if(f==false)
+													Toast.makeText(getApplicationContext(),"Please enter valid city",Toast.LENGTH_LONG).show();
+													else
 												callWebService();
 											}
 										}
@@ -372,15 +379,17 @@ public class MedicalServices extends BaseActivity {
 		service_id = txtservice.getText().toString();
 
 		String address = edt_address.getText().toString();
-		try {
+		/*try {
 			address = URLEncoder.encode(address, "utf-8");
 
 		} catch (UnsupportedEncodingException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		}*/
 		String pincode = edt_pincode.getText().toString();
 		relation1 = spinner_relation.getSelectedItem().toString();
+		if(relation1.equalsIgnoreCase("Relation"))
+   			relation1= rel_myself;
 		service1 = spinner_service.getSelectedItem().toString();
 		String weight = edt_weight.getText().toString();
 
@@ -434,15 +443,15 @@ public class MedicalServices extends BaseActivity {
 				R.string.bookAppointment)
 				+ "user_id="
 				+ uid
-				+ "&email="
+				+ "&email_id="
 				+ email
-				+ "&firstname="
+				+ "&first_name="
 				+ fname
-				+ "&lastname="
+				+ "&last_name="
 				+ sname
-				+ "&mobile_no="
+				+ "&mobile="
 				+ phoneNumber
-				+ "&addr="
+				+ "&address="
 				+ address
 				+ "&city="
 				+ city_id
@@ -498,7 +507,7 @@ public class MedicalServices extends BaseActivity {
 											.equals("Trained service booking inserted successfully")) {
 								String rel, serv;
 								if (relation1.equals("Relation")) {
-									rel = "";
+									rel = rel_myself;
 								} else {
 									rel = relation1;
 								}
@@ -648,9 +657,9 @@ public class MedicalServices extends BaseActivity {
 		this.progressLinLayout.setVisibility(View.INVISIBLE);
 	}
 
-	public static void getRid(String rId) {
+	public static void getRid(String rId,String rId_myself) {
 		rel_id = rId;
-
+		 rel_myself = rId_myself;
 	}
 
 	public static void getSid(String sId) {

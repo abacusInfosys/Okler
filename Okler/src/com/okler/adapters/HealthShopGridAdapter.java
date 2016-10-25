@@ -7,14 +7,9 @@ import org.json.JSONObject;
 
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
-import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.okler.android.BaseActivity;
-import com.okler.android.FavouritesActivity;
-import com.okler.android.NewSignIn;
-import com.okler.android.ProductDetailsActivity;
 import com.okleruser.R;
 
 import com.okler.databeans.CartDataBean;
@@ -23,14 +18,10 @@ import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
-import com.okler.utils.UserStatusEnum;
+import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,28 +29,27 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class HealthShopGridAdapter extends BaseAdapter {
 
-	Context context;
+	Activity context;
 	ArrayList<ProductDataBean> prods;
-	Activity c;
 	private static LayoutInflater inflater = null;
-
 	ImageLoader imgLoader;
 	Button cartBtn;
-	ArrayList<ProductDataBean> array = new ArrayList<ProductDataBean>();
+	ProductDataBean pbean = new ProductDataBean();
+	ArrayList<ProductDataBean> favs = new ArrayList<ProductDataBean>();
+	int pid = 0;
+	int userid;
 
 	public HealthShopGridAdapter(Activity con,
 			ArrayList<ProductDataBean> prodDataBean, Button cart) {
-		// TODO Auto-generated constructor stub
-
-		// context = con;
-		c = con;
-		context = c.getApplicationContext();
+		context = con;
 		prods = prodDataBean;
+		prods.trimToSize();
 		inflater = LayoutInflater.from(context);
 		cartBtn = cart;
 	}
@@ -86,7 +76,8 @@ public class HealthShopGridAdapter extends BaseAdapter {
 		TextView tv, textMrpValue, item_description, youSaveValue;
 		Button okler_price, image_cart;
 		NetworkImageView img;
-		ImageView image_favourite, image_favourite_filled;
+		ImageView image_favourite;
+		RelativeLayout parentImageFav;
 	}
 
 	@Override
@@ -106,10 +97,26 @@ public class HealthShopGridAdapter extends BaseAdapter {
 				.findViewById(R.id.tv_youSaveValue);
 		holder.image_favourite = (ImageView) rowView
 				.findViewById(R.id.image_favourite);
-		holder.image_favourite.setVisibility(View.INVISIBLE);
+		holder.parentImageFav = (RelativeLayout)rowView.findViewById(R.id.parentImageFav);
+		
+		//favs = Okler.getInstance().getFavourites();
+		favs = Utilities.getFavourites(context);
+		favs.trimToSize();
+		if(favs.size() != 0)
+		{
+			for(int i = 0; i<favs.size(); i++)
+			{
+				ProductDataBean pbean = favs.get(i);
+				int prodID = pbean.getProdId();
+				if(prodID == prods.get(position).getProdId())
+				{
+					holder.image_favourite.setBackgroundResource(R.drawable.fav_filled_heart_icon);
+				}
+			}
+		}
+		
 		holder.image_favourite.setTag(prods.get(position).getProdId());
-		holder.image_favourite_filled = (ImageView) rowView
-				.findViewById(R.id.image_favourite_filled);
+		holder.parentImageFav.setTag(prods.get(position).getProdId());
 		holder.image_cart = (Button) rowView.findViewById(R.id.image_cart);
 		holder.image_cart.setTag(prods.get(position).getProdId());
 		holder.image_cart.setVisibility(View.GONE);
@@ -130,111 +137,35 @@ public class HealthShopGridAdapter extends BaseAdapter {
 		holder.youSaveValue.setText(prods.get(position).getDiscount() + "%");
 
 		imgLoader = VolleyRequest.getInstance(context).getImageLoader();
-
-		// String First=
-		// "http://183.82.110.105:8081/oklerdevv2/uploads/images/medium/";
 		String First = prods.get(position).getThumbUrl();
 		String Second = prods.get(position).getImgUrl();
 		String photo_url = First + Second;
 
 		holder.img.setImageUrl(photo_url, imgLoader);
-		final int id;
-		holder.image_favourite.setOnClickListener(new OnClickListener() {
+		holder.parentImageFav.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-
-				int pid = 0;
-				holder.image_favourite.setVisibility(View.GONE);
-				holder.image_favourite_filled.setVisibility(View.VISIBLE);
-
-				// ProductDataBean pbean = Okler.getInstance().getProdList();
-
-				UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(c);
-				int id = ubean.getId();
-
+				ProductDataBean prod = new ProductDataBean();
 				int viewid = (int) v.getTag();
-				for (int i = 0; i < prods.size(); i++) {
-					if (prods.get(i).getProdId() == viewid) {
-
-						array.add(prods.get(i));
-						Okler.getInstance().setFavourites(array);
-						pid = viewid;
+				for(int i=0;i<prods.size();i++){
+					if(viewid==prods.get(i).getProdId()){
+						prod = prods.get(i);
+						break;
 					}
 				}
-
-				ArrayList<ProductDataBean> array1 = new ArrayList<ProductDataBean>();
-
-				array1 = Okler.getInstance().getFavourites();
-
-				if (Utilities.getUserStatusFromSharedPref(c) == UserStatusEnum.LOGGED_IN
-						|| (Utilities.getUserStatusFromSharedPref(c) == UserStatusEnum.LOGGED_IN_FB)
-						|| (Utilities.getUserStatusFromSharedPref(c) == UserStatusEnum.LOGGED_IN_GOOGLE)) {
-
-					String add_fav = context.getString(R.string.add_fav_url)
-							+ context.getString(R.string.cust_id) + id + context.getString(R.string.getMedsUrlProdId3) + pid;
-
-					WebJsonObjectRequest webjson = new WebJsonObjectRequest(
-							Method.GET, add_fav, new JSONObject(),
-							new Listener<JSONObject>() {
-								@Override
-								public void onResponse(JSONObject response) {
-									// TODO Auto-generated method stub
-
-									try {
-										JSONObject responseObj = (JSONObject) response;
-										String message = responseObj
-												.getString("message");
-										Toast.makeText(context, message,
-												Toast.LENGTH_LONG).show();
-										if (message
-												.equals("Product Successfully Added To Your Favorites")) {
-											Intent intent = new Intent(c,
-													FavouritesActivity.class);
-											c.startActivity(intent);
-										}
-
-									} catch (JSONException jsonEx) {
-										Log.e("Exception json", jsonEx
-												.getStackTrace().toString());
-									}
-
-								}
-							}, new Response.ErrorListener() {
-
-								@Override
-								public void onErrorResponse(VolleyError error) {
-									// TODO Auto-generated method stub
-
-									Toast.makeText(
-											c,
-											"Failed to add product to favorites",
-											Toast.LENGTH_LONG).show();
-
-								}
-							});
-
-					VolleyRequest.addJsonObjectRequest(context, webjson);
-				}
-
-				else {
-
-					Intent in = new Intent(c, NewSignIn.class);
-					c.startActivity(in);
-				}
-
+				UIUtils.addRemoveFavourites(v, context, prod);
 			}
 		});
-
+		
 		return rowView;
-
 	}
 
 	public void addToCart(final Button addToCart) {
 
 		CartDataBean mainbean = Okler.getInstance().getMainCart();
-		UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(c);
+		UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(context);
 		int unit = 0;
 		int prodId = Integer.parseInt(addToCart.getTag().toString());
 		mainbean.setUbean(ubean);
@@ -298,7 +229,7 @@ public class HealthShopGridAdapter extends BaseAdapter {
 	public void setCartQuantity() {
 		CartDataBean cbean = Okler.getInstance().getMainCart();
 		ArrayList<ProductDataBean> pdList = cbean.getProdList();
-		// pdList = odbean.getProdList();
+		pdList.trimToSize();
 		int maincount = pdList.size();
 
 		if (maincount > 9) {

@@ -10,12 +10,16 @@
             layout="@layout/tool_bar"            
             android:layout_alignParentTop="true"
              />
-
+<RelativeLayout 
+    android:id="@+id/chkboxRL"
+    android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@id/toolbar"
+    >
      <CheckBox
          android:id="@+id/checkBox_bill_addr"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_below="@id/toolbar"
          android:text="Use this address as default billing address" />
      
      <CheckBox
@@ -24,10 +28,10 @@
          android:layout_height="wrap_content"
          android:layout_below="@id/checkBox_bill_addr"
          android:text="Use this address as default shipping address" />
-
+</RelativeLayout>
      <ScrollView
          android:id="@+id/scrollView1"
-         android:layout_below="@id/checkBox_delivery_addr"
+         android:layout_below="@id/chkboxRL"
          android:layout_above="@+id/button_saveinfo"
          android:layout_width="match_parent"
          android:layout_height="wrap_content" >
@@ -70,8 +74,9 @@
              <TextView
                  android:id="@+id/dobTv"
                  android:layout_width="match_parent"
-                 android:layout_height="40dp"
+                 android:layout_height="wrap_content"
                  android:layout_marginTop="10dp"
+                 android:layout_marginLeft="5dp"
                  android:imeOptions="actionNext"
                  android:ems="10"
                  android:hint="Date of birth*"
@@ -146,7 +151,6 @@
                 android:id="@+id/stateTv"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_marginBottom="30dp"
                  android:layout_marginTop="10dp"
                  android:ems="10"
                  android:hint="State*"
@@ -157,7 +161,7 @@
                 android:id="@+id/cityTv"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_marginBottom="30dp"
+                 android:layout_marginBottom="10dp"
                  android:layout_marginTop="10dp"
                  android:ems="10"
                  android:hint="City*"

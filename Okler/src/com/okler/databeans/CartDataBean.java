@@ -4,7 +4,17 @@ import java.util.ArrayList;
 
 public class CartDataBean {
 	UsersDataBean ubean, curUBean;
-	float totalPrice, tax;
+	float totalPrice, tax,subTotal,totalMrp;
+	
+
+	public float getTotalMrp() {
+		return totalMrp;
+	}
+
+	public void setTotalMrp(float totalMrp) {
+		this.totalMrp = totalMrp;
+	}
+
 	ArrayList<ProductDataBean> ProdList = new ArrayList<ProductDataBean>();
 	String presc_id;
 	float coupon_disc;
@@ -81,6 +91,13 @@ public class CartDataBean {
 
 	public void setProdList(ArrayList<ProductDataBean> prodList) {
 		ProdList = prodList;
+	}
+	public float getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(float subTotal) {
+		this.subTotal = subTotal;
 	}
 
 }

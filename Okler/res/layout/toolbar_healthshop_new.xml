@@ -75,6 +75,7 @@
             android:layout_toLeftOf="@+id/ListRL"    
             android:background="@color/White"  
             android:visibility="visible"
+            android:layout_marginLeft="20dp"  
             android:focusable="false"
             />
            <RelativeLayout 

@@ -1,21 +1,16 @@
 package com.okler.diagnostics;
 
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-
-import java.util.ArrayList;
-
 import com.okler.android.BaseActivity;
 import com.okler.android.MyOrderHome;
 import com.okleruser.R;
-
 import com.okler.databeans.AddressDataBean;
-import com.okler.databeans.DiagnoOrderDataBean;
 import com.okler.databeans.UsersDataBean;
+import com.okler.databeans.diagnobean.DiagnoOrder;
+import com.okler.diagno.DiagnosticsActivityHome;
 import com.okler.android.ServiceCategoryActivity;
 import com.okler.utils.Okler;
 import com.okler.utils.Utilities;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,7 +22,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DiagnoOrderDetails extends BaseActivity {
 	Button chk_ord_status, place_new_order;
@@ -36,10 +30,10 @@ public class DiagnoOrderDetails extends BaseActivity {
 	View bottomBarLayout;
 	TextView orderId, nameTv, user_details_Tv, mobileTv, dateValue, timeValue,
 			atValue;
-	DiagnoOrderDataBean dobean;
+	DiagnoOrder dobean;
 	String pickupType;
 	UsersDataBean ubean = new UsersDataBean();
-	ArrayList<AddressDataBean> paList = new ArrayList<AddressDataBean>();
+	AddressDataBean paList = new AddressDataBean();
 	Activity ack;
 	String BookingId;
 	TextView title_mycart;
@@ -54,9 +48,9 @@ public class DiagnoOrderDetails extends BaseActivity {
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 		ubean = Utilities.getCurrentUserFromSharedPref(ack);
-		paList = ubean.getPatAddList();
-
-		pickupType = getIntent().getStringExtra("PickupType");
+		dobean = Okler.getInstance().getDiagnoOrder();
+		paList = dobean.getPatientAddr();
+		pickupType = dobean.getPickupType();
 		BookingId = getIntent().getStringExtra("BookingId");
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		dateValue = (TextView) findViewById(R.id.dateValue);
@@ -78,7 +72,6 @@ public class DiagnoOrderDetails extends BaseActivity {
 						MyOrderHome.class);
 				intent.putExtra("value", 2);
 				startActivity(intent);
-
 			}
 		});
 		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
@@ -86,11 +79,7 @@ public class DiagnoOrderDetails extends BaseActivity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent startServCat = new Intent(ack,
-						ServiceCategoryActivity.class);
-				startServCat.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(startServCat);	
+				onBackPressed();
 			}
 		});
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
@@ -98,11 +87,7 @@ public class DiagnoOrderDetails extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent startServCat = new Intent(ack,
-						ServiceCategoryActivity.class);
-				startServCat.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(startServCat);
+				onBackPressed();
 			}
 		});
 		Utilities.setTitleText(toolBar, "Diagnostic Test");
@@ -112,56 +97,36 @@ public class DiagnoOrderDetails extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getApplicationContext(),
+				Intent intent = new Intent(DiagnoOrderDetails.this,
 						DiagnosticsActivityHome.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				finish();
-				// Toast.makeText(getApplicationContext(), "Order Placed",
-				// Toast.LENGTH_SHORT).show();
 				startActivity(intent);
-
 			}
 		});
-		dobean = Okler.getInstance().getDiagnoOrderDataBean();
+		
 		atValue.setText(pickupType);
-		dateValue.setText(dobean.getAp_date());
-		timeValue.setText(dobean.getAp_time());
-
-		AddressDataBean abean = new AddressDataBean();
-		int length = paList.size();
-		for (int i = 0; i < length; i++) {
-			abean = new AddressDataBean();
-			abean = paList.get(i);
-			if (abean.isSelected()) {
-				nameTv.setText(abean.getFirstname() + " " + abean.getLastname());
-				String addr = abean.getDob() + "\n";
-				String rel = abean.getRelation();
+		dateValue.setText(dobean.getApptDt());
+		timeValue.setText(dobean.getAppTime());
+				nameTv.setText(paList.getFirstname() + " " + paList.getLastname());
+				String addr = paList.getDob() + "\n";
+				String rel = paList.getRelation();
 				if (!(rel.equals("null")))
 					addr = addr + rel + "\n";
-				addr = addr + abean.getGender() + "\n" + abean.getAddress1()
-						+ "\n" + abean.getAddress2() + "\n" + abean.getCity()
-						+ " - " + abean.getZip() + abean.getState();
+				addr = addr + paList.getGender() + "\n" + paList.getAddress1()
+						+ "\n" + paList.getAddress2() + "\n" + paList.getCity()
+						+ " - " + paList.getZip() + paList.getState();
 
 				user_details_Tv.setText(addr);
-				mobileTv.setText("+91 " + abean.getPhone());
-				break;
-			}
-		}
-
+				mobileTv.setText("+91 " + paList.getPhone());
 	}// end of onCreate
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.diagno_order_details, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;

@@ -9,10 +9,8 @@
 	        android:layout_height="wrap_content"
 	        android:orientation="vertical"
 	        android:layout_below="@+id/LL_for_prods_custom_view"
-	        android:background="@color/LightGreyWhite"
-	        android:layout_marginLeft="10dp"
-	        android:layout_marginRight="10dp"
-	        >
+	        android:background="@color/LightGreyWhite">
+	        
 	         <View android:layout_width="fill_parent"
 	             android:layout_height="1dp"
 	             android:background="@color/LightGrey"/>
@@ -21,6 +19,7 @@
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
 			    android:layout_marginBottom="10dp"
+			    android:layout_marginLeft="10dp"
 			    >
 			    <TextView 
 			        android:id="@+id/amount_tv"
@@ -36,6 +35,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_alignParentRight="true"
 			        android:text="Rs.00"
+			        android:layout_marginRight="10dp"
 			        />
 			</RelativeLayout>
 			<RelativeLayout 
@@ -43,6 +43,7 @@
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
 			    android:layout_marginBottom="10dp"
+			    android:layout_marginLeft="10dp"
 			    >
 			    <TextView 
 			        android:id="@+id/okler_disc_tv"
@@ -58,20 +59,23 @@
 			        android:layout_height="wrap_content"
 			        android:layout_alignParentRight="true"
 			        android:text="Rs.00"
+			        android:layout_marginRight="10dp"
 			        />
 			</RelativeLayout>	     
 			<RelativeLayout 
 			    android:id="@+id/coupon_disc_RL"
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
-			    android:visibility="gone"
 			    android:layout_marginBottom="10dp"
+			    android:layout_marginLeft="10dp"
+			    android:layout_marginRight="10dp"
 			    >
 			    <TextView 
 			        android:id="@+id/coupon_disc_tv"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:textStyle="bold"
+			        
 			        android:layout_alignParentLeft="true"
 			        android:text="@string/coupon_discount"
 			        />
@@ -79,6 +83,7 @@
 			        android:id="@+id/coupon_disc_value_tv"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
+			        
 			        android:layout_alignParentRight="true"
 			        android:text="Rs.00"
 			        />
@@ -88,6 +93,7 @@
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
 			    android:layout_marginBottom="10dp"
+			    android:layout_marginLeft="10dp"
 			    >
 			    <TextView 
 			        android:id="@+id/shipping_charg_tv"
@@ -103,6 +109,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_alignParentRight="true"
 			        android:text="Rs.00"
+			        android:layout_marginRight="10dp"
 			        />
 			</RelativeLayout>	     
 			<RelativeLayout 
@@ -110,6 +117,7 @@
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
 			    android:layout_marginBottom="10dp"
+			    android:layout_marginLeft="10dp"
 			    >
 			    <TextView 
 			        android:id="@+id/tax_tv"
@@ -125,6 +133,7 @@
 			        android:layout_height="wrap_content"
 			        android:layout_alignParentRight="true"
 			        android:text="Rs.00"
+			        android:layout_marginRight="10dp"
 			        />
 			</RelativeLayout>	     
 			<RelativeLayout 
@@ -132,6 +141,7 @@
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content"
 			    android:layout_marginBottom="10dp"
+			    android:layout_marginLeft="10dp"
 			    >
 			    <TextView 
 			        android:id="@+id/net_pay_tv"
@@ -148,6 +158,7 @@
 			        android:layout_alignParentRight="true"
 			        android:textColor="@color/Red"
 			        android:text="Rs.00"
+			        android:layout_marginRight="10dp"
 			        />
 			</RelativeLayout>	     	        
 	        

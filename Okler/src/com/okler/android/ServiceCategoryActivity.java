@@ -2,7 +2,8 @@ package com.okler.android;
 
 import java.util.ArrayList;
 
-import com.okler.diagnostics.DiagnosticsActivityHome;
+import com.okler.databeans.NavDrawerItems;
+import com.okler.diagno.DiagnosticsActivityHome;
 import com.okler.helpnsupport.ContactUsActivity;
 import com.okler.helpnsupport.FaqActivity;
 import com.okler.helpnsupport.LegalActivity;
@@ -12,11 +13,7 @@ import com.okler.utils.UIUtils;
 import com.okler.utils.UserStatusEnum;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
-
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.app.Activity;
@@ -24,12 +21,9 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,12 +32,10 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ServiceCategoryActivity extends BaseActivity {
@@ -96,7 +88,7 @@ public class ServiceCategoryActivity extends BaseActivity {
 		 * 
 		 * float versioncode = info.versionCode;
 		 */
-		versiontext.setText("Version :19.4");
+		versiontext.setText("Version :22");
 
 		/*
 		 * final ActionBar ab=getSupportActionBar();
@@ -137,6 +129,8 @@ public class ServiceCategoryActivity extends BaseActivity {
 		// Contact Us
 		navDrawerItems.add(new com.okler.databeans.NavDrawerItems(
 				navMenuTitles[6], R.drawable.black_telephone_icon));
+		
+		navDrawerItems.add(new com.okler.databeans.NavDrawerItems(navMenuTitles[7],R.drawable.round_and_up));
 
 		// setting the nav drawer list adapter
 		adapter = new com.okler.adapters.NavDrawerListAdapter(
@@ -285,6 +279,12 @@ public class ServiceCategoryActivity extends BaseActivity {
 			Intent strtContact = new Intent(this, ContactUsActivity.class);
 			startActivity(strtContact);
 			break;
+			
+		case 7:
+			Intent strtTerms=new Intent(this,LegalActivity.class);
+			int in = 1;
+			strtTerms.putExtra("t&c", in);
+			startActivity(strtTerms);
 		}
 
 	}
@@ -492,6 +492,7 @@ public class ServiceCategoryActivity extends BaseActivity {
 				intent = new Intent(context, HealthShopGrid.class);
 				int in = 0;
 				intent.putExtra("name", 0);
+				intent.putExtra("currentView", "Grid");
 				uiUtils = new UIUtils();
 				int ab = uiUtils.getBookingType("Healthshop");
 				Okler.getInstance().setBookingType(ab);

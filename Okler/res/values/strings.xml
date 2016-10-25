@@ -23,6 +23,7 @@
     <string name="title_activity_intro_screen"></string>
     <string name="title_activity_medical_services"></string>
     <string name="APP_ID">945660018842332</string>
+    <string name="delivery_address">Delivery Address</string>
 
     <string-array name="nav_drawer_items">
         <item>Home</item>
@@ -33,6 +34,7 @@
         <item>FAQ</item>
         <item>Legal Information</item>
         <item>Contact Us</item>
+        <item>Terms and Conditions</item>
     </string-array>
     <!-- Web services -->
     <string name="serverUrl">http://183.82.110.105:8081/oklerapi/</string>
@@ -269,7 +271,7 @@
 
     <!--
     <string name="getAllMedsAyurUrl">http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=&amp;search=&amp;prod_id=&amp;pro_type=3&amp;order_by=asc&amp;price_range=&amp;brand_id=</string>
-    <string name="getAllMedsHomeoUrl">http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=&amp;search=&amp;prod_id=&amp;pro_type=4&amp;order_by=asc&amp;price_range=&amp;brand_id=</string>
+    <string name="getAllMedsHomeoUrl">http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=&amp;search=&amp;prod_id=&amp;pro_type=4&amp;order_by=asc&amp;price_range=&amp;brand_id=</string>
     -->
     <string name="getMedsForDisMappingId">http://183.82.110.105:8081/oklerapi/diseasemapping/getrecordsbydiseases?mapping_typeid=</string>
     <string name="getMedsForDisDiD">&amp;disease_id=</string>
@@ -281,7 +283,7 @@
     <string name="title_activity_med">MedActivity</string>
     <!--
     <string name="getMedByAlphaPageNo1">http://183.82.110.105:8081/oklerapi/products/products/productsbyprotype?page=</string>
-	<string name="getMedByAlphaStartWith2">&amp;search=&amp;prod_id=&amp;pro_type=0&amp;order_by=&amp;price_range=&amp;brand_id=</string>
+	<string name="getMedByAlphaStartWith2">&amp;search=&amp;prod_id=&amp;pro_type=0&amp;order_by=&amp;price_range=&amp;brand_id=</string>
     -->
     <string name="signinUser1">http://183.82.110.105:8081/oklerapi/users/authenticate</string>
     <string name="get_user_address">http://183.82.110.105:8081/oklerapi/users/GetuserAddress?customer_id=</string>
@@ -348,7 +350,7 @@
     <string name="relatedProductHs1">http://183.82.110.105:8081/oklerapi/products/products/getproductrelated_constituent?pid=</string>
     <string name="relatedProductHs2">&amp;spage=0&amp;apage=&amp;rpage=</string>
     <string name="AddToFavouriteUrlPart1">http://183.82.110.105:8081/oklerapi/products/products/addfav?cust_id=</string>
-    <string name="AddToFavouriteUrlPart2">&amp;prod_id=195</string>
+    <string name="AddToFavouriteUrlPart2">&amp;prod_id=</string>
     <string name="DeleteUserAddPart1">http://183.82.110.105:8081/oklerapi/users/deleteuserAddress?customer_id=</string>
     <string name="DeleteUserAddPart2">&amp;addr_id=</string>
     <string name="DefaultBillShipPart1">http://183.82.110.105:8081/oklerapi/users/defaultBillingShippinguserAddress?cust_id=</string>
@@ -368,7 +370,9 @@
     <string name="pckid">package_id</string>
     <!-- <string name="getLabsTest">http://183.82.110.105:8081/oklerapi/lab/getlabsbyEntites?test_id=</string> -->
     <string name="getLabsTest1">http://183.82.110.105:8081/oklerapi/lab/getlabsbyEntites?test_id=</string>
-    <string name="getLabsTest2">&amp;lab_id=&amp;city_id=</string>
+    <string name="getLabsTest2">&amp;lab_id=</string>
+    <string name="getLabsTest3">&amp;city_id=</string>
+  <string name="getLabsTest3">&amp;city_id=</string>
     <string name="PlaceOrderDiagnoUrl">http://183.82.110.105:8081/oklerapi/lab/addlabbook?cust_id=</string>
     <string name="GetPatientsAllAddr">http://183.82.110.105:8081/oklerapi/users/GetuserPatientAddress?user_id=</string>
     <!-- Gitesh 14 feb -->
@@ -398,7 +402,7 @@
     <string name="medicine_order_url">order/getorders?</string>
     <string name="diagno_order_url">lab/retrivelabbook?</string>
     <string name="upload_pres_email">emailtemplateservice/prescription_upload_callback?</string>
-    <string name="forget_password">users/forgotpassword?email=</string>
+    <string name="forget_password">users/forgotpassword?user=</string>
     <string name="order_cancel">emailtemplateservice/order_cancel_callback?</string>
     <string name="service_cancel">emailtemplateservice/service_booking_cancel_callback?</string>
     <string name="cancel_order">order/delete?</string>
@@ -472,5 +476,26 @@
     <string name="getProdGenericSubsPart1">products/products/getproductgeneric_substitute?pid=</string>
     <string name="getProdGenericSubsPart2">&amp;city_id=</string>
     <string name="getAllCitiesPart1">cities/allcities?page=</string>
-    
+    <string name="view_search_history">View Search History</string>
+    <string name="title_activity_search_history"></string>
+    <string name="getSearchHistoryPart1">users/get_search_history?customer_id=</string>
+    <string name="term_type">&amp;term_type=</string>
+    <string name="addToSearchHistoryPart1">users/add_search_history?customer_id=</string>
+    <string name="term">&amp;term=</string>
+    <string name="clear_search_history">Clear Search History</string>
+    <string name="clearSearchHistoryPart1">users/clear_search_history?customer_id=</string>
+    <string name="title_activity_diagno_lab_available"></string>
+    <string name="title_activity_diagno_lab_pickup"></string>
+    <string name="title_activity_diagnostics_activity_home"></string>
+    <string name="title_activity_diagno_test_order_list"></string>
+    <string name="title_activity_diagno_test_pkg_home"></string>
+<string name="getRecPkgsPart1">lab/GetRecommandedPackagesByTestIdLabId?test_id=</string>
+    <string name="getTestsByLabs">lab/getTestsByLabs?search=</string>
+    <string name="getPkgsByLabs">lab/getPackagesByLabs?search=</string>
+    <string name="isArrowClicked">isClicked</string>
+	<string name="rightArrow">rightArrow</string>
+	<string name="coupon_type">&amp;coupon_type=</string>
+	<string name="getVersionCode1">users/</string>
+    <string name="getVersionCode2">app_version</string>
+    <string name="addPrescLater">prescription/addprescriptionlater</string>
 </resources>

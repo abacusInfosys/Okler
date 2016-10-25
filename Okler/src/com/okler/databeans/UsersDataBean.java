@@ -21,7 +21,13 @@ public class UsersDataBean {
     String phone;
     int available_status;
     String blood_group;
-    int id;
+    int id,approve_status;
+    public int getApprove_status() {
+		return approve_status;
+	}
+	public void setApprove_status(int approve_status) {
+		this.approve_status = approve_status;
+	}
     String password;
     ArrayList<AddressDataBean> addDatabean = new ArrayList<AddressDataBean>();
     ArrayList<AddressDataBean> patAddList = new ArrayList<AddressDataBean>();
@@ -31,13 +37,19 @@ public class UsersDataBean {
     String UserAvatarUrl;
     String salutation;
     ArrayList<ProductDataBean> recentProdList = new ArrayList<ProductDataBean>();
-    String userCity="",userCityId="",userCountry="",userCountryId="";
+    String userCity="",userCityId="",userCountry="",userCountryId="",referal;
     
     
     
     
     
-    public String getUserCity() {
+    public String getReferal() {
+		return referal;
+	}
+	public void setReferal(String referal) {
+		this.referal = referal;
+	}
+	public String getUserCity() {
 		return userCity;
 	}
 	public void setUserCity(String userCity) {

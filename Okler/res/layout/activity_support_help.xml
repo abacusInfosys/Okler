@@ -8,7 +8,8 @@
     <include 
             android:id="@+id/toolbar" 
             layout="@layout/tool_bar"
-            
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
             android:layout_alignParentTop="true"
             />
     <ScrollView 
@@ -21,6 +22,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             >
             <TextView 
                 android:id="@+id/we_would_love"
@@ -122,8 +125,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/choice"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/linear_border_black"
-                android:descendantFocusability="blocksDescendants"  />
+                android:background="@drawable/shape_drop_down"
+                android:descendantFocusability="blocksDescendants"
+                 />
 
               <EditText
                   android:id="@+id/give_details"
@@ -141,11 +145,11 @@
                    android:layout_height="wrap_content"
                    android:layout_below="@+id/give_details"
                    android:layout_marginBottom="20dp"
-                   android:layout_marginLeft="20dp"
+                   android:layout_marginLeft="10dp"
                    android:layout_marginTop="10dp"
                    android:background="@drawable/captcha_img02"
                    android:gravity="center_vertical|center_horizontal"
-                   
+                   android:src="@drawable/captcha_image"
                    android:textSize="30sp"
                    android:textStyle="bold" />
 

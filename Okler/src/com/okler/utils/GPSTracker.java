@@ -62,7 +62,8 @@ public class GPSTracker extends Service implements LocationListener {
 
             if (!isGPSEnabled && !isNetworkEnabled) {
                 // No network provider is enabled
-            	Toast.makeText(mContext, "No GPS Or Network Provider Found", Toast.LENGTH_LONG).show();
+            	if(!(Okler.getInstance().isLocationDenied))
+            	Toast.makeText(mContext, "No GPS Or Network Provider Found", Toast.LENGTH_SHORT).show();
             } else {
                 this.canGetLocation = true;
                 if (isNetworkEnabled) {
@@ -81,7 +82,7 @@ public class GPSTracker extends Service implements LocationListener {
                 }
                 // If GPS enabled, get latitude/longitude using GPS Services
                 if (isGPSEnabled) {
-                    if (location == null) {
+                    if (location != null) {
                         locationManager.requestLocationUpdates(
                                 LocationManager.GPS_PROVIDER,
                                 MIN_TIME_BW_UPDATES,
@@ -175,11 +176,13 @@ public class GPSTracker extends Service implements LocationListener {
         // On pressing the cancel button
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+            	Okler.getInstance().setLocationDenied(true);
             dialog.cancel();
             }
         });
 
         // Showing Alert Message
+        if(!(Okler.getInstance().isLocationDenied))
         alertDialog.show();
     }
 

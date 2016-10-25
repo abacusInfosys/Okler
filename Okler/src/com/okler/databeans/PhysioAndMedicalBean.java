@@ -17,6 +17,13 @@ public class PhysioAndMedicalBean {
 	String order_id;
 	String booking_status,booking_id;
 	String custId;
+	String service_required_for;
+	public String getService_required_for() {
+		return service_required_for;
+	}
+	public void setService_required_for(String service_required_for) {
+		this.service_required_for = service_required_for;
+	}
 	public String getCustId() {
 		return custId;
 	}
@@ -26,6 +33,11 @@ public class PhysioAndMedicalBean {
 
 	public void setBooking_status(String booking_status) {
 		this.booking_status = booking_status;
+	}
+	
+	public String getBooking_status()
+	{
+		return booking_status;
 	}
 
 	public String getBooking_id() {

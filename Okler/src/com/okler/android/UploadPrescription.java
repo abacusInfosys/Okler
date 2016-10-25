@@ -1,8 +1,4 @@
 package com.okler.android;
-
-
-import java.io.ByteArrayOutputStream;
-
 import com.okler.databeans.PrescriptionImagesDataBean;
 import com.okler.databeans.PrescriptionsDataBean;
 import com.okler.utils.CameraGalleryImageInfo;
@@ -18,15 +14,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -61,7 +54,7 @@ public class UploadPrescription extends BaseActivity {
 		ack = this;
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
-		Utilities.writeToLogFIle(" In Upload Prescription Start");
+		//Utilities.writeToLogFIle(" In Upload Prescription Start");
 		toolBar=(Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolBar);
 		final ActionBar ab=getSupportActionBar();
@@ -73,12 +66,12 @@ public class UploadPrescription extends BaseActivity {
 		Utilities.writeToLogFIle(" In Upload Prescription "+String.valueOf(isMedPres));
 		if(isMedPres)
 			{toolBar.setBackgroundResource(R.drawable.custom_view_grad_upload_pesc);
-			Utilities.writeToLogFIle(" In Upload Prescription ");
+		//	Utilities.writeToLogFIle(" In Upload Prescription ");
 			
 			}else{
 				toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
 				spinnerPrescriptionType.setSelection(1);
-				Utilities.writeToLogFIle(" In Diagno Upload Prescription");
+			//	Utilities.writeToLogFIle(" In Diagno Upload Prescription");
 			}
 			/*imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
 	       imgBack.setOnClickListener(new OnClickListener() {
@@ -95,7 +88,7 @@ public class UploadPrescription extends BaseActivity {
 		UIUtils.setBackClick(toolBar, ack);
 	      Utilities.setTitleText(toolBar, "Upload Prescriptions [1/3]");
 
-	      Utilities.writeToLogFIle(" In Upload Prescription 2");
+	   //   Utilities.writeToLogFIle(" In Upload Prescription 2");
 		
 		RelativeLayout rl = (RelativeLayout)bottomBarLayout.findViewById(R.id.uploadPresRL);
 		btnUpload =(ImageButton) rl.findViewById(R.id.btnUploadPres);
@@ -107,7 +100,7 @@ public class UploadPrescription extends BaseActivity {
 		presImgs = new PrescriptionImagesDataBean();
 		prsDtBean = new PrescriptionsDataBean();
 		Okler.getInstance().setPrescriptionsDataBeans(prsDtBean);
-		Utilities.writeToLogFIle(" In Upload Prescription 3");
+		//Utilities.writeToLogFIle(" In Upload Prescription 3");
 		/*if(isMedPres)
 		 spinnerPrescriptionType.setSelection(2);
 		else
@@ -176,9 +169,9 @@ public class UploadPrescription extends BaseActivity {
 		{
 		if(resultCode == RESULT_OK)
 		{			
-			Utilities.writeToLogFIle(" UpPresc: resultcode=resultOk "+resultCode);
+		//	Utilities.writeToLogFIle(" UpPresc: resultcode=resultOk "+resultCode);
 			CameraGalleryImageInfo imgInfo = Utilities.getImageInfo(requestCode, resultCode, this, data);
-			Utilities.writeToLogFIle("UpPresc: imgInfo"+imgInfo);
+			//Utilities.writeToLogFIle("UpPresc: imgInfo"+imgInfo);
 			Intent newIntent = new Intent(this,PrescriptionPreview.class);
 			Utilities.writeToLogFIle("UpPresc: newIntent");
 			newIntent.putExtra("imageFilePath", imgInfo.getFilePath());
@@ -186,27 +179,30 @@ public class UploadPrescription extends BaseActivity {
 			newIntent.putExtra("imgFileName",imgInfo.getFileName());
 			Utilities.writeToLogFIle("UpPresc: imgInfo.getFileName() "+imgInfo.getFileName());
 			newIntent.putExtra("isMedPres",isMedPres);
-			Utilities.writeToLogFIle("UpPresc: ismedpresc = "+String.valueOf(isMedPres));
-			Utilities.writeToLogFIle("upPresc: "+imgInfo.getFilePath()+"  name "+imgInfo.getFileName());
+			//Utilities.writeToLogFIle("UpPresc: ismedpresc = "+String.valueOf(isMedPres));
+			//Utilities.writeToLogFIle("upPresc: "+imgInfo.getFilePath()+"  name "+imgInfo.getFileName());
 			Bitmap iBitmap = imgInfo.getImgBitmap();
-			Utilities.writeToLogFIle("UpPresc: ibitmap "+iBitmap);
-			Utilities.writeToLogFIle(" In Upload Prescription 5");
-				
+			//Utilities.writeToLogFIle("UpPresc: ibitmap "+iBitmap);
+		//	Utilities.writeToLogFIle(" In Upload Prescription 5");
+			if(iBitmap!=null){	
 		    String	base64string = Utilities.convertImageToBase64(iBitmap); //Base64.encodeToString(byte_arr,Base64.DEFAULT);
-		    Utilities.writeToLogFIle("UpPresc: base64 "+base64string);
+		 //   Utilities.writeToLogFIle("UpPresc: base64 "+base64string);
 		    presImgs.setPrescImages(iBitmap);
-		    Utilities.writeToLogFIle("UpPresc: presImgs.setPrescImages(iBitmap);");
+		//    Utilities.writeToLogFIle("UpPresc: presImgs.setPrescImages(iBitmap);");
 		    presImgs.setBase64ConvrtedImg(base64string);
-		    Utilities.writeToLogFIle("UpPresc: presImgs.setBase64ConvrtedImg(base64string);");
+		  //  Utilities.writeToLogFIle("UpPresc: presImgs.setBase64ConvrtedImg(base64string);");
 		    String imgPa = imgInfo.getUri();
 		    Utilities.writeToLogFIle("UpPresc:  ImgUri "+imgPa);
 		    presImgs.setImgUri(imgPa);
-		    Utilities.writeToLogFIle("UpPresc: presImgs.setImgUri(imgPa);");
+		   // Utilities.writeToLogFIle("UpPresc: presImgs.setImgUri(imgPa);");
 			Okler.getInstance().getPrescriptionsDataBeans().getPresImages().add(presImgs);
 			
-			Utilities.writeToLogFIle("UpPresc: Okler.getInstance().getPrescriptionsDataBeans().getPresImages().add(presImgs);");
+			//Utilities.writeToLogFIle("UpPresc: Okler.getInstance().getPrescriptionsDataBeans().getPresImages().add(presImgs);");
 			//newIntent.putExtra("flag",flag);//******* 24112015
 			startActivity(newIntent);
+			}else{
+				Toast.makeText(ack, "Unable to locate image file.", Toast.LENGTH_SHORT).show();
+			}
 		}
 		
 		else if(resultCode == RESULT_CANCELED)

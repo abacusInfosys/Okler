@@ -5,10 +5,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.okler.android.BaseActivity;
 import com.okleruser.R;
-import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,18 +18,16 @@ public class ContactUsActivity extends BaseActivity {
 	View bottomBarLayout;
 	Toolbar toolBar;
 	ImageView imgBack;
-	Activity ack;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contact_us);
-		ack = this;
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolBar);
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
-		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -39,8 +35,7 @@ public class ContactUsActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});*/
-		UIUtils.setBackClick(toolBar, ack);
+		});
 		toolBar.setBackgroundColor(getResources().getColor(R.color.Blue));
 		Utilities.setTitleText(toolBar, "Contact Us");
 	}

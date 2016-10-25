@@ -57,6 +57,7 @@ View view;
 	Spinner spinnerRelation, spinnerService;
 	private static int webCall;
 	private static Activity act;
+	String rel_name;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -70,6 +71,8 @@ View view;
 		edtTxt_pincode = (EditText) view.findViewById(R.id.edtTxt_pincode);
 		edtTxt_weight = (EditText) view.findViewById(R.id.edtTxt_weight);
 		relation.add("Relation");
+		spinnerRelation.setSelection(1);
+		
 		service.add("Service Required For");
 		act = getActivity();
 		
@@ -95,6 +98,11 @@ View view;
 								JSONObject docObj =(JSONObject) doctorsArr.get(i);
 								relation.add(docObj.getString("relation"));
 								relationId.add(docObj.optString("relation_id"));
+								if(docObj.getString("relation").equals("myself"))
+								{
+									rel_name=docObj.optString("relation");
+									rel_id=docObj.optString("relation_id");
+								}
 								Log.i("tag", "json object" + docObj);
 								}catch (JSONException e) {
 									// TODO: handle exception
@@ -140,10 +148,20 @@ View view;
 				if(id1 != 0)
 				{
 					rel_id = relationId.get(id1-1); 
-					String rel_d = rel_id;
-					MedicalServices.getRid(rel_id);
-					Physiotherapy.getRelid(rel_id);
+					rel_name = spinnerRelation.getSelectedItem().toString();
+				/*	String rel_d = rel_id;
+					String relation_myself=rel_name;*/
+										
 				}
+				Physiotherapy.getRelid(rel_id,rel_name);
+				MedicalServices.getRid(rel_id,rel_name);
+				/*else
+				{
+					
+				//	rel_id=rel_myself;
+					Physiotherapy.getRelid(rel_id,rel_myself);
+				}*/
+				
 
 			}
 

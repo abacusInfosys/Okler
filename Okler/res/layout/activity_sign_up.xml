@@ -167,6 +167,18 @@
         android:hint="password"
         android:inputType="textPassword"
         android:drawablePadding="2dp"
+        android:imeOptions="actionNext"
+         />
+    
+    <EditText
+        android:id="@+id/et_referal_code"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:ems="10"
+        android:drawableLeft="@drawable/referral_icon"
+        android:hint="Referal Code"
+        android:inputType="text"
+        android:drawablePadding="2dp"
         android:imeOptions="actionDone"
          />
 

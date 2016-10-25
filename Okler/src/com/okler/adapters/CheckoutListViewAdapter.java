@@ -1,16 +1,13 @@
 package com.okler.adapters;
 
 import java.util.ArrayList;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.Request.Method;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.google.android.gms.appdatasearch.GetRecentContextCall;
 import com.okler.android.ProductCheckoutListView;
 import com.okleruser.R;
 import com.okler.databeans.CartDataBean;
@@ -20,7 +17,6 @@ import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
 import com.okler.utils.Utilities;
-
 import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
@@ -55,13 +51,11 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 
 	public CheckoutListViewAdapter(Context con,
 			ArrayList<ProductDataBean> ordList, boolean isCheckout2, int check1) {
-		// result=prgmNameList;
 		context = con;
 		ack = (Activity) con;
 		pdList = ordList;
 		isCheckout = isCheckout2;
 		check = check1;
-		// imageId=prgmImages;
 		inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
@@ -80,24 +74,22 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
 	public class Holder {
 		TextView item_name, item_desc, mrp, you_save;
-		Button okler_price, image_cart;
+		Button okler_price;
+		//image_cart;
 		EditText units;
 		ImageView deleteImage, image_favourite, red_plus_Image,
-				red_minus_Image, image_favourite_filled;
+				red_minus_Image;
 		NetworkImageView item_img;
 		RelativeLayout red_plus_ImageRl, red_minus_ImageRl;
-
 	}
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
 		if (check == 1) {
 			odbean = Okler.getInstance().getSingleCart();
 		} else {
@@ -117,15 +109,12 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 		holder.okler_price = (Button) rowView.findViewById(R.id.okler_Amount);
 		holder.units = (EditText) rowView.findViewById(R.id.unitValue);
 		holder.deleteImage = (ImageView) rowView.findViewById(R.id.deleteImage);
+		holder.deleteImage.setVisibility(View.GONE);
 		holder.image_favourite = (ImageView) rowView
 				.findViewById(R.id.image_favourite);
 		holder.image_favourite.setVisibility(View.GONE);
-		holder.image_favourite_filled = (ImageView) rowView
-				.findViewById(R.id.image_favourite_filled);
-		holder.image_favourite_filled.setVisibility(View.GONE);
-
-		holder.image_cart = (Button) rowView.findViewById(R.id.image_cart);
-		holder.image_cart.setVisibility(View.GONE);
+		/*holder.image_cart = (Button) rowView.findViewById(R.id.image_cart);
+		holder.image_cart.setVisibility(View.GONE);*/
 		holder.red_plus_Image = (ImageView) rowView
 				.findViewById(R.id.red_plus_Image);
 		holder.red_minus_Image = (ImageView) rowView
@@ -134,18 +123,13 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 				.findViewById(R.id.red_minus_ImageRl);
 		holder.red_minus_ImageRl = (RelativeLayout) rowView
 				.findViewById(R.id.red_minus_ImageRl);
-
-		/* for (int j = 0; j < pdList.size() ; j++) { */
 		holder.item_name.setText(pdList.get(position).getProdName());
-		//String gen_name = pdList.get(position).getGeneric_name();
 		String company = pdList.get(position).getCompany();
 		String str = "" + pdList.get(position).getMrp();
 		SpannableString strikethroughMRP = new SpannableString(str);
 		strikethroughMRP.setSpan(new StrikethroughSpan(), 0,
 				strikethroughMRP.length(), 0);
-		// String First=
-		// "http://183.82.110.105:8081/oklerdevv2/uploads/images/medium/";
-		String First;// = pdList.get(position).getThumbUrl();
+		String First;
 		if (Okler.getInstance().getBookingType() == 0) {
 			First = pdList.get(position).getClipArtUrl();
 		} else {
@@ -166,11 +150,8 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 				desc="";
 			holder.item_desc.setText(desc);
 		}
-
 		holder.mrp.setText(strikethroughMRP);
-
 		holder.you_save.setText(pdList.get(position).getDiscount() + "%");
-
 		holder.okler_price.setText(holder.okler_price.getText().toString()
 				+ pdList.get(position).getOklerPrice());
 		int unitvl = pdList.get(position).getUnits();
@@ -184,45 +165,32 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
 				String s2 = s.toString();
 				if (s2.equals("") || s2 == "") {
-					// Toast.makeText(ack, "Please Select atleast one unit",
-					// Toast.LENGTH_LONG).show();
 					pdList.get(position).setUnits(0);
 					isUnit = false;
 				} else if (s2.length() > 2) {
 					holder.units.setText("");
 					holder.units.requestFocus();
 					holder.units.setError("Maximum limit is 99");
-					// Toast.makeText(ack, "Maximum limit is 99",
-					// Toast.LENGTH_SHORT).show();
 				} else {
 					int s3 = Integer.parseInt(s2.toString());
 					if (s3 <= 0) {
-						// Toast.makeText(ack, "Please Select atleast one unit",
-						// Toast.LENGTH_LONG).show();
 						pdList.get(position).setUnits(0);
 						isUnit = false;
 					} else {
-
 						isUnit = true;
 					}
 				}
-				// enableNext(isUnit);
-
 			}
 		});
 		holder.red_plus_Image.setOnClickListener(new OnClickListener() {
@@ -251,13 +219,11 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 						} else {
 							holder.units.setText("0" + unit);
 						}
-						// holder.units.setText(""+unit);
 						pdList.get(position).setUnits(unit);
 						odbean.setProdList(pdList);
 						Okler.getInstance().setSingleCart(odbean);
+						Utilities.writeCartToSharedPref(ack, odbean);
 						ProductCheckoutListView.totalOrderValue();
-						// Toast.makeText(context, "You Clicked "+unit,
-						// Toast.LENGTH_LONG).show();
 					}
 				}
 			}
@@ -288,10 +254,10 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 						} else {
 							holder.units.setText("0" + unit);
 						}
-						// holder.units.setText(""+unit);
 						pdList.get(position).setUnits(unit);
 						odbean.setProdList(pdList);
 						Okler.getInstance().setSingleCart(odbean);
+						Utilities.writeCartToSharedPref(ack, odbean);
 						ProductCheckoutListView.totalOrderValue();
 					}
 				}
@@ -317,7 +283,6 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 						holder.units.setError(null);
 						unit = unit - 1;
 					} else {
-
 					}
 					if (unit > 9) {
 						holder.units.setText("" + unit);
@@ -327,9 +292,8 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 					pdList.get(position).setUnits(unit);
 					odbean.setProdList(pdList);
 					Okler.getInstance().setSingleCart(odbean);
+					Utilities.writeCartToSharedPref(ack, odbean);
 					ProductCheckoutListView.totalOrderValue();
-					// Toast.makeText(context, "You Clicked "+unit,
-					// Toast.LENGTH_LONG).show();
 				}
 			}
 		});
@@ -362,6 +326,7 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 					pdList.get(position).setUnits(unit);
 					odbean.setProdList(pdList);
 					Okler.getInstance().setSingleCart(odbean);
+					Utilities.writeCartToSharedPref(ack, odbean);
 					ProductCheckoutListView.totalOrderValue();
 				}
 			}
@@ -370,21 +335,16 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-
 				if (check == 1) {
 					pdList.remove(position);
 					odbean.setProdList(pdList);
 					Okler.getInstance().setSingleCart(odbean);
+					Utilities.writeCartToSharedPref(ack, odbean);
 					ProductCheckoutListView.setUi();
 				} else {
 					int pid = pdList.get(position).getProdId();
 					deleteFromCart(pid, position);
-					// pdList.remove(position);
-					// odbean.setProdList(pdList);
-					// Okler.getInstance().setMainCart(odbean);
 				}
-
-				// }
 			}
 		});
 
@@ -408,19 +368,14 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 
 					@Override
 					public void onResponse(JSONObject response) {
-						// Toast.makeText(getApplicationContext(), "onResponse",
-						// Toast.LENGTH_SHORT).show();
 						JSONObject jobj = (JSONObject) response;
 						try {
-							// showProgress(false);
 							String msg = jobj.getString("message");
 							if (msg.equals("item in your cart are deleted successfully.")) {
 								pdList.remove(position);
-								int i1 = pdList.size();
 								odbean.setProdList(pdList);
 								Okler.getInstance().setMainCart(odbean);
 								ProductCheckoutListView.setUi();
-
 							} else {
 								Toast.makeText(
 										ack,
@@ -429,23 +384,15 @@ public class CheckoutListViewAdapter extends BaseAdapter {
 										Toast.LENGTH_SHORT).show();
 							}
 						} catch (JSONException e) {
-							// Toast.makeText(getApplicationContext(),
-							// String.valueOf(e), Toast.LENGTH_SHORT).show();
 							e.printStackTrace();
 						}
-
 					}
 				}, new Response.ErrorListener() {
 
 					@Override
 					public void onErrorResponse(VolleyError error) {
-						// Toast.makeText(ack, String.valueOf(error),
-						// Toast.LENGTH_SHORT).show();
-
 					}
 				});
 		VolleyRequest.addJsonObjectRequest(ack, deljson);
-
 	}
-
 }

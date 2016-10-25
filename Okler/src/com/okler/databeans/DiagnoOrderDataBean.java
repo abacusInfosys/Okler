@@ -1,6 +1,5 @@
 package com.okler.databeans;
 
-import java.util.ArrayList;
 
 public class DiagnoOrderDataBean {
 	DiagnoLabsDataBean selectedLab = new DiagnoLabsDataBean();

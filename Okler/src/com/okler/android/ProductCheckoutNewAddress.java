@@ -3,16 +3,13 @@ package com.okler.android;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.okler.databeans.AddressDataBean;
 import com.okler.databeans.CartDataBean;
 import com.okler.databeans.UsersDataBean;
@@ -23,24 +20,17 @@ import com.okler.utils.TextValidations;
 import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
-
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -55,16 +45,15 @@ import android.widget.Toast;
 
 public class ProductCheckoutNewAddress extends BaseActivity {
 	private Toolbar toolBar;
-	private Context context;
-	private ImageLoader mImageLoader;
 	View bottomBarLayout;
-	private Button notifCount, save;
+	private Button save;
 	ImageView imgBack;
 	EditText nameTV, surnameTV, addr1TV, addr2TV, pincodeTV,
 			et_prefferedDelTime;
 	AutoCompleteTextView edtTxt_state, cityTV;
 	ArrayList<String> cities = new ArrayList<String>();
 	ArrayList<String> city_ids = new ArrayList<String>();
+	ArrayList<String> state_ids = new ArrayList<String>();
 
 	ArrayAdapter<String> adapter, adapter2;
 	CartDataBean cdbean;
@@ -96,19 +85,15 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 
 		Okler.getInstance().getStates().clear();
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
-		context = getApplicationContext();
-		mImageLoader = VolleyRequest.getInstance(context).getImageLoader();
 		setSupportActionBar(toolBar);
-		final ActionBar ab = getSupportActionBar();
-
 		if (check == 1) {
 			toolBar.setBackgroundResource(UIUtils.getToolBarDrawable(Okler
 					.getInstance().getBookingType()));
-			cdbean = Okler.getInstance().getSingleCart();
 		} else {
 			toolBar.setBackgroundColor(getResources().getColor(R.color.Blue));
-			cdbean = Okler.getInstance().getMainCart();
 		}
+		cdbean = Utilities.getCartDataBean(ack);
+		
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 		nameTV = (EditText) findViewById(R.id.et_firstName);
@@ -123,18 +108,6 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 		headingLL.setVisibility(View.GONE);
 		defaultBill = (CheckBox) findViewById(R.id.defaultShip);
 		defaultShip = (CheckBox) findViewById(R.id.defaultShip);
-
-		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
-		imgBack.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				finish();
-				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(imgBack.getWindowToken(), 0);
-			}
-		});*/
 		UIUtils.setBackClick(toolBar, ack);
 		Utilities.setTitleText(toolBar, "New Address");
 		save = (Button) findViewById(R.id.saveButton);
@@ -165,12 +138,12 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 				adId = addbean.optString("addr_id");
 				city_id = addbean.optString("city_id");
 				String ss = addbean.optString("state_id");
-				if (ss.equals("")) {
+				if (ss==null||ss.equals("null")||ss.equals("")) {
 					state_id = 0;
 				} else {
 					state_id = Integer.parseInt(addbean.optString("state_id"));
 				}
-			} catch (JSONException e1) {
+			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -196,8 +169,15 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
+				
+				int id1 = 0;
+				String state = edtTxt_state.getText().toString();
+				id1 = states.indexOf(state);
+				Log.i("id_tag", "id is:" + id);
+				state_id = Integer.parseInt(state_ids.get(id1).toString());
 
-				getCity(edtTxt_state);
+
+				getCity(state_id);
 			}
 		});
 
@@ -218,9 +198,9 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 		ubean = Utilities.getCurrentUserFromSharedPref(ack);
 		aList = new ArrayList<AddressDataBean>();
 		aList = ubean.getAddDatabean();
-		// int user_id = ubean.getId();
+		aList.trimToSize();
 		user_id = ubean.getId();
-		String name = "", name1 = "", email1 = "", pref_del_time = "", pref_del_time1 = "", surname = "", surname1 = "", dob = "", add1 = "", add2 = "", email = "", address1 = "", address2 = "", landmark1 = "", country_id = "", relation = "", zone_id = "", gender = "", landmark = "", pincode = "", mobile = "", city = "", state = "";
+		String name = "", name1 = "", pref_del_time = "", pref_del_time1 = "", surname = "", surname1 = "", add1 = "", add2 = "", email = "", address1 = "", address2 = "", landmark1 = "", country_id = "", zone_id = "", landmark = "", pincode = "", mobile = "", city = "", state = "";
 		flag = false;
 		TextValidations tval;
 		UIUtils uiUtils;
@@ -292,9 +272,7 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 				name1 = URLEncoder.encode(name, "UTF-8");
 				surname1 = URLEncoder.encode(surname, "UTF-8");
 				pref_del_time1 = URLEncoder.encode(pref_del_time, "UTF-8");
-				// email1 = URLEncoder.encode(email,"UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -400,6 +378,7 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 												+ add_id + u3;
 									} else {
 										aList.add(adbean);
+										aList.trimToSize();
 										ubean.setAddDatabean(aList);
 										Utilities.writeCurrentUserToSharedPref(
 												ack, ubean);
@@ -411,7 +390,6 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 
 									}
 									adbean.setAddr_id(String.valueOf(add_id));
-									// adbean.setDefault_shiping(default_shiping);
 									if (!(setDefaultAddUrl.equals(""))) {
 										if (defaultShip.isChecked()
 												|| defaultShip.isChecked()) {
@@ -424,9 +402,6 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 														@Override
 														public void onResponse(
 																JSONObject response) {
-															/* if(flag){ */
-															// Utilities.writeCurrentUserToSharedPref(ack,
-															// ubean);
 															if (defaultBill
 																	.isChecked()) {
 																adbean.setDefault_billing(add_id);
@@ -434,6 +409,7 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 																adbean.setDefault_shipping(add_id);
 															}
 															aList.add(adbean);
+															aList.trimToSize();
 															ubean.setAddDatabean(aList);
 															Utilities
 																	.writeCurrentUserToSharedPref(
@@ -454,9 +430,6 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 														@Override
 														public void onErrorResponse(
 																VolleyError error) {
-															// TODO
-															// Auto-generated
-															// method stub
 															Log.e("ERROR",
 																	String.valueOf(error));
 														}
@@ -470,6 +443,7 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 										adbean.setDefault_shipping(Integer
 												.parseInt(adId));
 										aList.add(adbean);
+										aList.trimToSize();
 										ubean.setAddDatabean(aList);
 										Utilities.writeCurrentUserToSharedPref(
 												ack, ubean);
@@ -511,9 +485,6 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -521,16 +492,10 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void getCity(EditText edt) {
+	public void getCity(int state_id) {
 
-		int id = 0;
 		cities.clear();
 		city_ids.clear();
-		String state = edt.getText().toString();
-		states = Okler.getInstance().getStates();
-		id = states.indexOf(state);
-		Log.i("id_tag", "id is:" + id);
-		state_id = 1268 + id;
 		cityUrl = getResources().getString(R.string.cityUrl) + "state_id="
 				+ state_id;
 		webjson = new WebJsonObjectRequest(Method.GET, cityUrl,
@@ -553,15 +518,14 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 									Log.e("JSON Exception", e.getMessage());
 								}
 							}
+							cities.trimToSize();
+							city_ids.trimToSize();
 							Okler.getInstance().setCities(cities);
 							Okler.getInstance().setCiti_ids(city_ids);
 							adapter2 = new ArrayAdapter<String>(
 									ack,
 									android.R.layout.simple_dropdown_item_1line,
 									cities)
-							// adapter = new ArrayAdapter<String>(this,
-							// android.R.layout.simple_dropdown_item_1line,
-							// cities)
 							{
 								@Override
 								public View getView(int position,
@@ -598,7 +562,6 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 	}
 
 	public void getStates() {
-		// web call for states
 		String ste = getResources().getString(R.string.stateUrl);
 		webjson = new WebJsonObjectRequest(Method.GET, ste, new JSONObject(),
 				new Listener<JSONObject>() {
@@ -609,22 +572,24 @@ public class ProductCheckoutNewAddress extends BaseActivity {
 							JSONObject responseObj = (JSONObject) response;
 							JSONArray doctorsArr = responseObj
 									.getJSONArray("result");
-							// docCount=responseObj.getInt("TotalCount");
 							for (int i = 0; i < doctorsArr.length(); i++) {
 								try {
 									JSONObject docObj = (JSONObject) doctorsArr
 											.get(i);
 									states.add(docObj.getString("state_name"));
+									state_ids.add(docObj.getString("id"));
 									Log.i("tag", "json object" + docObj);
 								} catch (JSONException e) {
 									// TODO: handle exception
 									Log.e("JSON Exception", e.getMessage());
 								}
 							}
+							states.trimToSize();
+							state_ids.trimToSize();
 							Okler.getInstance().setStates(states);
 							if (content == 2) {
 								city = cityTV.getText().toString();
-								getCity(edtTxt_state);
+								getCity(state_id);
 							}
 						} catch (JSONException jsonEx) {
 							Log.e("Exception json", jsonEx.getStackTrace()

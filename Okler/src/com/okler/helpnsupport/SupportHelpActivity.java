@@ -25,10 +25,9 @@ import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
-import com.okler.utils.UIUtils;
+import com.okler.utils.TextValidations;
 import com.okler.utils.Utilities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.SyncStateContract.Helpers;
@@ -59,12 +58,13 @@ public class SupportHelpActivity extends BaseActivity {
 	RelativeLayout mobile_rl, email_rl;
 	EditText give_details, capcha_text;
 	int like = 1;
+	String reason;
 
 	ArrayList<String> reason_list = new ArrayList<String>();
 	ArrayList<Integer> reason_id = new ArrayList<Integer>();
 
 	TextView capcha_img;
-	Activity ack;
+
 	int reason_id1 = 0;
 	int cust_id;
 
@@ -73,7 +73,7 @@ public class SupportHelpActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_support_help);
 		reason_list.add("Select Reason");
-		ack = this;
+
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolBar);
 		bottomBarLayout = findViewById(R.id.bottombar);
@@ -130,7 +130,7 @@ public class SupportHelpActivity extends BaseActivity {
 		});
 
 		handleMapping(bottomBarLayout);
-		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -138,8 +138,7 @@ public class SupportHelpActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});*/
-		UIUtils.setBackClick(toolBar, ack);
+		});
 		toolBar.setBackgroundColor(getResources().getColor(R.color.Blue));
 		Utilities.setTitleText(toolBar, "Support/Help");
 
@@ -194,6 +193,11 @@ public class SupportHelpActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				
+				if(validateData())
+				{
+					
+				}
 
 				String original_capcha = capcha_img.getText().toString();
 				String user_enter = capcha_text.getText().toString();
@@ -424,5 +428,29 @@ public class SupportHelpActivity extends BaseActivity {
 			 */
 		}
 		capcha_img.setText(new String(result));
+	}
+	
+	private boolean validateData()
+	{
+
+
+		// Verify Spinner
+		if (reason_spinner.getSelectedItemId() == 0) {
+			TextView errorText = (TextView) reason_spinner.getSelectedView();
+			errorText.setError("Please select reason");
+			Toast.makeText(getApplicationContext(), "Please select reason",
+					Toast.LENGTH_LONG).show();
+			return false;
+		}
+		reason = reason_spinner.getSelectedItem().toString();
+		// Verify Patient Name
+		
+		if(give_details.getText().toString().trim().length() == 0)
+		{
+			give_details.setError("Please give details");
+			return false;
+		}
+		return true;
+	
 	}
 }

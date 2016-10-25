@@ -1,16 +1,12 @@
 package com.okler.utils;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
-
 import com.okler.databeans.BrandsDataBean;
 import com.okler.databeans.CategoriesDataBean;
 import com.okler.databeans.DiagnoLabsDataBean;
 import com.okler.databeans.DiagnoOrderDataBean;
 import com.okler.databeans.DiseaseDataBean;
 import com.okler.databeans.CartDataBean;
-
-import com.okler.databeans.FavouritesDataBean;
 import com.okler.databeans.OrdersDataBean;
 import com.okler.databeans.PhysioAndMedicalBean;
 import com.okler.databeans.PrescriptionsDataBean;
@@ -18,38 +14,62 @@ import com.okler.databeans.ProductDataBean;
 import com.okler.databeans.SubCategoriesDataBean;
 import com.okler.databeans.TestDataBean;
 import com.okler.databeans.UsersDataBean;
-
+import com.okler.databeans.diagnobean.DiagnoOrder;
 import android.app.Application;
-import android.graphics.Bitmap;
 
 public class Okler extends Application {
 	private static Okler mContext;
 	private PhysioAndMedicalBean physioMedBean;
 
-	public ArrayList<DiagnoOrderDataBean> getUserDiagnoOrders() {
-		return userDiagnoOrders;
-	}
 
-	public void setUserDiagnoOrders(
-			ArrayList<DiagnoOrderDataBean> userDiagnoOrders) {
-		this.userDiagnoOrders = userDiagnoOrders;
-	}
 
 	int bookingType;
 	ProductDataBean pdbean;
-	ArrayList<ProductDataBean> prodList, subProdList;
+	//ArrayList<ProductDataBean> prodList, subProdList;
 	CartDataBean singleCart, mainCart, localCart;
 	ArrayList<OrdersDataBean> usersOrders;
-	FavouritesDataBean favDataBean;
 	int postion;
 	ArrayList<String> cities, relationList, relationIdList;
 	ArrayList<String> states;
 	ArrayList<String> citi_ids;
 	DiagnoOrderDataBean diagnoOrderDataBean;
 	ArrayList<DiagnoLabsDataBean> diagLabAddressList, diagLabAddrListNear;
-	ArrayList<ProductDataBean> favourites;
-	ArrayList<DiagnoOrderDataBean> userDiagnoOrders;
+	ArrayList<DiagnoOrder> userDiagnoOrders;
+	PrescriptionsDataBean prescriptionsDataBeans;
+	ArrayList<CategoriesDataBean> categoriesBean;
+	ArrayList<SubCategoriesDataBean> subCategories;
+	ArrayList<BrandsDataBean> alloBrands;
+	ArrayList<BrandsDataBean> homeoBrands;
+	ArrayList<BrandsDataBean> hsBrands;
+	ArrayList<String> priceRanges;
+	boolean isLocationDenied=false;
+	private ArrayList<TestDataBean> listSelectedDiagnoTest = null;
+	private ArrayList<DiseaseDataBean> listSelectedDisease = null;
+	/* History variables */
+	ArrayList<PrescriptionsDataBean> prescHistory;
 
+	public boolean isLocationDenied() {
+		return isLocationDenied;
+	}
+
+	public void setLocationDenied(boolean isLocationDenied) {
+		this.isLocationDenied = isLocationDenied;
+	}
+
+	UsersDataBean uDataBean;
+
+	DiagnoOrder diagnoOrder;
+	
+	public ArrayList<DiagnoOrder> getUserDiagnoOrders() {
+		return userDiagnoOrders;
+	}
+
+	public void setUserDiagnoOrders(
+			ArrayList<DiagnoOrder> userDiagnoOrders) {
+		this.userDiagnoOrders = userDiagnoOrders;
+	}
+	
+	
 	public ArrayList<String> getRelationList() {
 		return relationList;
 	}
@@ -155,27 +175,6 @@ public class Okler extends Application {
 		this.mainCart = mainCart;
 	}
 
-	public ArrayList<ProductDataBean> getFavourites() {
-		return favourites;
-	}
-
-	public void setFavourites(ArrayList<ProductDataBean> favourites) {
-		this.favourites = favourites;
-	}
-
-	PrescriptionsDataBean prescriptionsDataBeans;
-	ArrayList<CategoriesDataBean> categoriesBean;
-	ArrayList<SubCategoriesDataBean> subCategories;
-	ArrayList<BrandsDataBean> alloBrands;
-	ArrayList<BrandsDataBean> homeoBrands;
-	ArrayList<BrandsDataBean> hsBrands;
-	ArrayList<String> priceRanges;
-	private ArrayList<TestDataBean> listSelectedDiagnoTest = null;
-	private ArrayList<DiseaseDataBean> listSelectedDisease = null;
-	/* History variables */
-
-	ArrayList<PrescriptionsDataBean> prescHistory;
-
 	public PrescriptionsDataBean getPrescriptionsDataBeans() {
 		return prescriptionsDataBeans;
 	}
@@ -185,29 +184,29 @@ public class Okler extends Application {
 		this.prescriptionsDataBeans = prescriptionsDataBeans;
 	}
 
-	UsersDataBean uDataBean;
+	
 
-	public ArrayList<ProductDataBean> getSubProdList() {
+	/*public ArrayList<ProductDataBean> getSubProdList() {
 		return subProdList;
 	}
 
 	public void setSubProdList(ArrayList<ProductDataBean> subProdList) {
 		this.subProdList = subProdList;
-	}
+	}*/
 
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
+		
 		super.onCreate();
 		mContext = this;
 		setPhysioMedBean(new PhysioAndMedicalBean());
 		prescriptionsDataBeans = new PrescriptionsDataBean();
 		physioMedBean = new PhysioAndMedicalBean();
 		pdbean = new ProductDataBean();
-		prodList = new ArrayList<ProductDataBean>();
+		//prodList = new ArrayList<ProductDataBean>();
 		singleCart = new CartDataBean();
 		mainCart = new CartDataBean();
-		subProdList = new ArrayList<ProductDataBean>();
+		//subProdList = new ArrayList<ProductDataBean>();
 		uDataBean = new UsersDataBean();
 		categoriesBean = new ArrayList<CategoriesDataBean>();
 		subCategories = new ArrayList<SubCategoriesDataBean>();
@@ -217,8 +216,6 @@ public class Okler extends Application {
 		priceRanges = new ArrayList<String>();
 		prescHistory = new ArrayList<PrescriptionsDataBean>();
 		usersOrders = new ArrayList<OrdersDataBean>();
-		favourites = new ArrayList<ProductDataBean>();
-		favDataBean = new FavouritesDataBean();
 		cities = new ArrayList<String>();
 		states = new ArrayList<String>();
 		citi_ids = new ArrayList<String>();
@@ -226,18 +223,19 @@ public class Okler extends Application {
 		diagLabAddressList = new ArrayList<DiagnoLabsDataBean>();
 		diagLabAddrListNear = new ArrayList<DiagnoLabsDataBean>();
 		diagnoOrderDataBean = new DiagnoOrderDataBean();
-		favourites = new ArrayList<ProductDataBean>();
 		localCart = new CartDataBean();
 		relationList = new ArrayList<String>();
 		relationIdList = new ArrayList<String>();
+		diagnoOrder = new DiagnoOrder();
+		
 	}
 
-	public FavouritesDataBean getFavDataBean() {
-		return favDataBean;
+	public DiagnoOrder getDiagnoOrder() {
+		return diagnoOrder;
 	}
 
-	public void setFavDataBean(FavouritesDataBean favDataBean) {
-		this.favDataBean = favDataBean;
+	public void setDiagnoOrder(DiagnoOrder diagnoOrder) {
+		this.diagnoOrder = diagnoOrder;
 	}
 
 	public ArrayList<PrescriptionsDataBean> getPrescHistory() {
@@ -296,13 +294,13 @@ public class Okler extends Application {
 		this.priceRanges = priceRanges;
 	}
 
-	public ArrayList<ProductDataBean> getProdList() {
+	/*public ArrayList<ProductDataBean> getProdList() {
 		return prodList;
 	}
 
 	public void setProdList(ArrayList<ProductDataBean> prodList) {
 		this.prodList = prodList;
-	}
+	}*/
 
 	public static Okler getInstance() {
 		return mContext;

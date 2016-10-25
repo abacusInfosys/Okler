@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"  
-    tools:context="com.okler.diagnostics.DiagnosticsActivityHome"
+    tools:context="com.okler.diagno.DiagnosticsActivityHome"
     android:background="@drawable/category_menu_bg" >
 
     <include 
@@ -11,12 +11,12 @@
             android:layout_alignParentTop="true"/>
     <RelativeLayout 
         android:id="@+id/locationRelLL"
-        android:layout_height="?actionBarSize"
-        android:minHeight="?actionBarSize"
+        android:layout_height="wrap_content"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:layout_width="fill_parent"
         android:background="@color/ModerateMagenta"
         android:layout_below="@id/toolbar"
-        
         >
         <RelativeLayout
             android:layout_height="wrap_content"
@@ -29,16 +29,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/your_location"
-            android:textSize="18sp"
+            android:textSize="16sp"
+            
             />
         <TextView 
             android:id="@+id/userLocation"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="18sp"
+			android:textSize="16sp"
 			android:text="Select Your Location"
 			android:ellipsize="end"
 			android:maxLines="1"
+			android:textStyle="bold"
+			android:layout_marginRight="5dp"
             android:layout_toRightOf="@+id/locationText"
             />
         <ImageView 

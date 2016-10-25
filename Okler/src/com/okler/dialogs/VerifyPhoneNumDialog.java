@@ -145,7 +145,7 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 					 
 					 webOtpCall();
 					 dismiss();
-				}
+				}else{
 				if(!flg)
 				{
 					if(/*Utilities.getUserStatusFromSharedPref(actCntx.getApplicationContext()) == UserStatusEnum.LOGGED_IN ||*/ 
@@ -160,7 +160,7 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 					}
 				}
 				dismiss();
-					
+				}
 				//webOtpCall();
 			//	alert.dismiss();
 			}
@@ -212,6 +212,7 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 					nameValuePairs.add(new BasicNameValuePair("image", userBean.getUser_image()));
 					nameValuePairs.add(new BasicNameValuePair("password", userBean.getPassword()));
 					nameValuePairs.add(new BasicNameValuePair("salutation", userBean.getSalutation()));
+					nameValuePairs.add(new BasicNameValuePair("refercode", userBean.getReferal()));
 					//String json=gson.toJson(Okler.getInstance().getuDataBean());
 					String Result = String.valueOf(Utilities.RegisterNewUser(url,nameValuePairs));
 					return Result;
@@ -238,11 +239,12 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 						userBean=Okler.getInstance().getuDataBean();	
 						userBean.setId(uid);
 						userBean.setUser_image(userimage);
+						userBean.setApprove_status(0);
 						Utilities.writeCurrentUserToSharedPref(actCntx,userBean);	
 						Utilities.writeUserStatusToSharedPref(actCntx.getApplicationContext(), UserStatusEnum.LOGGED_IN);
-						//registrationCallbackMail();
+						UserStatusEnum userstatus = Utilities.getUserStatusFromSharedPref(actCntx);
 						//userBean=Okler.getInstance().getuDataBean();
-						//Utilities.writeCurrentUserToSharedPref(actCntx, userBean);
+						Utilities.writeCurrentUserToSharedPref(actCntx, userBean);
 						webOtpCall();
 						/*Intent success=new Intent(actCntx,OtpConfirmationActivity.class);
 						actCntx.startActivity(success);*/
@@ -276,7 +278,6 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 					@Override
 					public void onResponse(JSONObject response) {
 						// TODO Auto-generated method stub
-						registrationCallbackMail();
 						JSONObject j = (JSONObject) response;
 						getOtp(response.toString());
 
@@ -411,17 +412,68 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 				String respstatus = json.getString("status");
 				System.out.println("status" + respstatus);
 				if (messageReceived.equals("User Update successful.")) {
+					
 					userBean = Okler.getInstance().getuDataBean();
-					Utilities.writeUserStatusEnumToSharedPref(actCntx,
-							UserStatusEnum.LOGGED_IN);
+					userBean.setApprove_status(1);
+					/*Utilities.writeUserStatusEnumToSharedPref(actCntx,
+							UserStatusEnum.LOGGED_IN);*/
 					Utilities.writeCurrentUserToSharedPref(actCntx, userBean);
-					Intent success = new Intent(actCntx,
+					//Utilities.writeUserStatusToSharedPref(actCntx.getApplicationContext(), UserStatusEnum.LOGGED_IN);
+					Intent success = new Intent(diaContext,
 							ServiceCategoryActivity.class);
-					startActivity(success);
+					actCntx.startActivity(success);
 					Toast.makeText(actCntx, "OTP is verified successfully",
 							Toast.LENGTH_LONG).show();
 
-					//registrationCallbackMail();
+					UsersDataBean ubean = Utilities
+							.getCurrentUserFromSharedPref(actCntx);
+
+					int cust_id = ubean.getId();
+					String salutation = ubean.getSalutation();
+					String name = ubean.getFname();
+					String email = ubean.getEmail();
+
+					String user_registration = actCntx.getResources()
+							.getString(R.string.serverUrl)
+							+ actCntx.getResources().getString(
+									R.string.user_registration_url)
+							+ "salutation="
+							+ salutation
+							+ "&cust_id="
+							+ cust_id
+							+ "&customer_name="
+							+ name
+							+ "&email="
+							+ email;
+
+					WebJsonObjectRequest webObjReq = new WebJsonObjectRequest(
+							Method.GET, user_registration, new JSONObject(),
+							new Response.Listener<JSONObject>() {
+
+								@Override
+								public void onResponse(JSONObject response) {
+									Log.i("contact us", "*****  mail sent*****");
+								}
+
+							}, new Response.ErrorListener() {
+
+								@Override
+								public void onErrorResponse(VolleyError error) {
+
+									// Log.e("error", new
+									// String(error.networkResponse.data));
+
+									Log.i("error", "" + error.getStackTrace());
+
+									Log.i("contact us",
+											"***** fail to send mail****");
+
+								}
+
+							});
+
+					VolleyRequest.addJsonObjectRequest(actCntx, webObjReq);
+
 				} else {
 					Toast.makeText(actCntx, messageReceived, Toast.LENGTH_LONG)
 							.show();
@@ -437,57 +489,5 @@ public class VerifyPhoneNumDialog extends DialogFragment {
 			}
 
 		}
-	}
-	
-	public void registrationCallbackMail(){
-		UsersDataBean ubean = Utilities
-				.getCurrentUserFromSharedPref(actCntx);
-
-		int cust_id = ubean.getId();
-		String salutation = ubean.getSalutation();
-		String name = ubean.getFname();
-		String email = ubean.getEmail();
-
-		String user_registration = actCntx.getResources()
-				.getString(R.string.serverUrl)
-				+ actCntx.getResources().getString(
-						R.string.user_registration_url)
-				+ "salutation="
-				+ salutation
-				+ "&cust_id="
-				+ cust_id
-				+ "&customer_name="
-				+ name
-				+ "&email="
-				+ email;
-
-		WebJsonObjectRequest webObjReq = new WebJsonObjectRequest(
-				Method.GET, user_registration, new JSONObject(),
-				new Response.Listener<JSONObject>() {
-
-					@Override
-					public void onResponse(JSONObject response) {
-						Log.i("contact us", "*****  mail sent*****");
-					}
-
-				}, new Response.ErrorListener() {
-
-					@Override
-					public void onErrorResponse(VolleyError error) {
-
-						// Log.e("error", new
-						// String(error.networkResponse.data));
-
-						Log.i("error", "" + error.getStackTrace());
-
-						Log.i("contact us",
-								"***** fail to send mail****");
-
-					}
-
-				});
-
-		VolleyRequest.addJsonObjectRequest(actCntx, webObjReq);
-
 	}
 }

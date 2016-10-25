@@ -55,11 +55,10 @@ public class MyAccount extends BaseActivity {
 			txt_favourites, txt_Uploaded_prescriptions;
 	RelativeLayout myOrderRl;
 	// NetworkImageView profile_image;
-	TextView text_name, text_addr;
+	TextView text_name, text_location;
 	RoundedImageView profile_image;
 	LinearLayout text_myprofile;
-
-	LinearLayout layout;
+	LinearLayout layout,favouritesLL;
 
 	UsersDataBean currentUser;
 
@@ -81,7 +80,7 @@ public class MyAccount extends BaseActivity {
 		profile_image = (RoundedImageView) findViewById(R.id.profile_photo);
 
 		text_name = (TextView) findViewById(R.id.text_name);
-		text_addr = (TextView) findViewById(R.id.text_addr);
+		//text_location = (TextView) findViewById(R.id.text_location);
 		imgExpand = (ImageView) findViewById(R.id.expand_services);
 		imgCalculator = (ImageView) findViewById(R.id.expand_calculator);
 		imgReminder = (ImageView) findViewById(R.id.expand_reminder);
@@ -97,6 +96,7 @@ public class MyAccount extends BaseActivity {
 		txt_Uploaded_prescriptions = (TextView) findViewById(R.id.MyUploaded_prescriptions);
 		txt_favourites = (TextView) findViewById(R.id.text_favourites);
 		myOrderRl = (RelativeLayout) findViewById(R.id.myOrderRl);
+		favouritesLL = (LinearLayout)findViewById(R.id.favouritesLL);
 
 		layout = (LinearLayout) findViewById(R.id.layout_services);
 		myOrderRl.setOnClickListener(new OnClickListener() {
@@ -130,7 +130,16 @@ public class MyAccount extends BaseActivity {
 
 			}
 		});
-
+		favouritesLL.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent in = new Intent(MyAccount.this, FavouritesActivity.class);
+				startActivity(in);
+				
+			}
+		});
+		
 		text_myprofile = (LinearLayout) findViewById(R.id.linearMyProfile);
 		text_myprofile.setOnClickListener(new OnClickListener() {
 
@@ -391,7 +400,7 @@ public class MyAccount extends BaseActivity {
 									.getJSONArray("result");
 							// docCount=responseObj.getInt("TotalCount");
 							for (int i = 0; i < doctorsArr.length(); i++) {
-								uDatabean = new UsersDataBean();
+								uDatabean = Utilities.getCurrentUserFromSharedPref(MyAccount.this);
 								try {
 									JSONObject docObj = (JSONObject) doctorsArr
 											.get(i);
@@ -413,6 +422,8 @@ public class MyAccount extends BaseActivity {
 									uDatabean.setDob(docObj.getString("dob"));
 									uDatabean.setSalutation(docObj
 											.optString("salutation"));
+									uDatabean.setApprove_status(1);
+								
 									Log.i("tag", "json object" + docObj);
 								} catch (JSONException e) {
 									// TODO: handle exception
@@ -464,6 +475,12 @@ public class MyAccount extends BaseActivity {
 			txt_name.setText(salutation + " " + currentUser.getFname() + " "
 					+ currentUser.getLname());
 		}
+		text_location = (TextView) findViewById(R.id.text_location);
+		if (!(currentUser.getAddDatabean().size() <= 0))
+			text_location.setText(currentUser.getAddDatabean().get(0).getCity()
+					+ ", " + "India");
+		else
+			text_location.setText("" + "India");
 
 		// txt_location.setText(udBeans.getState_name());
 		

@@ -14,14 +14,15 @@ import com.okler.adapters.MyOrdersAdapter.viewHolder;
 import com.okleruser.R;
 import com.okler.databeans.DiagnoOrderDataBean;
 import com.okler.databeans.OrdersDataBean;
+import com.okler.databeans.diagnobean.DiagnoOrder;
 
 public class MyOrderDiagnoOrderAdapter extends BaseAdapter {
 	Context con;
-	ArrayList<DiagnoOrderDataBean> prods;
+	ArrayList<DiagnoOrder> prods;
 	LayoutInflater inflater;
 
 	public MyOrderDiagnoOrderAdapter(Context context,
-			ArrayList<DiagnoOrderDataBean> diagnoDataBean) {
+			ArrayList<DiagnoOrder> diagnoDataBean) {
 
 		prods = diagnoDataBean;
 		inflater = LayoutInflater.from(context);
@@ -67,13 +68,13 @@ public class MyOrderDiagnoOrderAdapter extends BaseAdapter {
 
 			convertView.setTag(holder);
 		} else {
-			Log.i("nullvale", prods.get(position).getOrderId());
+			Log.i("nullvale", prods.get(position).getOrderId()+"");
 			holder = (viewHolder) convertView.getTag();
 		}
 		holder.id.setText(prods.get(position).getOrderId());
-		holder.price.setText(prods.get(position).getNetPayable());
+		holder.price.setText(prods.get(position).getNetPayable()+"");
 		holder.orderStatus.setText(prods.get(position).getStatus());
-		holder.date.setText(prods.get(position).getAp_date());
+		holder.date.setText(prods.get(position).getApptDt());
 
 		return convertView;
 

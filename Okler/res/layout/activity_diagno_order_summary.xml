@@ -12,10 +12,11 @@
     <TextView 
         android:id="@+id/confirm_order"
         android:layout_width="fill_parent"
-        android:layout_height="?actionBarSize"
-    	android:minHeight="?actionBarSize"
+        android:layout_height="wrap_content"
+    	android:paddingTop="6dp"
+    	android:paddingBottom="6dp"
     	android:background="@color/ModerateMagenta"
-    	android:textSize="20sp"
+    	android:textSize="16sp"
     	android:textColor="@color/White"
     	android:gravity="center"
     	android:text="@string/confirm_order"
@@ -39,7 +40,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                 android:layout_margin="20dp"
+                 android:layout_margin="10dp"
                 >
                 <RelativeLayout 
                     android:id="@+id/orderIdInnerRL"
@@ -56,7 +57,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/orderIdHeading"
-                        android:text="OK001526598"                        
+                        android:text="OK001526598"  
+                        android:layout_marginLeft="10dp" 
+                        android:layout_marginTop="5dp"                     
                         />
                 </RelativeLayout>
             </RelativeLayout>
@@ -65,7 +68,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/orderIdRL"
-                android:layout_margin="20dp"
+                android:layout_margin="10dp"
                 >
                 <include 
                     android:id="@+id/selected_labs_heading"
@@ -88,7 +91,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/selected_labs_RL"
-                android:layout_margin="20dp"
+                android:layout_margin="10dp"
                 >
                 <include 
                     android:id="@+id/selected_tests_heading"
@@ -104,14 +107,38 @@
                     >
                     
                 </LinearLayout>
+                 <RelativeLayout
+                android:layout_below="@+id/LL_for_selected_tests"     
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/txt_add_more_tests"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/White"
+                    android:elevation="5dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:layout_margin="1dp"
+                    android:textSize="14sp"
+                    android:text="ADD MORE TESTS"
+                    android:textColor="@color/Red"
+                    android:visibility="gone" />
+            </RelativeLayout>
             </RelativeLayout>
             <RelativeLayout 
                 android:id="@+id/bill_summary_RL"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/selected_tests_RL"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 >
                 <include 
                     android:id="@+id/bill_summary_heading"
@@ -131,7 +158,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/bill_summary_RL"
-                android:layout_margin="20dp"
+                android:layout_margin="10dp"
                 >
                 <RelativeLayout 
 	            
@@ -227,7 +254,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:layout_below="@+id/coupon_code_RL"
-                android:layout_margin="20dp"
+                android:layout_margin="10dp"
                 >
                 <include 
                     android:id="@+id/appoint_info_heading"
@@ -237,12 +264,12 @@
                     android:id="@+id/a_date_tv"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:ems="7"
+                    android:ems="9"
                     android:textStyle="bold"
                     android:text="Appointment Date"
                     android:layout_below="@+id/appoint_info_heading"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     />
                 <TextView 
                     android:id="@+id/dateValue"
@@ -251,13 +278,13 @@
                     android:text=""
                     android:layout_below="@+id/appoint_info_heading"
                     android:layout_toRightOf="@+id/a_date_tv"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     />
                 <TextView 
                     android:id="@+id/a_time_tv"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:ems="7"
+                    android:ems="9"
                     android:textStyle="bold"
                     android:text="Appointment Time"
                     android:layout_below="@+id/a_date_tv"
@@ -275,7 +302,7 @@
                     android:id="@+id/a_at_tv"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:ems="7"
+                    android:ems="9"
                     android:textStyle="bold"
                     android:text="Appointment At"
                     android:layout_below="@+id/a_time_tv"
@@ -301,8 +328,8 @@
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             >
             <include 
                 android:id="@+id/pickup_addr_heading"
@@ -317,7 +344,7 @@
                 android:text=""
                 android:textSize="19sp"
                 android:textStyle="bold"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
                 />
             <ImageView 
@@ -327,7 +354,7 @@
                 android:layout_below="@+id/pickup_addr_heading"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/edit_pencil_red_icon"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
                 android:visibility="gone"
                 />
@@ -338,7 +365,7 @@
                 android:minLines="1"
                 android:layout_below="@+id/nameTv"
                 android:text=""
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
                 />
             
@@ -349,8 +376,8 @@
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:orientation="vertical"
             android:visibility="gone"
             >
@@ -371,7 +398,7 @@
             android:layout_height="wrap_content"
             android:background="@color/LightGrey"
             android:layout_below="@+id/addrRL"
-            android:layout_margin="20dp"
+            android:layout_margin="10dp"
             >
             <TextView 
                 android:id="@+id/queryText"
@@ -379,8 +406,8 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:text="@string/queryText"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp"
                 />
             <TextView 
@@ -390,14 +417,14 @@
                 android:textStyle="bold"
                 android:text="@string/phone"
                 android:layout_below="@+id/queryText"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp"
                 />
             <TextView 
                 android:id="@+id/phoneValueTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+91022234567890"
+                android:text=" 77100 88100"
                 android:layout_below="@+id/queryText"
                 android:layout_toRightOf="@+id/phoneTv"
                 android:layout_marginBottom="5dp"
@@ -409,18 +436,18 @@
                 android:textStyle="bold"
                 android:text="@string/email"
                 android:layout_below="@+id/phoneTv"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
                 />
             	
             <TextView 
                 android:id="@+id/emailValueTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="care@okler.com"
+                android:text=" contact@okler.com"
                 android:layout_below="@+id/phoneTv"
                 android:layout_toRightOf="@+id/emailTv"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 
                 />
             
@@ -429,15 +456,16 @@
         </RelativeLayout>
         
     </ScrollView>
-        <TextView 
+        <Button 
         android:id="@+id/sched_appoint"
         android:layout_width="fill_parent"
-        android:layout_height="?actionBarSize"
-    	android:minHeight="?actionBarSize"
+        android:layout_height="wrap_content"
     	android:background="@color/ModerateMagenta"
-    	android:textSize="20sp"
+    	android:textSize="16sp"
     	android:textColor="@color/White"
     	android:gravity="center"
+    	android:paddingTop="6dp"
+    	android:paddingBottom="6dp"
     	android:text="@string/sched_appoint"
     	android:layout_above="@+id/bottombar"
         />

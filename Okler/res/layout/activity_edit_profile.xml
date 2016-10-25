@@ -7,7 +7,8 @@
 
     <include
         android:id="@+id/toolbar"
-       
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         layout="@layout/tool_bar"
         android:background="@color/Blue" />
@@ -101,21 +102,21 @@
                 android:textSize="18sp" />
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" >
+                android:layout_marginBottom="10dp" 
+                android:gravity="center">
 
                 <Button
                     android:id="@+id/btnsubmit"
                     android:layout_width="wrap_content"
-                    android:layout_height="?actionBarSize"
-                    android:layout_gravity="center"
-                    android:text="Submit"
+                    android:layout_height="30dp"
+                    android:gravity="center"
                     android:textColor="@color/White"
-                    android:background="@color/Blue" />
-            </LinearLayout>
+                    android:background="@color/Blue"
+                    android:text="Submit" />
+            </LinearLayout> 
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -132,44 +133,19 @@
                 android:orientation="vertical"
                 android:layout_marginTop="10dp" >
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_phone_value"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="20dp" >
+                    android:text="9930217782"
+                    android:layout_marginLeft="20dp" />
 
-                    <TextView
-                        android:id="@+id/tv_phone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Phone :" />
-
-                    <TextView
-                        android:id="@+id/tv_phone_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="9930217782" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv_mail_value"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="20dp" >
-                    
-                    <TextView
-                        android:id="@+id/tv_email"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Email:" />
-
-                    <TextView
-                        android:id="@+id/tv_mail_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="rahulmane@gmail.com" />
-                </LinearLayout>
+                    android:text="rahulmane@gmail.com"
+                    android:layout_marginLeft="20dp" />
 
             </LinearLayout>
             
@@ -226,5 +202,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         layout="@layout/layout_bottom_bar" />
-
+<LinearLayout 
+        android:orientation="vertical" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" 
+        android:id="@+id/progressLinLayout" 
+        android:gravity="center" 
+        android:visibility="gone" 
+        android:layout_centerInParent="true">
+	<ProgressBar 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:indeterminate="true"/>
+    </LinearLayout>
 </RelativeLayout>

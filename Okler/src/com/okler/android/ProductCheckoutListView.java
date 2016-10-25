@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.okler.adapters.CheckoutListViewAdapter;
-import com.okler.adapters.HealthShopListAdapter;
 import com.okler.databeans.AddressDataBean;
 import com.okler.databeans.CartDataBean;
 import com.okler.databeans.ProductDataBean;
@@ -21,22 +19,14 @@ import com.okler.utils.Okler;
 import com.okler.utils.UIUtils;
 import com.okler.utils.UserStatusEnum;
 import com.okler.utils.Utilities;
-
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-
-import com.okler.utils.Okler;
-import com.okler.utils.UIUtils;
 import com.okleruser.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,7 +41,7 @@ import android.widget.Toast;
 public class ProductCheckoutListView extends BaseActivity {
 	Button notifCount;
 	Toolbar toolBar;
-	static TextView next;
+	static Button next;
 	static TextView totalAmountValue;
 	static TextView count;
 	static TextView emptyText;
@@ -60,7 +50,7 @@ public class ProductCheckoutListView extends BaseActivity {
 	View bottomBarLayout;
 	static CartDataBean odbean;
 	static CartDataBean odbean2;
-	ArrayList<ProductDataBean> pdList;
+	//ArrayList<ProductDataBean> pdList;
 	static ArrayList<ProductDataBean> pdSendList;
 	ImageView imgBack;
 	int prodtype, prodcount = 0, maincount = 0;
@@ -70,13 +60,6 @@ public class ProductCheckoutListView extends BaseActivity {
 	static int check;
 	static Activity ack;
 	static boolean isEmpty = false;
-	public static String[] prgmNameList = { "1 kg weight cuff",
-			"1 kg weight cuff", "1 kg weight cuff", "1 kg weight cuff",
-			"1 kg weight cuff", "1 kg weight cuff" };
-	public static int[] prgmImages = { R.drawable.camera, R.drawable.camera,
-			R.drawable.camera, R.drawable.camera, R.drawable.camera,
-			R.drawable.camera, R.drawable.camera };
-	
 	UsersDataBean ubean;
 	LinearLayout progressLinLayout;
 	RelativeLayout back_layout;
@@ -91,7 +74,6 @@ public class ProductCheckoutListView extends BaseActivity {
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolBar);
 		notifCount = (Button) toolBar.findViewById(R.id.notif_count);
-		final ActionBar ab = getSupportActionBar();
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 		progressLinLayout = (LinearLayout) findViewById(R.id.progressLinLayout);
@@ -99,28 +81,23 @@ public class ProductCheckoutListView extends BaseActivity {
 		showProgress(true);
 		getAllAddress();
 		
-		// ab.setDisplayHomeAsUpEnabled(true);//11_01_2016 Gitesh
 		checkoutCount = (RelativeLayout) findViewById(R.id.checkoutCount);
 		if (Okler.getInstance().getBookingType() == 0) {
-			// ab.setTitle(R.string.title_activity_allopathy);
 			prodtype = 0;
 			checkoutCount.setBackgroundColor(getResources().getColor(
 					R.color.Brightyellow));
 			Utilities.setTitleText(toolBar, getString(R.string.allopathy));
 		} else if (Okler.getInstance().getBookingType() == 3) {
-			// ab.setTitle(R.string.title_activity_ayurvedic);
 			prodtype = 3;
 			checkoutCount.setBackgroundColor(getResources().getColor(
 					R.color.Brightyellow));
 			Utilities.setTitleText(toolBar, getString(R.string.ayurvedic));
 		} else if (Okler.getInstance().getBookingType() == 4) {
-			// ab.setTitle(R.string.title_activity_homeopathy);
 			prodtype = 4;
 			checkoutCount.setBackgroundColor(getResources().getColor(
 					R.color.Brightyellow));
 			Utilities.setTitleText(toolBar, getString(R.string.homeopathy));
 		} else {
-			// ab.setTitle(R.string.title_activity_health_shop_grid);
 			prodtype = 1;
 			Utilities.setTitleText(toolBar, "Health Shop");
 		}
@@ -131,30 +108,11 @@ public class ProductCheckoutListView extends BaseActivity {
 			checkoutCount.setBackgroundColor(Color.BLUE);
 			Utilities.setTitleText(toolBar, "Cart");
 		}
-
-		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
-		back_layout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-			finish();	
-			}
-		});
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
-		imgBack.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				finish();
-			}
-		});*/
 		UIUtils.setBackClick(toolBar, ack);
 		
 		amountLayout_chList = (RelativeLayout) findViewById(R.id.amountLayout_chList);
 		emptyText = (TextView) findViewById(R.id.emptyText);
-		next = (TextView) findViewById(R.id.next);
+		next = (Button) findViewById(R.id.next);
 		next.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -184,6 +142,7 @@ public class ProductCheckoutListView extends BaseActivity {
 										.getCurrentUserFromSharedPref(ack);
 								ArrayList<AddressDataBean> adList = new ArrayList<AddressDataBean>();
 								adList = ubean.getAddDatabean();
+								adList.trimToSize();
 								if (adList.size() <= 0) {
 									Intent intent = new Intent(
 											getApplicationContext(),
@@ -231,13 +190,12 @@ public class ProductCheckoutListView extends BaseActivity {
 		} else {
 			odbean = Okler.getInstance().getMainCart();
 		}
+		//Write user cart to shared pref so that if app crashes while uploading prescription, cart data is not lost. This is to avoid 0 order insertion 
+		Utilities.writeCartToSharedPref(ack, odbean);
 		productList = (ListView) findViewById(R.id.productList);
-
-		// pdList.get(0).getProdType();
-
-		// maincount = pdList.size();
 		pdSendList = new ArrayList<ProductDataBean>();
 		pdSendList = odbean.getProdList();
+		pdSendList.trimToSize();
 
 		if (!(pdSendList.size() <= 0)) {
 
@@ -249,7 +207,6 @@ public class ProductCheckoutListView extends BaseActivity {
 				count.setText("" + count1);
 			}
 		}
-		// }
 		setUi();
 
 	}
@@ -275,15 +232,11 @@ public class ProductCheckoutListView extends BaseActivity {
 
 	public static void totalOrderValue() {
 		ArrayList<ProductDataBean> prodL = new ArrayList<ProductDataBean>();
-		if (check == 1) {
-			odbean2 = Okler.getInstance().getSingleCart();
-		} else {
-			odbean2 = Okler.getInstance().getMainCart();
-		}
+		odbean2 = Utilities.getCartDataBean(ack);
 		prodL = odbean2.getProdList();
-
-		int length = prodL.size(), units;
-		float mrp = 0.00f, okler_pr = 0.00f, disco = 0.00f, tax = 0.00f, shipping = 0.00f, net_pay = 0.00f;
+		prodL.trimToSize();
+		int length = prodL.size();
+		float mrp = 0.00f, okler_pr = 0.00f, tax = 0.00f, shipping = 0.00f, net_pay = 0.00f;
 
 		if (length <= 0) {
 			totalAmountValue.setText("00");
@@ -292,17 +245,17 @@ public class ProductCheckoutListView extends BaseActivity {
 			for (int i = 0; i < length; i++) {
 
 				pbean = prodL.get(i);
-				units = pbean.getUnits();
-				float mrp1 = pbean.getMrp();
+				//units = pbean.getUnits();
+				//float mrp1 = pbean.getMrp();
 				mrp = mrp + (pbean.getMrp() * pbean.getUnits());
-				float ok = pbean.getOklerPrice();
+				//float ok = pbean.getOklerPrice();
 				okler_pr = okler_pr
 						+ (pbean.getOklerPrice() * pbean.getUnits());
 
-				float tx = pbean.getTax();
+				//float tx = pbean.getTax();
 				tax = tax + (pbean.getTax() * pbean.getUnits());
 			}
-			disco = (mrp - okler_pr);
+			//disco = (mrp - okler_pr);
 			net_pay = okler_pr + tax;
 			if (net_pay < 499) {
 				shipping = 50;
@@ -312,55 +265,11 @@ public class ProductCheckoutListView extends BaseActivity {
 		}
 	}
 
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		CartDataBean cbean = new CartDataBean();
-		if (check == 1) {
-			cbean = Okler.getInstance().getSingleCart();
-		} else {
-			cbean = Okler.getInstance().getMainCart();
-		}
-	}
-
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		CartDataBean cbean = new CartDataBean();
-		if (check == 1) {
-			cbean = Okler.getInstance().getSingleCart();
-		} else {
-			cbean = Okler.getInstance().getMainCart();
-		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		CartDataBean cbean = new CartDataBean();
-		if (check == 1) {
-			cbean = Okler.getInstance().getSingleCart();
-		} else {
-			cbean = Okler.getInstance().getMainCart();
-		}
-	}
-
 	public static void setUi() {
-		/*
-		 * ProductCheckoutListView pl = new ProductCheckoutListView();
-		 * pl.setView(); }
-		 */
-		// public void setView(){
-		if (check == 1) {
-			odbean = Okler.getInstance().getSingleCart();
-		} else {
-			odbean = Okler.getInstance().getMainCart();
-		}
+		odbean = Utilities.getCartDataBean(ack);
 		pdSendList = new ArrayList<ProductDataBean>();
 		pdSendList = odbean.getProdList();
+		pdSendList.trimToSize();
 		if (pdSendList.size() <= 0) {
 			productList.setVisibility(View.GONE);
 			emptyText.setVisibility(View.VISIBLE);
@@ -368,10 +277,7 @@ public class ProductCheckoutListView extends BaseActivity {
 			count.setText("00");
 			next.setText("CONTINUE TO PRODUCTS");
 			isEmpty = true;
-			// totalOrderValue();
 		} else {
-			// emptyText.setVisibility(View.GONE);
-
 			clistViewAdapter = new CheckoutListViewAdapter(ack, pdSendList,
 					true, check);
 			productList.setAdapter(clistViewAdapter);
@@ -387,11 +293,6 @@ public class ProductCheckoutListView extends BaseActivity {
 		super.onResume();
 		UIUtils.setCartCount(notifCount, ack);
 	}
-	/*
-	 * public static void setEmptyUi(){
-	 * 
-	 * }
-	 */
 	
 	public void getAllAddress(){
 		ubean = Utilities.getCurrentUserFromSharedPref(ack);
@@ -423,8 +324,6 @@ WebJsonObjectRequest adjson = new WebJsonObjectRequest(Method.GET, get_addr, new
 						break;
 					}
 					jobj2 = jarr2.getJSONObject(a);
-					//jobj2 = jarr2.getJSONObject(i);
-					
 					adbean.setFirstname(jobj2.optString("customer_name"));
 					adbean.setLastname(jobj2.optString("surname"));
 					adbean.setAddress1(jobj2.optString("addr1"));
@@ -441,13 +340,12 @@ WebJsonObjectRequest adjson = new WebJsonObjectRequest(Method.GET, get_addr, new
 					adbean.setDefault_shipping(jobj2.optInt("default_shiping"));
 					adbean.setPreferred_del_time(jobj2.optString("delivery_time"));
 					//adbean.setPreferred_del_time(jobj2.optString(name));
-					AddressDataBean ab = new AddressDataBean();
-					ab = adbean;
 					aList.add(adbean);
 					showProgress(false);
 					next.setEnabled(true);
 			}
 				//showProgress(false);
+				aList.trimToSize();
 				ubean.setAddDatabean(aList);
 				Utilities.writeCurrentUserToSharedPref(ack, ubean);
 				
@@ -456,7 +354,8 @@ WebJsonObjectRequest adjson = new WebJsonObjectRequest(Method.GET, get_addr, new
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
+			showProgress(false);
+			next.setEnabled(true);
 		}
 		
 		
@@ -467,6 +366,7 @@ WebJsonObjectRequest adjson = new WebJsonObjectRequest(Method.GET, get_addr, new
 	public void onErrorResponse(VolleyError error) {
 		Log.e("ERROR", ""+error.getStackTrace());
 		showProgress(false);
+		next.setEnabled(true);
 		//Utilities.handleVollyError(error, ack);
 	}
 });	

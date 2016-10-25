@@ -3,36 +3,24 @@ package com.okler.android;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.CDATASection;
-
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.google.gson.JsonObject;
-import com.okler.android.PrescriptionDelivery.UploadPrescAsyncTask;
 import com.okler.databeans.AddressDataBean;
 import com.okler.databeans.CartDataBean;
 import com.okler.databeans.ProductDataBean;
 import com.okler.databeans.UsersDataBean;
-import com.okler.dialogs.OrderPlacedConfirmationDialog;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
 import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
-
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -51,7 +39,6 @@ import android.widget.Toast;
 public class ProductCheckoutPaymentMode extends BaseActivity {
 	private View bottomBarLayout;
 	private Toolbar toolBar;
-	private Context context;
 	private Button processButton;
 	private String orderId;
 	TextView textView1;
@@ -62,8 +49,8 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 	AddressDataBean adbean;
 	ArrayList<AddressDataBean> adList;
 	ArrayList<NameValuePair> nvPair = new ArrayList<NameValuePair>();
-	ArrayList<NameValuePair> nvProds = new ArrayList<NameValuePair>();
-	ArrayList<NameValuePair> nvProdsq = new ArrayList<NameValuePair>();
+	//ArrayList<NameValuePair> nvProds = new ArrayList<NameValuePair>();
+	//ArrayList<NameValuePair> nvProdsq = new ArrayList<NameValuePair>();
 	ArrayList<ProductDataBean> pdList = new ArrayList<ProductDataBean>();
 	String bill_city, bill_add1, bill_add2, billFname, bill_zip, payment_info,
 			shipFname, shipCity, fname, emailId, salutation1, ship_add2,
@@ -82,36 +69,26 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 		setContentView(R.layout.activity_product_checkout_payment_mode);
 		toolBar = (Toolbar) findViewById(R.id.toolbar);
 		notifCount = (Button) toolBar.findViewById(R.id.notif_count);
-		context = getApplicationContext();
 		setSupportActionBar(toolBar);
 		ack = this;
 		check = getIntent().getIntExtra("Check", 11);
-		final ActionBar ab = getSupportActionBar();
-		// ab.setDisplayHomeAsUpEnabled(true);
 		textView1 = (TextView) findViewById(R.id.textView1);
 		progressInScreen = (ImageView) findViewById(R.id.progressInScreen);
 		if (Okler.getInstance().getBookingType() == 0) {
 			progressInScreen.setImageResource(R.drawable.md_process_payment);
 			textView1.setBackgroundColor(getResources().getColor(
 					R.color.Brightyellow));
-			// ab.setTitle(R.string.title_activity_allopathy);
 			Utilities.setTitleText(toolBar, getString(R.string.allopathy));
 		} else if (Okler.getInstance().getBookingType() == 3) {
-			// progressInScreen.setImageResource(R.drawable.md_process_payment);
 			textView1.setBackgroundColor(getResources().getColor(
 					R.color.Brightyellow));
-			// ab.setTitle(R.string.title_activity_ayurvedic);
 			Utilities.setTitleText(toolBar, getString(R.string.ayurvedic));
 		} else if (Okler.getInstance().getBookingType() == 4) {
-			// progressInScreen.setImageResource(R.drawable.md_process_payment);
 			textView1.setBackgroundColor(getResources().getColor(
 					R.color.Brightyellow));
-			// ab.setTitle(R.string.title_activity_homeopathy);
 			Utilities.setTitleText(toolBar, getString(R.string.homeopathy));
 		} else {
-			// ab.setTitle(R.string.title_activity_health_shop_grid);
 			Utilities.setTitleText(toolBar, "Health Shop");
-
 		}
 		toolBar.setBackgroundResource(UIUtils.getToolBarDrawable(Okler
 				.getInstance().getBookingType()));
@@ -120,68 +97,31 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 			textView1.setBackgroundColor(Color.BLUE);
 			Utilities.setTitleText(toolBar, "Cart");
 		}
-
-		// toolBar.setBackgroundResource(R.drawable.custom_view_grad_healthshop);
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
-		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
-		back_layout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-			finish();	
-			}
-		});
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
-		imgBack.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				finish();
-			}
-		});*/
 		UIUtils.setBackClick(toolBar, ack);
-		
-		if (check == 1) {
-			cdbean = Okler.getInstance().getSingleCart();
-		} else {
-			cdbean = Okler.getInstance().getMainCart();
-		}
+		cdbean = Utilities.getCartDataBean(ack);
 		pdList = cdbean.getProdList();
+		pdList.trimToSize();
 		processButton = (Button) findViewById(R.id.payment_placeorder);
 		processButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				processButton.setEnabled(false);
-				// TODO Auto-generated method stub
 				int[] prodid = new int[50];
 				int[] quantity = new int[50];
-				String one = "";
-				// ProductDataBean pdBean = pdList.get(0);
-				// pdList.get(0).setProdId(123);
 				payment_info = "Cash On Delivery";
 
 				String cart_id = "";
 				String shipLname = "", ship_salutation = "", bill_salutation = "", bill_lastname = "", del_time = "", b_land = "", s_land = "";
 				ubean = Utilities.getCurrentUserFromSharedPref(ack);
 				adList = ubean.getAddDatabean();
+				adList.trimToSize();
 				int length = adList.size();
 				for (int i = 0; i < length; i++) {
 					adbean = adList.get(i);
-					if (adbean.getDefault_billing() != 0) {
-						bill_city = adbean.getCity_id();
-						bill_add1 = adbean.getAddress1();
-						bill_add2 = adbean.getAddress2();
-						bill_salutation = adbean.getBillSalut();
-						billFname = adbean.getFirstname();
-						bill_lastname = adbean.getLastname();
-						bill_zip = "" + adbean.getZip();
-						bill_state = adbean.getState_id();
-						b_land = adbean.getLandmark();
-					}
+					
 					if (adbean.isSelected()) {
 						shipFname = adbean.getFirstname();
 						shipLname = adbean.getLastname();
@@ -194,20 +134,40 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 						ship_state = adbean.getState_id();
 						s_land = adbean.getLandmark();
 					}
+					if (adbean.getDefault_billing() != 0) {
+						bill_city = adbean.getCity_id();
+						bill_add1 = adbean.getAddress1();
+						bill_add2 = adbean.getAddress2();
+						bill_salutation = adbean.getBillSalut();
+						billFname = adbean.getFirstname();
+						bill_lastname = adbean.getLastname();
+						bill_zip = "" + adbean.getZip();
+						bill_state = adbean.getState_id();
+						b_land = adbean.getLandmark();
+					}else{
+						bill_city=shipCity;
+						bill_add1 = ship_add1;
+						bill_add2 = ship_add2;
+						bill_salutation = ship_salutation;
+						billFname = shipFname;
+						bill_lastname = shipLname;
+						bill_zip = ship_zip;
+						bill_state = ship_state;
+						b_land = s_land;
+					}
 				}
-				// defaultUbean = Utilities.getCurrentUserFromSharedPref(ack);
 				userId = ubean.getId();
 				fname = ubean.getFname();
 				emailId = ubean.getEmail();
 				salutation1 = ubean.getSalutation();
-				String subtotal = "";
-
+				float subTotal = cdbean.getSubTotal();
 				nvPair.add(new BasicNameValuePair("total", ""
-						+ cdbean.getTotalPrice()));//
-				nvPair.add(new BasicNameValuePair("payment_info", payment_info));//
+						+ cdbean.getTotalPrice()));
+				nvPair.add(new BasicNameValuePair("totalmrpprice", ""+cdbean.getTotalMrp()));
+				nvPair.add(new BasicNameValuePair("payment_info", payment_info));
 				nvPair.add(new BasicNameValuePair("ccode", cdbean.getcCode()));
-				nvPair.add(new BasicNameValuePair("subtotal", subtotal));//
-				nvPair.add(new BasicNameValuePair("tax", "" + cdbean.getTax()));//
+				nvPair.add(new BasicNameValuePair("subtotal", ""+subTotal));
+				nvPair.add(new BasicNameValuePair("tax", "" + cdbean.getTax()));
 				nvPair.add(new BasicNameValuePair("city_select", shipCity));
 				nvPair.add(new BasicNameValuePair("ship_salutation",
 						ship_salutation));
@@ -243,24 +203,15 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				nvPair.add(new BasicNameValuePair("ship_city", shipCity));
 				nvPair.add(new BasicNameValuePair("delivery_slots_timings",
 						del_time));
-				// bill_firstName
 				nvPair.add(new BasicNameValuePair("firstname", billFname));
-				// nvPair.add(new BasicNameValuePair("ship_zone", ""));
-				// nvPair.add(new BasicNameValuePair("Testuuhih8", ""));
 				nvPair.add(new BasicNameValuePair("cust_id", "" + userId));//
 				nvPair.add(new BasicNameValuePair("bill_zip", bill_zip));
-				// nvPair.add(new BasicNameValuePair("ship_phone",
-				// ubean.getPhone()));
 				nvPair.add(new BasicNameValuePair("ship_address2", ship_add2));
 				nvPair.add(new BasicNameValuePair("ship_address1", ship_add1));
 				nvPair.add(new BasicNameValuePair("coupon_discount", ""
 						+ cdbean.getCoupon_disc()));
 				nvPair.add(new BasicNameValuePair("bill_country", "Indian"));
-				// nvPair.add(new BasicNameValuePair("notes", ""));
 				nvPair.add(new BasicNameValuePair("ship_zip", ship_zip));
-				// nvPair.add(new BasicNameValuePair("products",
-				// "array(product_id=925&quantity=1),(product_id=1489&quantity=1),(product_id=1504&quantity=1))"));
-				// nvPair.add(new BasicNameValuePair("products", one));
 				nvPair.add(new BasicNameValuePair("presc_id", cdbean
 						.getPresc_id()));
 				nvPair.add(new BasicNameValuePair("ship_state", ship_state));
@@ -272,14 +223,18 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 					prodid[i] = pdBean.getProdId();
 					quantity[i] = pdBean.getUnits();
 					cart_id = pdBean.getCart_id();
+					if(cart_id == null||cart_id.equals("null"))
+					{
+						cart_id = "";
+					}
 					String prodPara = "products[" + i + "][product_id]";
-					String qtyPara = "products[" + i + "][quantity]";// +prodid[i]+"&Product["+i+"][quantity]="+quantity[i];
+					String qtyPara = "products[" + i + "][quantity]";
 					nvPair.add(new BasicNameValuePair(prodPara, "" + prodid[i]));
 					nvPair.add(new BasicNameValuePair(qtyPara, "" + quantity[i]));
 
 				}
 				nvPair.add(new BasicNameValuePair("cart_id", cart_id));
-
+				nvPair.trimToSize();
 				String str = "";// gson.toJson(postParams);
 				new PlaceOrderAsyncTask().execute(str);
 
@@ -302,16 +257,11 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -352,11 +302,13 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				if (check == 1) {
 					CartDataBean c = new CartDataBean();
 					Okler.getInstance().setSingleCart(c);
+					Utilities.writeCartToSharedPref(ack, null);
 				} else {
 					CartDataBean c = new CartDataBean();
 					Okler.getInstance().setMainCart(c);
+					//Setting shared pref cart to null. This is to make cart empty.
+					Utilities.writeCartToSharedPref(ack, null);
 				}
-
 				isDialog = true;
 				String part1, part2, part3, part4, Url, part5;
 				part1 = getString(R.string.orderConfirmCallBackUrl);
@@ -367,7 +319,6 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 				try {
 					fname = URLEncoder.encode(fname, "UTF-8");
 				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -379,22 +330,14 @@ public class ProductCheckoutPaymentMode extends BaseActivity {
 
 							@Override
 							public void onResponse(JSONObject response) {
-								// TODO Auto-generated method stub
-
 								Log.e("order mail", "mail sent");
-
 							}
 						}, new Response.ErrorListener() {
 
 							@Override
 							public void onErrorResponse(VolleyError error) {
-								// TODO Auto-generated method stub
-
 								Log.e("error", error.getStackTrace().toString());
-								// Log.e("Error", new
-								// String(error.networkResponse.data));
 								Log.e("order mail", "mail not sent");
-
 							}
 						}, true);
 				VolleyRequest.addJsonObjectRequest(ack, mailjson);

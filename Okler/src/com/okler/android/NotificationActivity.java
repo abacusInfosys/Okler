@@ -2,11 +2,9 @@ package com.okler.android;
 
 import java.util.ArrayList;
 
-import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -31,13 +29,12 @@ public class NotificationActivity extends BaseActivity{
     ImageView imgBack;
     ImageButton btnNotif;
     LinearLayout active_notif;
-    Activity ack;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_notification);
-		ack = this;
+
    		bottomBarLayout = findViewById(R.id.bottombar);
    		handleMapping(bottomBarLayout);
    		toolBar=(Toolbar) findViewById(R.id.toolbar);
@@ -51,7 +48,7 @@ public class NotificationActivity extends BaseActivity{
 		btnNotif.setEnabled(false);
 		rl.setEnabled(false);
    		
-   		/*imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
+   		imgBack = (ImageView)toolBar.findViewById(R.id.toolbar_back);
    	       imgBack.setOnClickListener(new OnClickListener() 
    	       {
    			
@@ -61,8 +58,7 @@ public class NotificationActivity extends BaseActivity{
    				// TODO Auto-generated method stub
    			finish();	
    			}
-   		});*/
-		UIUtils.setBackClick(toolBar, ack);
+   		});
    	      Utilities.setTitleText(toolBar, "Notifications");
    		
 		

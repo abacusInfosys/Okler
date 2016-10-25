@@ -1,18 +1,12 @@
 package com.okler.android;
 
 import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.Request.Method;
-import com.android.volley.toolbox.ImageRequest;
 import com.okler.adapters.MedPrescListAdapter;
 import com.okler.adapters.PrescriptionListAdapter;
-import com.okler.databeans.CategoriesDataBean;
 import com.okler.databeans.PrescriptionImagesDataBean;
 import com.okler.databeans.PrescriptionsDataBean;
 import com.okler.dialogs.ConfirmPrescDialog;
@@ -23,10 +17,7 @@ import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -44,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PrescriptionList extends BaseActivity implements OnScrollListener {
 	
@@ -71,7 +63,6 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 	PrescriptionList pct;
 	boolean isParentMyAccount,isDiagnoBooking=false;
 	RelativeLayout back_layout;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -89,7 +80,7 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 		tabbar_layout = (LinearLayout)findViewById(R.id.tabbar_layout);
 		conti = (Button)findViewById(R.id.conti);
 		pct = this;
-		Utilities.writeToLogFIle("PrList: ");
+	//	Utilities.writeToLogFIle("PrList: ");
 		isMedPres = getIntent().getBooleanExtra("isMedPres", true);
 		// 
 		//if(UploadPrescription.changetab == false)
@@ -97,14 +88,14 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 		{
 			footer1.setVisibility(View.VISIBLE);
 			footer2.setVisibility(View.INVISIBLE);
-			Utilities.writeToLogFIle("PrList: med");
+		//	Utilities.writeToLogFIle("PrList: med");
 		}
 		else
 		//if(UploadPrescription.changetab == true)
 		{
 			footer1.setVisibility(View.INVISIBLE);
 			footer2.setVisibility(View.VISIBLE);
-			Utilities.writeToLogFIle("PrList: diagno");
+		//	Utilities.writeToLogFIle("PrList: diagno");
 		}
 		
 		listview1 = (ListView) findViewById(R.id.imagesPrescHistory);
@@ -118,8 +109,8 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 					Intent intent = new Intent(PrescriptionList.this,ProductCheckoutSummary.class);
 					intent.putExtra("Check", check);
 					startActivity(intent);
-					Utilities.writeToLogFIle("PrList: ");
-					Utilities.writeToLogFIle("PrList: AlloPresc");
+		//			Utilities.writeToLogFIle("PrList: ");
+		//			Utilities.writeToLogFIle("PrList: AlloPresc");
 					
 				}else{
 					Intent intent = new Intent(PrescriptionList.this,UploadPrescription.class);
@@ -127,7 +118,7 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 				}
 			}
 		});
-		Utilities.writeToLogFIle("PrList: 1");
+	//	Utilities.writeToLogFIle("PrList: 1");
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 		
@@ -146,9 +137,9 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 				flag = true;
 				footer1.setBackgroundColor(getResources().getColor(R.color.Black));
 				footer2.setBackgroundColor(getResources().getColor(R.color.Black));
-				Utilities.writeToLogFIle("PrList: Allo ");
+	//			Utilities.writeToLogFIle("PrList: Allo ");
 		}
-			Utilities.writeToLogFIle("PrList: 2");
+	//		Utilities.writeToLogFIle("PrList: 2");
 	if(Okler.getInstance().getBookingType()==9){
 		tabbar_layout.setBackgroundColor(Color.parseColor("#c054ca"));
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
@@ -157,10 +148,10 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 			footer1.setBackgroundColor(Color.parseColor("#562E86"));
 			footer2.setBackgroundColor(Color.parseColor("#562E86"));
 			isDiagnoBooking=true;
-			Utilities.writeToLogFIle("PrList: Diagno");
+		//	Utilities.writeToLogFIle("PrList: Diagno");
 			}		
 		
-	Utilities.writeToLogFIle("PrList: 3");
+	//Utilities.writeToLogFIle("PrList: 3");
 		
 	back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
 	back_layout.setOnClickListener(new OnClickListener() {
@@ -205,9 +196,9 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 	    	tabbar_layout.setBackgroundColor(getResources().getColor(R.color.Blue));
 	    	footer1.setBackgroundColor(getResources().getColor(R.color.DarkBlue));
 			footer2.setBackgroundColor(getResources().getColor(R.color.DarkBlue));
-			Utilities.writeToLogFIle("PrList: Cart");
+		//	Utilities.writeToLogFIle("PrList: Cart");
 	      }
-	      Utilities.writeToLogFIle("PrList: 4");
+	 //     Utilities.writeToLogFIle("PrList: 4");
 		btn_medicines.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -221,7 +212,7 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 				listview1.setAdapter(prescLstAdp);
 				//listview1.setOnScrollListener(null);
 				setListView(false);	
-				Utilities.writeToLogFIle("PrList: Med Clicked");
+		//		Utilities.writeToLogFIle("PrList: Med Clicked");
 			}
 		});
 		btn_dignostics.setOnClickListener(new OnClickListener() {
@@ -238,32 +229,39 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 				listview1.setAdapter(prescLstAdp);
 			//	listview1.setOnScrollListener(null);
 				setListView(true);
-				Utilities.writeToLogFIle("PrList: Diagno Clicked");
+			//	Utilities.writeToLogFIle("PrList: Diagno Clicked");
 			}
 		});
 		
-		Utilities.writeToLogFIle("PrList: 5");
+	//	Utilities.writeToLogFIle("PrList: 5");
 	
 		getPresc = getString(R.string.get_prescriptions);
 		getPresc = getPresc + Utilities.getCurrentUserFromSharedPref(PrescriptionList.this).getId();
 		prescHistory = new ArrayList<PrescriptionsDataBean>();
 		medPrescHistory = new ArrayList<PrescriptionsDataBean>();
 		diagnoPrescHistory = new ArrayList<PrescriptionsDataBean>(); 
+		
+		if(flag)
+		{
+			adap = new MedPrescListAdapter(this, medPrescHistory);
+			listview1.setAdapter(adap);
+		}
+		
 		if(isMedPres){
 			prescLstAdp = new PrescriptionListAdapter(this, medPrescHistory);
-		Utilities.writeToLogFIle("PrList: medList");
+	//	Utilities.writeToLogFIle("PrList: medList");
 		}
 		else{
 			prescLstAdp = new PrescriptionListAdapter(this, diagnoPrescHistory);
-		Utilities.writeToLogFIle("PrList: diagnoList");
+	//	Utilities.writeToLogFIle("PrList: diagnoList");
 		}
 		listview1.setAdapter(prescLstAdp);
 		currPresc = new PrescriptionsDataBean();
-		Utilities.writeToLogFIle("PrList: listview1.setAdapter(prescLstAdp);");
+	//	Utilities.writeToLogFIle("PrList: listview1.setAdapter(prescLstAdp);");
 		//Get Prescriptions
 		getPrescriptions(pageNumber);	
 		listview1.setOnScrollListener(this);
-		Utilities.writeToLogFIle("PrList: pageno = "+pageNumber);
+	//	Utilities.writeToLogFIle("PrList: pageno = "+pageNumber);
 		
 	}
 	@Override
@@ -273,13 +271,13 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 		if(Okler.getInstance().getBookingType()==0){
 			notifcount.setVisibility(View.VISIBLE);
 			UIUtils.setCartCount(notifcount, pct);
-			Utilities.writeToLogFIle("PrList: onResume");
+	//		Utilities.writeToLogFIle("PrList: onResume");
 		}
 	}
 	public void getPrescriptions(int pageNum)
 	{
 		String prescURL = getPresc + getString(R.string.getdiseasePagePart)+pageNum;
-		Utilities.writeToLogFIle("PrList: getpresc Url "+prescURL);
+		//Utilities.writeToLogFIle("PrList: getpresc Url "+prescURL);
 		WebJsonObjectRequest wjson = new WebJsonObjectRequest(Method.GET, prescURL, new JSONObject(), 
 				new Response.Listener<JSONObject>() {
 			@Override
@@ -287,7 +285,7 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 			{
 				try {
 					showProgress(false);
-					Utilities.writeToLogFIle("PrList: getpresscResponse "+String.valueOf(response));
+			//		Utilities.writeToLogFIle("PrList: getpresscResponse "+String.valueOf(response));
 					JSONObject resultsObj = response.getJSONObject("result");
 					totalResultsFromWebService = resultsObj.getInt("total_count");
 					prescriptionURL = resultsObj.getString("prescription_url");
@@ -297,20 +295,22 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 					{
 						currPresc = new PrescriptionsDataBean();
 						JSONObject curPrescrJSon= resultsObj.getJSONObject(""+i);
-						Utilities.writeToLogFIle("PrList: getpresscResponseforloop "+String.valueOf(curPrescrJSon));
+				//		Utilities.writeToLogFIle("PrList: getpresscResponseforloop "+String.valueOf(curPrescrJSon));
 						currPresc.setPresId(curPrescrJSon.getString("id"));
 						currPresc.setDocName(curPrescrJSon.getString("doc_name"));
 						currPresc.setDocSirname(curPrescrJSon.getString("doctorlname"));
 						currPresc.setPatientName(curPrescrJSon.getString("patient_name"));
 						currPresc.setPrescStatus(curPrescrJSon.getString("status"));
-						
+						String str="";
 						String prescrImages = curPrescrJSon.getString("prescription_name");
-						String str = prescrImages.substring(1,prescrImages.length()-1);
+						if(prescrImages.equals(""))
+						continue;	
+						str = prescrImages.substring(1,prescrImages.length()-1);
 						if(str.equals("0"))
 							continue;
 						String[] imgs = str.split(",");
 						ArrayList<PrescriptionImagesDataBean> prsArr = new ArrayList<PrescriptionImagesDataBean>();
-						Utilities.writeToLogFIle("before image for ");
+				//		Utilities.writeToLogFIle("before image for ");
 						for(int imgCnt = 0 ; imgCnt < imgs.length;imgCnt++ )
 						{
 							PrescriptionImagesDataBean pImages = new PrescriptionImagesDataBean();
@@ -321,7 +321,7 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 							prsArr.add(pImages);
 						}
 						currPresc.setPresImages(prsArr);
-						Utilities.writeToLogFIle("PrList: exception before if service type");
+					//	Utilities.writeToLogFIle("PrList: exception before if service type");
 						if(curPrescrJSon.getString("service_type").equals("1"))
 							diagnoPrescHistory.add(currPresc);							
 						else
@@ -329,7 +329,7 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 						prescHistory.add(currPresc);
 				//	Okler.getInstance().setCategoriesBean(categoriesList);
 					}
-					Utilities.writeToLogFIle("PrList: exception before if set ui");
+				//	Utilities.writeToLogFIle("PrList: exception before if set ui");
 					//Set UI
 					if(!isMedPres)
 						setListView(true);
@@ -390,23 +390,66 @@ public class PrescriptionList extends BaseActivity implements OnScrollListener {
 	{
 		Utilities.writeToLogFIle("PrList: setListView("+String.valueOf(isDiagno)+") "+flag);
 		if(flag){
-			adap = new MedPrescListAdapter(this, medPrescHistory);
-			listview1.setAdapter(adap);
-			listview1.setOnItemClickListener(new OnItemClickListener() {
+			if(isDiagno)
+			{
+				adap = new MedPrescListAdapter(this, diagnoPrescHistory);
+				listview1.setAdapter(adap);
+				adap.notifyDataSetChanged();
+				listview1.setOnItemClickListener(new OnItemClickListener() {
 
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					PrescriptionsDataBean pbean = new PrescriptionsDataBean();
-					pbean = (PrescriptionsDataBean)adap.getItem(position);
-					String idd = pbean.getPresId();
-					ConfirmPrescDialog cdlg = new ConfirmPrescDialog(getApplicationContext(), idd);
-					cdlg.show(getFragmentManager(), "DO you want to select this Prescripion?");
-				}
-			});
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+						PrescriptionsDataBean pbean = new PrescriptionsDataBean();
+						pbean = (PrescriptionsDataBean)adap.getItem(position);
+						String idd = pbean.getPresId();
+						String status = pbean.getPrescStatus();
+						if(status.equals("Pending") || status.equals("Rejected"))
+						{
+							boolean flgPending = true;
+							//Toast.makeText(pct, "You cannot upload pending/rejected prescription", Toast.LENGTH_SHORT).show();
+							ConfirmPrescDialog cdlg = new ConfirmPrescDialog(getApplicationContext(), idd, false);
+							cdlg.show(getFragmentManager(), "DO you want to select this Prescripion?");
+						}
+						else
+						{
+							ConfirmPrescDialog cdlg = new ConfirmPrescDialog(getApplicationContext(), idd, true);
+							cdlg.show(getFragmentManager(), "DO you want to select this Prescripion?");
+						}
+					}
+				});
+			}
+			else
+			{
+				adap = new MedPrescListAdapter(this, medPrescHistory);
+				listview1.setAdapter(adap);
+				//adap.notifyDataSetChanged();
+				listview1.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+						PrescriptionsDataBean pbean = new PrescriptionsDataBean();
+						pbean = (PrescriptionsDataBean)adap.getItem(position);
+						String idd = pbean.getPresId();
+						String status = pbean.getPrescStatus();
+						if(status.equals("Pending") || status.equals("Rejected"))
+						{
+							//Toast.makeText(pct, "You cannot upload pending/rejected prescription", Toast.LENGTH_SHORT).show();
+							ConfirmPrescDialog cdlg = new ConfirmPrescDialog(getApplicationContext(), idd, false);
+							cdlg.show(getFragmentManager(), "DO you want to select this Prescripion?");
+						}
+						else
+						{
+							ConfirmPrescDialog cdlg = new ConfirmPrescDialog(getApplicationContext(), idd, true);
+							cdlg.show(getFragmentManager(), "DO you want to select this Prescripion?");
+						}
+					}
+				});
+			}
+			
 		}else
 		{
 			prescLstAdp.notifyDataSetChanged();
-			Utilities.writeToLogFIle("PrList: notifydatasetChanged()");
+		//	Utilities.writeToLogFIle("PrList: notifydatasetChanged()");
 			
 			}
 		showProgress(false);

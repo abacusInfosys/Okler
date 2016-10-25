@@ -715,7 +715,7 @@ public class SocialMediaUtils implements ConnectionCallbacks,
 	private void WebCallForSocialLogin() {
 		// TODO Auto-generated method stub
 
-		// https://www.okler.com/api//emailtemplateservice/user_registration_callback?salutation=&cust_id=&customer_name=&email=
+		// http://183.82.110.105:8081/oklerapi//emailtemplateservice/user_registration_callback?salutation=&cust_id=&customer_name=&email=
 
 		String socal_call_back = activity.getResources().getString(
 				R.string.serverUrl)

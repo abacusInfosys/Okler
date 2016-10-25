@@ -63,7 +63,7 @@ public class PrescriptionDelivery extends BaseActivity {
 	PrescriptionsDataBean presbean = Okler.getInstance()
 			.getPrescriptionsDataBeans();
 	int cust_id;
-	String customer_name, email, salutation, doctor_name, patient_name;
+	String customer_name, email, salutation, doctor_name="", patient_name;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,14 +86,16 @@ public class PrescriptionDelivery extends BaseActivity {
 		PrescriptionsDataBean presbean = Okler.getInstance()
 				.getPrescriptionsDataBeans();
 		doctor_name = presbean.getDocName();
+		if(doctor_name==null)
+			doctor_name="";
 		patient_name = presbean.getPatientName();
 
 		act = this;
-		Utilities.writeToLogFIle("Prdel: 1");
+	//	Utilities.writeToLogFIle("Prdel: 1");
 		proceed.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Utilities.writeToLogFIle("Prdel: proceed clicked");
+		//		Utilities.writeToLogFIle("Prdel: proceed clicked");
 				nameValuePairs = Utilities.getPrescriptionNameValPairFromBean(
 						act, prescriptionsDataBean, isMedPres, required_type);
 				for (int i = 0; i < nameValuePairs.size(); i++) {
@@ -103,7 +105,7 @@ public class PrescriptionDelivery extends BaseActivity {
 				}
 				String str = "";// gson.toJson(postParams);
 				new UploadPrescAsyncTask().execute(str);
-				Utilities.writeToLogFIle("Prdel: asyncCalled");
+		//		Utilities.writeToLogFIle("Prdel: asyncCalled");
 				showProgress(true);
 
 			}
@@ -124,11 +126,11 @@ public class PrescriptionDelivery extends BaseActivity {
 			toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
 			titleLayout.setBackgroundColor(Color.parseColor("#c054ca"));
 			proceed.setBackgroundColor(Color.parseColor("#c054ca"));
-			Utilities.writeToLogFIle("Prdel: diagno");
+		//	Utilities.writeToLogFIle("Prdel: diagno");
 
 		} else {
 			toolBar.setBackgroundResource(R.drawable.custom_view_grad_upload_pesc);
-			Utilities.writeToLogFIle("Prdel: med");
+		//	Utilities.writeToLogFIle("Prdel: med");
 		}
 
 		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
@@ -150,14 +152,14 @@ public class PrescriptionDelivery extends BaseActivity {
 		yesAllMedsImg.setImageResource(R.drawable.blue_radio_btn);
 		callMeImg.setImageResource(R.drawable.grey_radio_btn);
 		required_type = 1;
-		Utilities.writeToLogFIle("Prdel: allmeds");
+	//	Utilities.writeToLogFIle("Prdel: allmeds");
 	}
 
 	public void callMeClicked(View view) {
 		yesAllMedsImg.setImageResource(R.drawable.grey_radio_btn);
 		callMeImg.setImageResource(R.drawable.blue_radio_btn);
 		required_type = 2;
-		Utilities.writeToLogFIle("Prdel: callmediscuss");
+	//	Utilities.writeToLogFIle("Prdel: callmediscuss");
 	}
 
 	public class UploadPrescAsyncTask extends AsyncTask<String, Object, Object> {
@@ -166,7 +168,7 @@ public class PrescriptionDelivery extends BaseActivity {
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
-			Utilities.writeToLogFIle("Prdel: pre_execute");
+		//	Utilities.writeToLogFIle("Prdel: pre_execute");
 		}
 
 		@Override
@@ -237,8 +239,8 @@ public class PrescriptionDelivery extends BaseActivity {
 				String s1[] = resu.split(",");
 				String s2 = s1[3];
 				String s3[] = s2.split(":");
-				String ss = s3[1].substring(0, s3[1].length() - 1);
-				String presc_id = ss;
+				//String ss = s3[1].substring(0, s3[1].length() - 1);
+				String presc_id = s3[1];
 				Utilities.writeToLogFIle("Prdel: upload Success " + presc_id);
 
 				try {
@@ -346,7 +348,7 @@ public class PrescriptionDelivery extends BaseActivity {
 				Toast.makeText(getApplicationContext(),
 						"Some error occured while uploading prescription",
 						Toast.LENGTH_LONG).show();
-				Utilities.writeToLogFIle("Prdel: upload fail");
+			//	Utilities.writeToLogFIle("Prdel: upload fail");
 			}
 
 		}

@@ -35,13 +35,13 @@ public class MediPhysioTextValidations {
 	public boolean validateFirstName() {
 		this.editTextToValidate = edt_firstname;
 		text = new TextValidations(editTextToValidate);
-		return text.ValidateMinimumChars("Please Enter First name", 3);
+		return text.ValidateMinimumChars("Please enter first name", 3);
 	}
 
 	public boolean validateSurnmae() {
 		this.editTextToValidate = edt_surname;
 		text = new TextValidations(editTextToValidate);
-		return text.ValidateMinimumChars("Please Enter surname", 3);
+		return text.ValidateMinimumChars("Please enter surname", 3);
 	}
 
 	public boolean validateEmail() {
@@ -56,27 +56,39 @@ public class MediPhysioTextValidations {
 		long mobile_no;
 		if (mno.equals("") || mno.length() == 0) {
 			mobile_no = 0;
-			editTextToValidate.setError("Please Enter Correct mobile number");
+			editTextToValidate.setError("Please enter correct mobile number.");
+			editTextToValidate.requestFocus();
 			return false;
 		} else {
+			try {
+				
+			
 			mobile_no = Long.parseLong(editTextToValidate.getText().toString());
 			if (mobile_no == 0) {
 				editTextToValidate
-						.setError("Please Enter Correct mobile number");
+						.setError("Please enter correct mobile number.");
+				editTextToValidate.requestFocus();
 				return false;
 			} else if (editTextToValidate.length() < 10
 					|| editTextToValidate.length() > 10) {
 				editTextToValidate
-						.setError("Please enter 10 digit mobile number");
+						.setError("Please enter 10 digit mobile number.");
+				editTextToValidate.requestFocus();
 				return false;
 			} else if (!(mno.startsWith("9") || mno.startsWith("8") || mno
 					.startsWith("7"))) {
 				editTextToValidate
-						.setError("Number should starts with 9,8 or 7");
+						.setError("Number should starts with 9,8 or 7.");
+				editTextToValidate.requestFocus();
 				return false;
 			}
 
-			return true;
+				return true;
+			} catch (NumberFormatException e) {
+				editTextToValidate.setError("Please enter correct mobile number");
+				editTextToValidate.requestFocus();
+				return false;
+			}
 		}
 	}
 

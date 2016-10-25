@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.okler.databeans.UsersDataBean;
 import com.okler.dialogs.EmailPhoneDialog;
 import com.okler.dialogs.PasswordConfirmationDialog;
+import com.okler.dialogs.ResendOtpDialog;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
@@ -27,17 +28,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class OtpConfirmationActivity extends BaseActivity {
 
+	private static final int RESULT_CLOSE_ALL = 0;
 	// Variables init
 	EditText edt_getotp;
+	TextView txt_resend_otp;
 	Button btn_enter;
 	String otpfompref;
 	UsersDataBean userBean;
@@ -46,17 +52,20 @@ public class OtpConfirmationActivity extends BaseActivity {
 	String customer_name;
 	ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 	public static int flag = 0;
-	
-	
-	
+	int approved_status = 0;
+	Activity actr;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		
+		actr = this;
 
 		setContentView(R.layout.activity_otp_confirmation);
 		edt_getotp = (EditText) findViewById(R.id.editText_otp);
 		btn_enter = (Button) findViewById(R.id.button_enter);
+		txt_resend_otp = (TextView) findViewById(R.id.txt_resend_otp);
 		act = this;
 		UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(act);
 		customer_name = ubean.getFname();
@@ -64,6 +73,24 @@ public class OtpConfirmationActivity extends BaseActivity {
 		otpfompref = Utilities.getOtpFromSharedPref(getApplicationContext());
 
 		in = getIntent().getIntExtra("password", 0);
+		
+		UserStatusEnum userstatus = Utilities.getUserStatusFromSharedPref(act);
+		//Toast.makeText(act, ""+userstatus, Toast.LENGTH_SHORT).show();
+		SpannableString content = new SpannableString("Resend OTP ?");
+		content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+		txt_resend_otp.setText(content);
+		
+		txt_resend_otp.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				new ResendOtpDialog(actr).show(getFragmentManager(),"");
+				
+			}
+		});
+		
 		btn_enter.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -73,8 +100,8 @@ public class OtpConfirmationActivity extends BaseActivity {
 				String otp_to_confirm = edt_getotp.getText().toString();
 				if (otpfompref.equals(otp_to_confirm)) {
 					if (in == 1) {
-					/*	Random randomGenerator = new Random();
-						int guid = randomGenerator.nextInt(100000);*/
+						Random randomGenerator = new Random();
+						int guid = randomGenerator.nextInt(100000);
 						String email = EmailPhoneDialog.email;
 						String forgot_pass = getResources().getString(
 								R.string.serverUrl)
@@ -138,6 +165,7 @@ public class OtpConfirmationActivity extends BaseActivity {
 						PasswordConfirmationDialog newpass = new PasswordConfirmationDialog(
 								OtpConfirmationActivity.this);
 						newpass.show();
+						
 
 					} else {
 						userBean = Utilities
@@ -199,8 +227,7 @@ public class OtpConfirmationActivity extends BaseActivity {
 					// Toast.makeText(getApplicationContext(),"Registration Successful",Toast.LENGTH_LONG).show();
 
 					userBean = Okler.getInstance().getuDataBean();
-					Utilities.writeUserStatusEnumToSharedPref(act,
-							UserStatusEnum.LOGGED_IN);
+					//Utilities.writeUserStatusEnumToSharedPref(act,UserStatusEnum.LOGGED_IN);
 					Utilities.writeCurrentUserToSharedPref(
 							OtpConfirmationActivity.this, userBean);
 					Intent success = new Intent(OtpConfirmationActivity.this,
@@ -259,15 +286,16 @@ public class OtpConfirmationActivity extends BaseActivity {
 					// Toast.makeText(getApplicationContext(),"Registration Successful",Toast.LENGTH_LONG).show();
 
 					userBean = Okler.getInstance().getuDataBean();
+					userBean.setApprove_status(1);
 					Utilities.writeUserStatusEnumToSharedPref(act,
 							UserStatusEnum.LOGGED_IN);
 					Utilities.writeCurrentUserToSharedPref(
 							OtpConfirmationActivity.this, userBean);
+				//	Utilities.writeApprovedStatusToFile("1");
 					Intent success = new Intent(OtpConfirmationActivity.this,
 							ServiceCategoryActivity.class);
 					startActivity(success);
-					finish();
-					/*
+					
 					UsersDataBean ubean = Utilities
 							.getCurrentUserFromSharedPref(OtpConfirmationActivity.this);
 
@@ -315,13 +343,13 @@ public class OtpConfirmationActivity extends BaseActivity {
 
 							});
 
-					VolleyRequest.addJsonObjectRequest(OtpConfirmationActivity.this, webObjReq);*/
-					
+					VolleyRequest.addJsonObjectRequest(OtpConfirmationActivity.this, webObjReq);
+					finish();
 					
 				} else {
 
 					Toast.makeText(getApplicationContext(),
-							messageReceived + "\n Please Enter Another Email",
+							messageReceived + "\n Unable to complete registration. Please try again",
 							Toast.LENGTH_LONG).show();
 					Intent intent = new Intent(OtpConfirmationActivity.this,
 							SignUp.class);
@@ -336,55 +364,30 @@ public class OtpConfirmationActivity extends BaseActivity {
 		}
 	}
 	
-	public void registrationCallbackMail(){
-		UsersDataBean ubean = Utilities
-				.getCurrentUserFromSharedPref(act);
-
-		int cust_id = ubean.getId();
-		String salutation = ubean.getSalutation();
-		String name = ubean.getFname();
-		String email = ubean.getEmail();
-
-		String user_registration = act.getResources()
-				.getString(R.string.serverUrl)
-				+ act.getResources().getString(
-						R.string.user_registration_url)
-				+ "salutation="
-				+ salutation
-				+ "&cust_id="
-				+ cust_id
-				+ "&customer_name="
-				+ name
-				+ "&email="
-				+ email;
-
-		WebJsonObjectRequest webObjReq = new WebJsonObjectRequest(
-				Method.GET, user_registration, new JSONObject(),
-				new Response.Listener<JSONObject>() {
-
-					@Override
-					public void onResponse(JSONObject response) {
-						Log.i("contact us", "*****  mail sent*****");
-					}
-
-				}, new Response.ErrorListener() {
-
-					@Override
-					public void onErrorResponse(VolleyError error) {
-
-						// Log.e("error", new
-						// String(error.networkResponse.data));
-
-						Log.i("error", "" + error.getStackTrace());
-
-						Log.i("contact us",
-								"***** fail to send mail****");
-
-					}
-
-				});
-
-		VolleyRequest.addJsonObjectRequest(act, webObjReq);
-
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		/*Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
+		setResult(RESULT_CLOSE_ALL);
+		/*startActivity(intent);*/
+		finish();
+		
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    switch(resultCode)
+	    {
+	    case RESULT_CLOSE_ALL:
+	        setResult(RESULT_CLOSE_ALL);
+	        finish();
+	    }
+	    super.onActivityResult(requestCode, resultCode, data);
+	}
+	
 }

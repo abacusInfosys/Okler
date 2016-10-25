@@ -89,7 +89,9 @@ public class BaseActivity extends AppCompatActivity implements OnClickListener {
 		{
 		case R.id.btnHome:
 			case	R.id.homeRL: intent = new Intent(this,ServiceCategoryActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 									startActivity(intent);
+									finish();
 									break;
 			case R.id.btnUploadPres:						
 			case R.id.uploadPresRL:
@@ -106,8 +108,9 @@ public class BaseActivity extends AppCompatActivity implements OnClickListener {
 					Intent in = new Intent(BaseActivity.this, NewSignIn.class);	
 					int ab = UIUtils.getBookingType("UploadPresc");
 					Okler.getInstance().setBookingType(ab);
+					in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(in);
-					finish();
+					//finish();
 					break;
 				}					
 									
@@ -126,7 +129,9 @@ public class BaseActivity extends AppCompatActivity implements OnClickListener {
 					intent = new Intent(BaseActivity.this, NewSignIn.class);
 					int ab = UIUtils.getBookingType("helpSupport");
 					Okler.getInstance().setBookingType(ab);
+					intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
+					//finish();
 				}
 				break;
 	case R.id.btnManageProfile:	
@@ -138,7 +143,10 @@ public class BaseActivity extends AppCompatActivity implements OnClickListener {
 	case R.id.btnNotif:
 	case R.id.notifRL:
 	intent = new Intent(BaseActivity.this, NotificationActivity.class);
+	intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
+			//finish();
+			
 break;
 					
 			
@@ -156,7 +164,7 @@ break;
 		         public void onClick(DialogInterface arg0, int arg1) {
 		        	 
 		        	 //startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
-		        	 finish();
+		        	// finish();
 		        	 System.exit(0);
 		         }
 		      });
@@ -173,12 +181,19 @@ break;
 		switch(curStatus.ordinal())
 		{
 		case 0:
-		case 5:intent = new Intent(this,NewSignIn.class);startActivity(intent);break;
+		case 5:	intent = new Intent(this,NewSignIn.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				//finish();
+				break;
 		case 1:
 		case 2:
 		case 3:
-		case 4:intent = new Intent(this,MyAccount.class);
-		startActivity(intent);break;
+		case 4:	intent = new Intent(this,MyAccount.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				//finish();
+				break;
 		}	
 	}	
 }

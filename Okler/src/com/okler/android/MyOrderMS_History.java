@@ -24,7 +24,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -52,7 +51,7 @@ public class MyOrderMS_History extends BaseActivity {
 	String add;
 	String custId, ordId;
 	int servType, get;
-	RelativeLayout back_layout;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,31 +87,6 @@ public class MyOrderMS_History extends BaseActivity {
 		btn_cancel_order = (Button) findViewById(R.id.btn_cancel_order);
 
 		// txt_firstname = (TextView) findViewById(R.id.);
-		
-		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
-		back_layout.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				// finish();
-				if (get == 1) {
-					Intent newIntent = new Intent(act,
-							ServiceCategoryActivity.class);
-					newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(newIntent);
-				} else {
-					if (get == 2) {
-						Intent newIntent = new Intent(act,
-								ServiceCategoryActivity.class);
-						newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						startActivity(newIntent);
-					} else {
-						finish();
-					}
-				}
-			}
-		});
 
 		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
@@ -144,8 +118,8 @@ public class MyOrderMS_History extends BaseActivity {
 		addr_title_name = (TextView) findViewById(R.id.addr_title_name);
 		txt_address = (TextView) findViewById(R.id.addr_tv);
 		txt_relation = (TextView) findViewById(R.id.relation_value_tv);
-		txt_service = (TextView) findViewById(R.id.services_required_for_value_tv);
-		txt_sercice_rq = (TextView) findViewById(R.id.services_required_value_tv);
+		txt_service = (TextView) findViewById(R.id.services_required_value_tv);
+		txt_sercice_rq = (TextView) findViewById(R.id.services_required_for_value_tv);
 		int service_rq = msDatabean.getUsertype();
 
 		add = getIntent().getStringExtra("physiobean");
@@ -264,10 +238,111 @@ public class MyOrderMS_History extends BaseActivity {
 			btn_cancel_order
 					.setBackgroundResource(R.drawable.custom_view_grad_physio);
 			btn_cancel_order.setTextColor(Color.WHITE);
-
 			break;
+			
 		case 3:
+		
+		toolBar.setBackgroundResource(R.drawable.custom_view_grad_medi_services);
+		textView_screen_title.setText("Medical services order history");
+		textView_screen_title.setTextColor(Color.WHITE);
+		textView_screen_title
+				.setBackgroundResource(R.drawable.custom_view_grad_medi_services);
+		Utilities.setTitleText(toolBar, "My Order");
+		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 
+		try {
+			addbean = new JSONObject(add);
+			txt_To.setText(addbean.optString("To"));
+
+			txt_From.setText(addbean.optString("From"));
+
+			txt_city.setText(addbean.optString("city"));
+
+			orderId.setText(addbean.optString("booking_id"));
+
+			addr_title_name.setText(addbean.optString("firstname") + " "
+					+ addbean.optString("surname"));
+
+			txt_address.setText(addbean.optString("address") + "\n"
+					+ addbean.optString("city") + " " + "-" + " "
+					+ addbean.optString("pincode") + "\n"
+					+ addbean.optString("phoneno") + "\n"
+					+ addbean.optString("email"));
+
+			relation = addbean.optString("relation");
+			if (relation.equals("Relation") || relation.equals("null")
+					|| relation.equals("")) {
+				txt_relation.setText("");
+			} else {
+				txt_relation.setText(relation);
+			}
+
+			service = addbean.optString("service");
+			if (service.equals("Service Required For")
+					|| service.equals("") || service.equals("null")) {
+				txt_service.setText("");
+			} else {
+				txt_service.setText(service);
+			}
+
+							txt_sercice_rq.setText(addbean.optString("service_required_for"));
+			status = addbean.optString("booking_status");
+
+			// txt_relation.setText(pDataBean.getRelation());
+
+			// txt_service.setText(pDataBean.getService());
+
+			custId = ""
+					+ Utilities.getCurrentUserFromSharedPref(this).getId();
+			ordId = addbean.optString("booking_id");
+			String type = addbean.optString("service");
+			if (type.equals("Trained Attendant"))
+				servType = 4;
+			else
+				servType = 2;
+			/*
+			 * custId = msDatabean.getCustId(); ordId =
+			 * msDatabean.getOrder_id(); servType =
+			 * msDatabean.getUsertype();
+			 */
+			String ordStatus = addbean.optString("booking_status");
+
+			if (ordStatus.equalsIgnoreCase("Placed")) {
+				order_image
+						.setImageResource(R.drawable.blue_order_status_placed_image);
+				// order_image.setImageDrawable(getDrawable(R.drawable.blue_order_status_placed_image));
+			}
+			if (ordStatus.equalsIgnoreCase("Scheduled")) {
+
+				order_image
+						.setImageResource(R.drawable.blue_order_status_scheduled_image);
+			}
+			if (ordStatus.equalsIgnoreCase("In-Service")) {
+				order_image
+						.setImageResource(R.drawable.blue_order_status_processing_image);
+			}
+			if (ordStatus.equalsIgnoreCase("Completed")) {
+				order_image
+						.setImageResource(R.drawable.blue_order_status_complited_image);
+			}
+
+			if (ordStatus.equalsIgnoreCase("Cancelled")){
+				btn_cancel_order.setVisibility(View.INVISIBLE);
+				order_image.setImageDrawable(getResources().getDrawable(R.drawable.order_canceled_pink));
+			}	
+			else {
+				btn_cancel_order
+						.setBackgroundResource(R.drawable.custom_view_grad_medi_services);
+				btn_cancel_order.setTextColor(Color.WHITE);
+			}
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		break;
+		
+		case 4:
 			toolBar.setBackgroundResource(R.drawable.custom_view_grad_physio);
 			textView_screen_title.setText("Physiotherapy order history");
 			textView_screen_title.setTextColor(Color.WHITE);
@@ -309,6 +384,9 @@ public class MyOrderMS_History extends BaseActivity {
 				} else {
 					txt_service.setText(service);
 				}
+				
+				
+				txt_sercice_rq.setText(addbean.optString("service_required_for"));
 
 				status = addbean.optString("booking_status");
 
@@ -340,8 +418,12 @@ public class MyOrderMS_History extends BaseActivity {
 							.setImageResource(R.drawable.blue_order_status_complited_image);
 				}
 
-				if (ordStatus.equalsIgnoreCase("Cancelled"))
+				if (ordStatus.equalsIgnoreCase("Cancelled")){
 					btn_cancel_order.setVisibility(View.INVISIBLE);
+					order_image.setImageDrawable(getResources().getDrawable(R.drawable.order_canceled_blue));
+					
+
+				}
 				else {
 					btn_cancel_order
 							.setBackgroundResource(R.drawable.custom_view_grad_physio);
@@ -353,105 +435,7 @@ public class MyOrderMS_History extends BaseActivity {
 			}
 
 			break;
-
-		case 4:
-
-			toolBar.setBackgroundResource(R.drawable.custom_view_grad_medi_services);
-			textView_screen_title.setText("Medical services order history");
-			textView_screen_title.setTextColor(Color.WHITE);
-			textView_screen_title
-					.setBackgroundResource(R.drawable.custom_view_grad_medi_services);
-			Utilities.setTitleText(toolBar, "My Order");
-			imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
-
-			try {
-				addbean = new JSONObject(add);
-				txt_To.setText(addbean.optString("To"));
-
-				txt_From.setText(addbean.optString("From"));
-
-				txt_city.setText(addbean.optString("city"));
-
-				orderId.setText(addbean.optString("booking_id"));
-
-				addr_title_name.setText(addbean.optString("firstname") + " "
-						+ addbean.optString("surname"));
-
-				txt_address.setText(addbean.optString("address") + "\n"
-						+ addbean.optString("city") + " " + "-" + " "
-						+ addbean.optString("pincode") + "\n"
-						+ addbean.optString("phoneno") + "\n"
-						+ addbean.optString("email"));
-
-				relation = addbean.optString("relation");
-				if (relation.equals("Relation") || relation.equals("null")
-						|| relation.equals("")) {
-					txt_relation.setText("");
-				} else {
-					txt_relation.setText(relation);
-				}
-
-				service = addbean.optString("service");
-				if (service.equals("Service Required For")
-						|| service.equals("") || service.equals("null")) {
-					txt_service.setText("");
-				} else {
-					txt_service.setText(service);
-				}
-
-				status = addbean.optString("booking_status");
-
-				// txt_relation.setText(pDataBean.getRelation());
-
-				// txt_service.setText(pDataBean.getService());
-
-				custId = ""
-						+ Utilities.getCurrentUserFromSharedPref(this).getId();
-				ordId = addbean.optString("booking_id");
-				String type = addbean.optString("service");
-				if (type.equals("Trained Attendant"))
-					servType = 4;
-				else
-					servType = 2;
-				/*
-				 * custId = msDatabean.getCustId(); ordId =
-				 * msDatabean.getOrder_id(); servType =
-				 * msDatabean.getUsertype();
-				 */
-				String ordStatus = addbean.optString("booking_status");
-
-				if (ordStatus.equalsIgnoreCase("Placed")) {
-					order_image
-							.setImageResource(R.drawable.blue_order_status_placed_image);
-					// order_image.setImageDrawable(getDrawable(R.drawable.blue_order_status_placed_image));
-				}
-				if (ordStatus.equalsIgnoreCase("Scheduled")) {
-
-					order_image
-							.setImageResource(R.drawable.blue_order_status_scheduled_image);
-				}
-				if (ordStatus.equalsIgnoreCase("In-Service")) {
-					order_image
-							.setImageResource(R.drawable.blue_order_status_processing_image);
-				}
-				if (ordStatus.equalsIgnoreCase("Completed")) {
-					order_image
-							.setImageResource(R.drawable.blue_order_status_complited_image);
-				}
-
-				if (ordStatus.equalsIgnoreCase("Cancelled"))
-					btn_cancel_order.setVisibility(View.INVISIBLE);
-				else {
-					btn_cancel_order
-							.setBackgroundResource(R.drawable.custom_view_grad_medi_services);
-					btn_cancel_order.setTextColor(Color.WHITE);
-				}
-			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			break;
+	
 		}
 
 		btn_cancel_order.setOnClickListener(new OnClickListener() {

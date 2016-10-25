@@ -106,7 +106,7 @@ public class DiagnoOrderCancellation extends Dialog implements
 					+ c.getString(R.string.cancel_order_diagno_reason) + reason;
 			/*
 			 * } else cancel_order =
-			 * "https://www.okler.com/api/order/delete?order_id="
+			 * "http://183.82.110.105:8081/oklerapi/order/delete?order_id="
 			 * +order_id+"&cust_id="+uid+"&notes="+reason;
 			 */
 			WebJsonObjectRequest webjson = new WebJsonObjectRequest(Method.GET,

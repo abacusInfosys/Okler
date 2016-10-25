@@ -1,5 +1,7 @@
 package com.okler.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +13,7 @@ import org.json.JSONObject;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.Request.Method;
+import com.android.volley.Response.Listener;
 import com.okler.android.MyCart;
 import com.okler.android.NewSignIn;
 import com.okleruser.R;
@@ -26,9 +29,11 @@ import com.okler.network.WebJsonObjectRequest;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -60,6 +65,8 @@ public class UIUtils {
 	static int totalPages;
 	static int totalWebServiceResults;
 	static boolean isCityFound=false;
+	static ArrayList<ProductDataBean> favs;
+	static boolean isAddedAlready =false;
 
 	// 15_01_2016 Gitesh start
 	public UIUtils() {
@@ -501,7 +508,7 @@ public class UIUtils {
 									subCat.setSubCateId(subCates
 											.getString("id"));
 									subCat.setSubCateName(subCates
-											.getString("drug_name"));
+											.getString("subcategory"));
 									subCatsList.add(subCat);
 								}
 							} catch (JSONException e) {
@@ -672,4 +679,330 @@ public class UIUtils {
 			}
 		});
     }
+	
+	public static void addToSearchHistory(String search,Activity ack,int term_type_id){
+		String term_type="",serverUrl="",term="",addToSearchUrl="",addToSearchUrlPart1="";
+		UsersDataBean ubBean = Utilities.getCurrentUserFromSharedPref(ack);
+		int userId=0;
+		userId = ubBean.getId();
+		term_type = ack.getString(R.string.term_type);
+		final String search1 = search;
+		try {
+			search = URLEncoder.encode(search,"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		term = ack.getString(R.string.term);
+		addToSearchUrlPart1= ack.getString(R.string.addToSearchHistoryPart1);
+		serverUrl = ack.getString(R.string.serverUrl);		
+		addToSearchUrl = serverUrl+addToSearchUrlPart1+userId+term_type+term_type_id+term+search;
+	
+		WebJsonObjectRequest addToHisJson = new WebJsonObjectRequest(Method.GET, addToSearchUrl, new JSONObject(), new Response.Listener<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				
+				if(!(response.has("error"))){
+					Utilities.writeToLogFIle("added to Search History "+search1+" result "+response.optString("message"));
+				}
+				
+			}
+		}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				Utilities.writeToLogFIle("Not added to Search History "+search1+" onError "+error.toString());
+				//Log.e("ERROR", new String(error.networkResponse.data));
+				
+			}
+		},true);
+		
+		VolleyRequest.addJsonObjectRequest(ack, addToHisJson);
+	}
+	
+	public static String getDayOfWeek(int day){
+		String dayOfWeek="";
+		switch (day) {
+		case 1:
+			return "SUN";
+			
+		case 2:
+			return "MON";
+			
+		case 3:
+			return "TUE";
+			
+		case 4:
+			return "WED";
+			
+		case 5:
+			return "THU";
+			
+		case 6:
+			return "FRI";
+			
+		case 7:
+			return "SAT";		
+			
+		default:
+			return "";
+			
+		}
+		
+	}
+	
+	public static String getMonthOfYear(int month){
+		String monthOfYear="";
+		switch (month) {
+		case 0:
+			return "Jan";
+		case 1:
+			return "Feb";
+		case 2:
+			return "Mar";
+		case 3:
+			return "Apr";
+		case 4:
+			return "May";
+		case 5:
+			return "Jun";
+		case 6:
+			return "Jul";
+		case 7:
+			return "Aug";
+		case 8:
+			return "Sep";
+		case 9:
+			return "Oct";
+		case 10:
+			return "Nov";
+		case 11:
+			return "Dec";
+		default:
+			return "";
+		
+		}
+	}
+	
+	public static void addRemoveFavourites(View v,final Activity context,final ProductDataBean prods){
+		favs = new ArrayList<ProductDataBean>();
+		isAddedAlready =false;
+		if (Utilities.getUserStatusFromSharedPref(context) == UserStatusEnum.LOGGED_IN ||
+				(Utilities.getUserStatusFromSharedPref(context) == UserStatusEnum.LOGGED_IN_FB) ||
+				(Utilities.getUserStatusFromSharedPref(context) == UserStatusEnum.LOGGED_IN_GOOGLE))
+			{
+		final int viewid = (int) v.getTag();
+		//Toast.makeText(context, ""+viewid, 100).show();
+		UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(context);
+		final int userId = ubean.getId();
+		//favs = new ArrayList<ProductDataBean>();
+		favs = Utilities.getFavourites(context);
+		//favs = Okler.getInstance().getFavourites();
+		final RelativeLayout rl = (RelativeLayout)v;
+	for(int i=0;i<favs.size();i++){
+		if(viewid==favs.get(i).getProdId()){
+			isAddedAlready=true;
+			break;
+		}
+	}
+	if(isAddedAlready){
+		AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+		alertDialog.setTitle("Alert");
+		alertDialog.setMessage("Are you sure, you want to remove this product from your favourites?");
+		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				
+				final String delete_fav = context.getString(R.string.delete_fav_url) +userId+context.getString(R.string.getMedsUrlProdId3)+viewid;
+				//	Toast.makeText(getApplicationContext(), "id"+ viewid, Toast.LENGTH_LONG).show();
+									         
+				        	 WebJsonObjectRequest webjson=new WebJsonObjectRequest(Method.GET, delete_fav, new JSONObject(),new Listener<JSONObject>() 
+										{
+											@Override
+											public void onResponse(JSONObject response) 
+											{
+												// TODO Auto-generated method stub
+												
+												
+												JSONObject responseObj =(JSONObject)response;
+												String result = responseObj.optString("result");
+												String message = responseObj.optString("message"); 
+									//			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+												
+										//		Toast.makeText(getApplicationContext(), "result" + result, Toast.LENGTH_LONG).show();
+												
+												if(message.equals("deleted success from favourites"))
+												{
+													//array1 = Okler.getInstance().getFavourites();
+													favs = Utilities.getFavourites(context);
+													//favs = Okler.getInstance().getFavourites();
+													for(int i = 0; i<favs.size(); i++)
+													{
+														if(viewid==favs.get(i).getProdId()){
+															favs.remove(i);
+															Utilities.writeFavouritesToSharedPref(context, favs);
+															//Okler.getInstance().setFavourites(favs);
+															ImageView image_favourite = (ImageView) rl.findViewById(R.id.image_favourite);	
+					 	 									image_favourite.setBackgroundResource(R.drawable.favourites);
+					 	 									Toast.makeText(context, "Product Successfully Removed From Your Favourites", Toast.LENGTH_SHORT).show();
+					 	 									isAddedAlready=false;
+														}
+														
+													}
+												}else{
+													Toast.makeText(context, "Failed To Remove Product From Your Favourites", Toast.LENGTH_SHORT).show();
+												}
+												
+												
+										
+											}}, 
+											new Response.ErrorListener() 
+											{
+
+												@Override
+												public void onErrorResponse(VolleyError error) 
+												{
+													Log.i("error", String.valueOf(error));
+													Toast.makeText(context, "Failed To Remove Product From Your Favourites", Toast.LENGTH_SHORT).show();
+										
+												}
+											}
+								);
+							
+						VolleyRequest.addJsonObjectRequest(context,webjson);
+				
+			}
+		});
+		
+		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				
+				dialog.dismiss();
+				
+			}
+		});
+		
+		alertDialog.show();
+	}else{
+			String add_fav = context.getString(R.string.add_fav_url)
+					+ context.getString(R.string.cust_id) + userId + context.getString(R.string.getMedsUrlProdId3)+viewid;
+		    	
+		    	
+		    	WebJsonObjectRequest webjson=new WebJsonObjectRequest(Method.GET, add_fav, new JSONObject(),new Listener<JSONObject>() 
+						{
+							@Override
+							public void onResponse(JSONObject response) 
+							{
+								// TODO Auto-generated method stub
+								
+								
+								JSONObject responseObj =(JSONObject)response;
+								String message = responseObj.optString("message");
+									
+								if(message.equals("Product Successfully Added To Your Favorites"))
+								{
+									favs = Utilities.getFavourites(context);
+									//favs = Okler.getInstance().getFavourites();
+									//for(int i = 0;i<prods.size();i++){
+										//if(prods.get(i).getProdId()==viewid){
+											favs.add(prods);
+										//}
+									//}
+									Utilities.writeFavouritesToSharedPref(context, favs);		
+									//Okler.getInstance().setFavourites(favs);
+								ImageView image_favourite = (ImageView) rl.findViewById(R.id.image_favourite);	
+									image_favourite.setBackgroundResource(R.drawable.fav_filled_heart_icon);
+									Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+									//holder.image_favourite.setEnabled(false);
+									//holder.image_favourite_filled.setVisibility(View.VISIBLE);
+									//holder.image_favourite_filled.setEnabled(true);
+								}else if(message.equals("Product Already Exists In Your Favorites")){
+									Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+								}
+								else{
+									Toast.makeText(context, "Failed To Add Product To Your Favorites", Toast.LENGTH_LONG).show();
+								}
+								
+						
+							}}, 
+							new Response.ErrorListener() 
+							{
+
+								@Override
+								public void onErrorResponse(VolleyError error) 
+								{
+									
+									Toast.makeText(context, "Failed To Add Product To Your Favorites", Toast.LENGTH_LONG).show();
+						
+								}
+							}
+				);
+					
+				VolleyRequest.addJsonObjectRequest(context,webjson);
+			
+	}
+	}else{
+		
+			Intent in = new Intent(context, NewSignIn.class);
+			context.startActivity(in);
+		}
+	}
+	
+	public static ProductDataBean getProdBean(String json){
+		ProductDataBean pBean=new ProductDataBean();
+		try {
+			JSONObject job = new JSONObject(json);
+			pBean.setProdId(job.optInt("prodId"));
+			pBean.setPresc_needed(job.optInt("presc_needed"));
+			pBean.setUnits(job.optInt("units"));
+			pBean.setProdType(job.optInt("prodType"));
+			pBean.setProdName(job.optString("prodName"));
+			pBean.setDesc(job.optString("desc"));
+			pBean.setSide_effect(job.optString("side_effect"));
+			pBean.setCompany(job.optString("company"));
+			pBean.setDosage(job.optString("dosage"));
+			pBean.setImgUrl(job.optString("imgUrl"));
+			pBean.setIndications(job.optString("indications"));
+			pBean.setContraIndi(job.optString("contraIndi"));
+			pBean.setCaution(job.optString("caution"));
+			pBean.setWeight(job.optString("weight"));
+			pBean.setGeneric_name(job.optString("generic_name"));
+			pBean.setInteracions(job.optString("interacions"));
+			pBean.setDiet_rest(job.optString("diet_rest"));
+			pBean.setComposition(job.optString("composition"));
+			pBean.setPacking_size(job.optString("packing_size"));
+			pBean.setKey_feature(job.optString("key_feature"));
+			pBean.setSpecfic(job.optString("specfic"));
+			pBean.setBrandInfo(job.optString("brandInfo"));
+			pBean.setWarranty(job.optString("warranty"));
+			pBean.setMrp(Float.parseFloat(job.opt("mrp").toString()));
+			pBean.setOklerPrice(Float.parseFloat(job.opt("oklerPrice").toString()));
+			pBean.setDiscount(Float.parseFloat(job.opt("discount").toString()));
+			pBean.setCart_item_id(job.optInt("cart_item_id"));
+			pBean.setTax(Float.parseFloat(job.opt("tax").toString()));
+			pBean.setPresc_id(job.optString("presc_id"));
+			pBean.setIs_presc_upped(job.optInt("is_presc_upped"));
+			pBean.setCart_id(job.optString("cart_id"));
+			pBean.setCart_num(job.optString("cart_num"));
+			pBean.setFavourite(job.optBoolean("isFavourite"));
+			pBean.setMediumUrl(job.optString("mediumUrl"));
+			pBean.setThumbUrl(job.optString("thumbUrl"));
+			pBean.setSmallUrl(job.optString("SmallUrl"));
+			pBean.setClipArtUrl(job.optString("clipArtUrl"));
+			
+			return pBean;
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return new ProductDataBean();
+		}
+		
+	}
 }

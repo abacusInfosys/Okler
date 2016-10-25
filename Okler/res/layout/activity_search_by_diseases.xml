@@ -19,8 +19,31 @@
 	/>
 
 <TextView
+    android:id="@+id/search_history"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    
+    android:layout_alignParentRight="true"
+    android:layout_below="@+id/toolbar"
+    android:layout_marginRight="6dp"
+    android:background="@null"
+    android:text="@string/view_search_history"
+    android:textColor="#99d5e3"
+    android:visibility="invisible"
+    android:textSize="16sp" />
+
+<RelativeLayout 
+    android:id="@+id/separatorRL"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/currentPosition"
+    >
+   <include layout="@layout/separator_1dp"/>
+</RelativeLayout>
+
+<TextView
     android:id="@+id/no_items"
-    android:layout_below="@id/currentPosition"
+    android:layout_below="@+id/separatorRL"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"    
     android:text="No Data Available"

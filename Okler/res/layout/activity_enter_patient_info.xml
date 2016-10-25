@@ -24,11 +24,13 @@
 <TextView 
         android:id="@+id/p_info_addr"
         android:layout_width="fill_parent"
-        android:layout_height="?actionBarSize"
+        android:layout_height="wrap_content"
     	android:background="@color/LightGrey"
-    	android:textSize="18sp"
+    	android:textSize="16sp"
     	android:textColor="@color/Black"
     	android:textStyle="bold"
+    	android:paddingTop="6dp"
+    	android:paddingBottom="6dp"
     	android:gravity="center|center_vertical"
     	android:text="@string/p_info_addr"
     	android:layout_below="@+id/toolbar"
@@ -81,6 +83,7 @@
                  android:layout_height="40dp"
                  android:layout_marginTop="10dp"
                  android:ems="10"
+                 android:layout_marginLeft="10dp"
                  android:hint="Date of birth*"
                  android:textSize="18sp" />
 
@@ -162,7 +165,7 @@
                 android:id="@+id/stateTv"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_marginBottom="30dp"
+                 android:layout_marginBottom="10dp"
                  android:layout_marginTop="10dp"
                  android:ems="10"
                  android:imeOptions="actionNext"
@@ -173,8 +176,7 @@
                  android:id="@+id/cityTv"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:layout_marginBottom="30dp"
-                 android:layout_marginTop="10dp"
+                 android:layout_marginBottom="10dp"
                  android:ems="10"
                  android:imeOptions="actionDone"
                  android:inputType="text"
@@ -186,12 +188,16 @@
      <Button
          android:id="@+id/btn_sced_pickup"
          android:layout_above="@id/bottombar"
-         android:layout_width="match_parent"
+         android:layout_width="fill_parent"
          android:background="@color/ModerateMagenta"
-         android:layout_height="?actionBarSize"
+         android:layout_height="wrap_content"
          android:text="@string/schedule_pickup"
          android:textColor="@color/White"
-         android:textSize="20sp" />
+         android:gravity="center"
+         android:paddingTop="6dp"
+         android:textSize="16sp"
+         android:paddingBottom="6dp"
+          />
      
      
      <include
@@ -200,5 +206,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         layout="@layout/layout_bottom_bar" />
-    
+     <LinearLayout 
+        android:orientation="vertical" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" 
+        android:id="@+id/progressLinLayout" 
+        android:gravity="center" 
+        android:visibility="gone" 
+        android:layout_centerInParent="true">
+	<ProgressBar 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:indeterminate="true"/>
+    </LinearLayout>
 </RelativeLayout>

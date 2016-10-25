@@ -44,24 +44,27 @@
 	 				    layout="@layout/seperator"
 	 				    android:layout_below="@id/item_image"/> -->
 					    
-					
+				<RelativeLayout 
+				     android:id="@+id/parentImageFav"
+				     android:layout_width="wrap_content"
+				     android:layout_height="wrap_content"
+				     android:layout_alignParentRight="true"
+				     
+				    >	
 				<ImageView
 				        android:id="@+id/image_favourite"
 				        android:layout_width="30dp"
 				        android:layout_height="30dp"
-				        android:layout_alignParentRight="true"
-				        android:src="@drawable/favourites"
-				        
-				        android:layout_marginTop="5dp" />
-				
-				<ImageView
+				        android:background="@drawable/favourites"
+				        android:layout_margin="5dp" />
+				</RelativeLayout>
+				<!-- <ImageView
 				        android:id="@+id/image_favourite_filled"
 				        android:layout_width="30dp"
 				        android:layout_height="30dp"
 				        android:layout_alignParentRight="true"
-				        android:src="@drawable/favourites"
-				        
-				        android:layout_marginTop="5dp" />
+				        android:src="@drawable/fav_filled_heart_icon"
+				        android:layout_marginTop="5dp" /> -->
 				    
 			</RelativeLayout>
 			<RelativeLayout 

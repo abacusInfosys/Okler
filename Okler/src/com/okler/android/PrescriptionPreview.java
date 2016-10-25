@@ -2,19 +2,12 @@ package com.okler.android;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -34,8 +27,6 @@ import com.okler.utils.CameraGalleryImageInfo;
 import com.okler.utils.Okler;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
-import com.okler.android.PrescriptionDelivery.UploadPrescAsyncTask;
-
 import com.okler.databeans.PrescriptionImagesDataBean;
 import com.okler.databeans.PrescriptionsDataBean;
 import com.okler.databeans.UsersDataBean;
@@ -43,19 +34,12 @@ import com.okler.dialogs.CameraGalleryDialog;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -87,12 +71,12 @@ public class PrescriptionPreview extends BaseActivity {
 	ImageView imgBack;
 	boolean isMedPres;
 	LinearLayout progressLinLayout;
-Activity act;
-ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-PrescriptionsDataBean prescriptionsDataBean;
-int required_type=0;
-String uploadPrescrUrl;
-RelativeLayout back_layout;
+	Activity act;
+	ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+	PrescriptionsDataBean prescriptionsDataBean;
+	int required_type=0;
+	String uploadPrescrUrl;
+	RelativeLayout back_layout;
 
 
 	@Override
@@ -106,7 +90,7 @@ RelativeLayout back_layout;
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 		act=this;
-		Utilities.writeToLogFIle("PrescPrev: 1");
+		//Utilities.writeToLogFIle("PrescPrev: 1");
 		toolBar=(Toolbar) findViewById(R.id.toolbar);
 		progressLinLayout = (LinearLayout)findViewById(R.id.progressLinLayout);
 		setSupportActionBar(toolBar);
@@ -118,10 +102,10 @@ RelativeLayout back_layout;
 			titleLayout=(LinearLayout) findViewById(R.id.title_layout);
 			toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
 			titleLayout.setBackgroundColor(Color.parseColor("#c054ca"));
-				Utilities.writeToLogFIle("PrescPrev: Diagno");
+		//		Utilities.writeToLogFIle("PrescPrev: Diagno");
 		}else{
 			toolBar.setBackgroundResource(R.drawable.custom_view_grad_upload_pesc);
-			Utilities.writeToLogFIle("PrescPrev: Med");
+	//		Utilities.writeToLogFIle("PrescPrev: Med");
 		}
 		back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
 		back_layout.setOnClickListener(new OnClickListener() {
@@ -138,7 +122,8 @@ RelativeLayout back_layout;
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-			Okler.getInstance().getPrescriptionsDataBeans().getPresImages().clear();
+				Okler.getInstance().getPrescriptionsDataBeans().getPresImages().clear();
+				
 			finish();	
 			}
 		});
@@ -155,7 +140,7 @@ RelativeLayout back_layout;
 			btnCancel.setBackgroundColor(getResources().getColor(R.color.ModerateMagenta)); 
 			btnUpload.setBackgroundColor(getResources().getColor(R.color.Darkmoderateviolet));
 		}
-		Utilities.writeToLogFIle("PrescPrev: 2");
+	//	Utilities.writeToLogFIle("PrescPrev: 2");
 		if(getIntent().getExtras().get("imageFilePath") != null)
     	{
     		imageFilePath =  getIntent().getExtras().get("imageFilePath").toString();
@@ -177,7 +162,7 @@ RelativeLayout back_layout;
 		imgBitmap.compress(Bitmap.CompressFormat.JPEG, 50, bs);
 		bundle.putByteArray("image", bs.toByteArray());		
 		
-		Utilities.writeToLogFIle("PrescPrev: 3");
+	//	Utilities.writeToLogFIle("PrescPrev: 3");
 		imgPreview.setImageBitmap(imgBitmap);
 		
 		btnCancel.setOnClickListener(new OnClickListener() {
@@ -193,10 +178,10 @@ RelativeLayout back_layout;
 					Okler.getInstance().getPrescriptionsDataBeans().getPresImages().clear();
 					//Toast.makeText(getApplicationContext(), "Atleast One Prescription is needed.", Toast.LENGTH_LONG).show();
 				}
-				Utilities.writeToLogFIle("PrescPrev:  Cancle Clicked");
+			//	Utilities.writeToLogFIle("PrescPrev:  Cancle Clicked");
 			}
 		});
-		Utilities.writeToLogFIle("PrescPrev: 4");
+	//	Utilities.writeToLogFIle("PrescPrev: 4");
 		btnUpload.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -208,7 +193,7 @@ RelativeLayout back_layout;
 					prescriptionsDataBean = Okler.getInstance().getPrescriptionsDataBeans();
 					nameValuePairs = Utilities.getPrescriptionNameValPairFromBean(act, prescriptionsDataBean, isMedPres, required_type);
 					String str ="";// gson.toJson(postParams);
-					Utilities.writeToLogFIle("PrescPrev: upclicked diagno");
+				//	Utilities.writeToLogFIle("PrescPrev: upclicked diagno");
 					new UploadPrescAsyncTask().execute(str);
 					showProgress(true);
 				}
@@ -217,10 +202,10 @@ RelativeLayout back_layout;
 					Intent in = new Intent(PrescriptionPreview.this, PrescriptionDelivery.class);
 					in.putExtra("isMedPres",isMedPres);
 					startActivity(in);
-					Utilities.writeToLogFIle("PrescPrev:  upclicked med");
+				//	Utilities.writeToLogFIle("PrescPrev:  upclicked med");
 				}
 				
-				Utilities.writeToLogFIle("PrescPrev:  upclicked");
+			//	Utilities.writeToLogFIle("PrescPrev:  upclicked");
 				
 			}
 		});	
@@ -230,7 +215,7 @@ RelativeLayout back_layout;
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		super.onBackPressed();
-		Utilities.writeToLogFIle("PrescPrev: onBackPressed()");
+	//	Utilities.writeToLogFIle("PrescPrev: onBackPressed()");
 		Okler.getInstance().getPrescriptionsDataBeans().getPresImages().clear();
 		finish();
 	}
@@ -239,7 +224,7 @@ RelativeLayout back_layout;
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		Utilities.writeToLogFIle("PrescPrev: onResume()");
+	//	Utilities.writeToLogFIle("PrescPrev: onResume()");
 		layout = (LinearLayout) findViewById(R.id.image_layout);
 		totalCnt = Okler.getInstance().getPrescriptionsDataBeans().getPresImages().size();
 		ImageView[] imageViews = new ImageView[totalCnt+1];
@@ -250,7 +235,7 @@ RelativeLayout back_layout;
 		lp2.width=100;
 		lp2.gravity=Gravity.CENTER_VERTICAL;
 		lp.setMargins(5, 5, 5, 5);
-		Utilities.writeToLogFIle("PrescPrev: 6");
+	//	Utilities.writeToLogFIle("PrescPrev: 6");
 		for(int  i =0; i < totalCnt; i++)
 		{
 			imageViews[i] = new ImageView(getApplicationContext());
@@ -269,7 +254,7 @@ RelativeLayout back_layout;
 		imageViews[totalCnt].setLayoutParams(lp2);
 		//imageViews[totalCnt].setLayoutParams(lp);
 		layout.addView(imageViews[totalCnt]);
-		Utilities.writeToLogFIle("PrescPrev: 8");
+	//	Utilities.writeToLogFIle("PrescPrev: 8");
 	
 		
 		imageViews[totalCnt].setOnClickListener(new OnClickListener() {
@@ -286,7 +271,7 @@ RelativeLayout back_layout;
 				
 			}
 		});
-		Utilities.writeToLogFIle("PrescPrev: 9");
+	//	Utilities.writeToLogFIle("PrescPrev: 9");
 	}
 	
 	@Override
@@ -317,23 +302,24 @@ RelativeLayout back_layout;
 			super.onActivityResult(requestCode, resultCode, data);
 			try
 			{
-			Utilities.writeToLogFIle("PrescPrev: onactivityresult");
-			Utilities.writeToLogFIle("UpPresc: requestCode= "+requestCode+" resultCode= "+resultCode+" data= "+data);
+	//		Utilities.writeToLogFIle("PrescPrev: onactivityresult");
+		//	Utilities.writeToLogFIle("UpPresc: requestCode= "+requestCode+" resultCode= "+resultCode+" data= "+data);
 			if(resultCode == RESULT_OK)
 			{
-				Utilities.writeToLogFIle("PrescPrev: resultCode == RESULT_OK "+resultCode);
+		//		Utilities.writeToLogFIle("PrescPrev: resultCode == RESULT_OK "+resultCode);
 			CameraGalleryImageInfo imgInfo = Utilities.getImageInfo(requestCode, resultCode, this, data);
-			Utilities.writeToLogFIle("PrescPrev: CameraGalleryImageInfo imgInfo = Utilities.getImageInfo(requestCode, resultCode, this, data); "+imgInfo);
+		//	Utilities.writeToLogFIle("PrescPrev: CameraGalleryImageInfo imgInfo = Utilities.getImageInfo(requestCode, resultCode, this, data); "+imgInfo);
 			PrescriptionImagesDataBean pImgBean = new PrescriptionImagesDataBean();
-			Utilities.writeToLogFIle("PrescPrev: PrescriptionImagesDataBean pImgBean = new PrescriptionImagesDataBean();");
-			Bitmap iBitmap = imgInfo.getImgBitmap();				
+		//	Utilities.writeToLogFIle("PrescPrev: PrescriptionImagesDataBean pImgBean = new PrescriptionImagesDataBean();");
+			Bitmap iBitmap = imgInfo.getImgBitmap();
+			if(iBitmap!=null){
 			Utilities.writeToLogFIle("PrescPrev: Bitmap iBitmap = imgInfo.getImgBitmap(); "+ iBitmap);
 		    String	base64string = Utilities.convertImageToBase64(iBitmap);
-		    Utilities.writeToLogFIle("PrescPrev: String	base64string = Utilities.convertImageToBase64(iBitmap); "+base64string);
+		  //  Utilities.writeToLogFIle("PrescPrev: String	base64string = Utilities.convertImageToBase64(iBitmap); "+base64string);
 		    pImgBean.setPrescImages(iBitmap);
-		    Utilities.writeToLogFIle("PrescPrev: pImgBean.setPrescImages(iBitmap);");
+		  //  Utilities.writeToLogFIle("PrescPrev: pImgBean.setPrescImages(iBitmap);");
 		    pImgBean.setBase64ConvrtedImg(base64string);
-		    Utilities.writeToLogFIle("PrescPrev: pImgBean.setBase64ConvrtedImg(base64string);");
+		  //  Utilities.writeToLogFIle("PrescPrev: pImgBean.setBase64ConvrtedImg(base64string);");
 		    String imgPa = imgInfo.getUri();
 		    Utilities.writeToLogFIle("PrescPrev: ImgUri "+imgPa);
 		    pImgBean.setImgUri(imgPa);
@@ -346,9 +332,9 @@ RelativeLayout back_layout;
 		    {
 		    	for(int c = 0; c < size; c++)
 		    	{
-		    		Utilities.writeToLogFIle("PrescPrev: in for "+c);
+		    		//Utilities.writeToLogFIle("PrescPrev: in for "+c);
 		    		String oldImgPath = Okler.getInstance().getPrescriptionsDataBeans().getPresImages().get(c).getImgUri();
-		    		Utilities.writeToLogFIle("PrescPrev: String oldImgPath = Okler.getInstance().getPrescriptionsDataBeans().getPresImages().get(c).getImgUri(); "+oldImgPath  );
+		    		//Utilities.writeToLogFIle("PrescPrev: String oldImgPath = Okler.getInstance().getPrescriptionsDataBeans().getPresImages().get(c).getImgUri(); "+oldImgPath  );
 		    		if(oldImgPath.equals(pImgBean.getImgUri())){
 		    			Utilities.writeToLogFIle("PrescPrev: if(oldImgPath.equals(pImgBean.getImgUri())) "+"imgFound"+String.valueOf(imgFound));
 		    			imgFound = true;
@@ -357,10 +343,12 @@ RelativeLayout back_layout;
 		    }
 
 		    if(!imgFound)
-		    	Utilities.writeToLogFIle("PrescPrev: if(!imgFound)");
+		    	//Utilities.writeToLogFIle("PrescPrev: if(!imgFound)");
 		    	Okler.getInstance().getPrescriptionsDataBeans().getPresImages().add(pImgBean);
-		    	Utilities.writeToLogFIle("PrescPrev: Okler.getInstance().getPrescriptionsDataBeans().getPresImages().add(pImgBean);");
-	
+		    	//Utilities.writeToLogFIle("PrescPrev: Okler.getInstance().getPrescriptionsDataBeans().getPresImages().add(pImgBean);");
+			}else{
+				Toast.makeText(act, "Unable to locate image file.", Toast.LENGTH_SHORT).show();
+			}
 			}
 			else if(resultCode == -1){
 				Utilities.writeToLogFIle("PrescPrev:  Gallery Crash "+resultCode);
@@ -455,8 +443,8 @@ RelativeLayout back_layout;
 					String s1[] = resu.split(",");
 					String s2 = s1[3];
 					String s3[] = s2.split(":");
-					String ss = s3[1].substring(0, s3[1].length()-1);
-					String presc_id= ss;
+					//String ss = s3[1].substring(0, s3[1].length()-1);
+					String presc_id= s3[1];
 					Utilities.writeToLogFIle("PrescPrev: Uploaded success Pid = "+presc_id);
 					UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(PrescriptionPreview.this);
 					int cust_id = ubean.getId();
@@ -464,19 +452,19 @@ RelativeLayout back_layout;
 					String email = ubean.getEmail();
 					String salutation = ubean.getSalutation();
 					PrescriptionsDataBean presbean = Okler.getInstance().getPrescriptionsDataBeans();
-					String doctor_name = presbean.getDocName();
+					//String doctor_name = presbean.getDocName();
 					String patient_name = presbean.getPatientName();
 					
 					try {
 						customer_name = URLEncoder.encode(customer_name,"UTF-8");
-						doctor_name = URLEncoder.encode(doctor_name,"UTF-8");
+						//doctor_name = URLEncoder.encode(doctor_name,"UTF-8");
 						patient_name = URLEncoder.encode(patient_name, "UTF-8");
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
-					String upload_pres_email = getResources().getString(R.string.serverUrl)+getResources().getString(R.string.upload_pres_email)+"salutation="+salutation+"&cust_id="+cust_id+"&customer_name="+customer_name+"&email="+email+"&presc_id="+presc_id+"&doctor_name="+doctor_name+"&patient_name="+patient_name;
+					String upload_pres_email = getResources().getString(R.string.serverUrl)+getResources().getString(R.string.upload_pres_email)+"salutation="+salutation+"&cust_id="+cust_id+"&customer_name="+customer_name+"&email="+email+"&presc_id="+presc_id+"&doctor_name="+""+"&patient_name="+patient_name;
 
 					WebJsonObjectRequest webObjReq=new WebJsonObjectRequest(Method.GET, upload_pres_email, new JSONObject(),new Response.Listener<JSONObject>() 
 							{

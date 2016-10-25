@@ -1,8 +1,8 @@
 package com.okler.android;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Hashtable;
 
-import org.apache.http.protocol.ResponseConnControl;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,9 +10,7 @@ import org.json.JSONObject;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.Request.Method;
-import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.ImageRequest;
-import com.google.gson.JsonArray;
 import com.okler.databeans.AddressDataBean;
 import com.okler.databeans.BrandsDataBean;
 import com.okler.databeans.CartDataBean;
@@ -20,6 +18,10 @@ import com.okler.databeans.CategoriesDataBean;
 import com.okler.databeans.ProductDataBean;
 import com.okler.databeans.SubCategoriesDataBean;
 import com.okler.databeans.UsersDataBean;
+import com.okler.dialogs.CheckInternetDialog;
+import com.okler.dialogs.ErrorDialog;
+import com.okler.dialogs.VersionUpdateDialog;
+import com.okler.network.NetworkUtils;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
@@ -29,16 +31,15 @@ import com.okler.utils.UserStatusEnum;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
 
-import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 public class SplashActivity extends BaseActivity {
@@ -48,7 +49,7 @@ public class SplashActivity extends BaseActivity {
     String categoriesUrl,subCategoriesUrl,brandsUrl,priceRangeUrl;
     int brandMappingId;
     ArrayList<CategoriesDataBean> categoriesList;
-   ArrayList<SubCategoriesDataBean> subCatsList;
+    ArrayList<SubCategoriesDataBean> subCatsList;
 	ArrayList<BrandsDataBean> alloBrands;
 	ArrayList<BrandsDataBean> homeoBrands;
 	ArrayList<String> priceRanges;
@@ -63,8 +64,11 @@ public class SplashActivity extends BaseActivity {
 	AddressDataBean adbean;
 	CartDataBean mainCart;
 	ArrayList<ProductDataBean> prodList;
+	ArrayList<ProductDataBean> myfav;
 	ProductDataBean pdbean;
 	Activity ack;
+	float currentVersion;
+	float onlineVersion;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -91,39 +95,10 @@ public class SplashActivity extends BaseActivity {
 		
 		
 		Okler.getInstance().setBookingType(100);
-		//Depending on the user status, launch activity
-    	new Handler().postDelayed(new Runnable() {			 
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-            	//if user status is log in fb / log in google, then make user login again
-            	if (Utilities.getUserStatusFromSharedPref(SplashActivity.this) == UserStatusEnum.LOGGED_IN||Utilities.getUserStatusFromSharedPref(SplashActivity.this) == UserStatusEnum.LOGGED_IN_FB||Utilities.getUserStatusFromSharedPref(SplashActivity.this) == UserStatusEnum.LOGGED_IN_GOOGLE)
-    			{
-            		Intent startAct = new Intent(getApplicationContext(),ServiceCategoryActivity.class);
-            		startActivity(startAct);
-            		finish();
-    			}
-            	else
-            	{
-	            	Intent startAct = new Intent(getApplicationContext(),IntroScreen.class);
-	        		startActivity(startAct);
-	        		finish();
-            	}
-            }
-        }, SPLASH_TIME_OUT);
-    	
-    	setUserData();
-    	//SetCategories
-    	UIUtils.setCategories(this,categoriesUrl);
-    	//SetSubcategories
-   
-    	//SetHomeoBrands
-    	setHomeoBrands();
-    	 //	SetAlloBrands
-    	setAlloBrands();
-    	setHSBrands();
-    	
+		
+		
+		
+
 	}
 
 	@Override
@@ -161,7 +136,7 @@ public class SplashActivity extends BaseActivity {
 						brndHS = new BrandsDataBean();
 						JSONObject subCates = resultsArr.getJSONObject(j);
 						brndHS.setBrandId(subCates.getString("id"));
-						brndHS.setBrandName(subCates.getString("brand_name"));
+						brndHS.setBrandName(subCates.getString("company_name"));
 						alloBrands.add(brndHS);					
 					}
 					Okler.getInstance().setAlloBrands(alloBrands);
@@ -198,7 +173,7 @@ public class SplashActivity extends BaseActivity {
 						brndHS = new BrandsDataBean();
 						JSONObject subCates = resultsArr.getJSONObject(j);
 						brndHS.setBrandId(subCates.getString("id"));
-						brndHS.setBrandName(subCates.getString("brand_name"));
+						brndHS.setBrandName(subCates.getString("company_name"));
 						homeoBrands.add(brndHS);					
 					}
 					Okler.getInstance().setHomeoBrands(homeoBrands);
@@ -234,7 +209,7 @@ public class SplashActivity extends BaseActivity {
 						brndHS = new BrandsDataBean();
 						JSONObject subCates = resultsArr.getJSONObject(j);
 						brndHS.setBrandId(subCates.getString("id"));
-						brndHS.setBrandName(subCates.getString("brand_name"));
+						brndHS.setBrandName(subCates.getString("company_name"));
 						hsBrands.add(brndHS);
 					
 					}
@@ -263,6 +238,7 @@ public class SplashActivity extends BaseActivity {
 			getAllAddress();
 			getPatAdresses();
 			getUserCart();
+			getAllFavourites();
 		}
 	}
 	
@@ -279,32 +255,35 @@ WebJsonObjectRequest cartjson = new WebJsonObjectRequest(Method.GET, getMyCartUr
 		mainCart = new CartDataBean();
 		
 		JSONObject jobj = (JSONObject)response;
-		try {
-			String msg = jobj.getString("message");
-			JSONArray jarr = jobj.getJSONArray("result");
+		
+			String msg = jobj.optString("message");
+			if("User cart is Empty.".equals(msg))
+				return;
+			
+			JSONArray jarr = jobj.optJSONArray("result");
 			int length = jarr.length();
 			prodList = new ArrayList<ProductDataBean>();
 			
 			
 			for (int i = 0; i < length; i++) {
-				JSONObject jobj1 = jarr.getJSONObject(i);
+				JSONObject jobj1 = jarr.optJSONObject(i);
 				pdbean = new ProductDataBean();
-				pdbean.setCart_id(jobj1.getString("cart_id"));
-				pdbean.setCart_num(jobj1.getString("cart_number"));
-				pdbean.setProdId(Integer.parseInt(jobj1.getString("id")));
-				pdbean.setTax(Float.parseFloat(jobj1.getString("tax")));
-				pdbean.setPresc_id(jobj1.getString("prescription_id"));
-				pdbean.setProdName(jobj1.getString("name"));
+				pdbean.setCart_id(jobj1.optString("cart_id"));
+				pdbean.setCart_num(jobj1.optString("cart_number"));
+				pdbean.setProdId(Integer.parseInt(jobj1.optString("id")));
+				pdbean.setTax(Float.parseFloat(jobj1.optString("tax")));
+				pdbean.setPresc_id(jobj1.optString("prescription_id"));
+				pdbean.setProdName(jobj1.optString("name"));
 				pdbean.setDesc(jobj1.optString("description"));
 				pdbean.setWeight(jobj1.optString("weight"));
 				pdbean.setPacking_size(jobj1.optString("type_of_packing"));
 				pdbean.setSide_effect(jobj1.optString("side_effects"));
-				pdbean.setUnits(Integer.parseInt(jobj1.getString("quantity")));
-				pdbean.setCart_item_id(Integer.parseInt(jobj1.getString("cart_item_id")));
-				pdbean.setMrp(Float.parseFloat(jobj1.getString("price")));
-				pdbean.setOklerPrice(Float.parseFloat(jobj1.getString("saleprice")));
-				pdbean.setDiscount(Float.parseFloat(jobj1.getString("discount")));
-				String ajimg = jobj1.getString("images");
+				pdbean.setUnits(Integer.parseInt(jobj1.optString("quantity")));
+				pdbean.setCart_item_id(Integer.parseInt(jobj1.optString("cart_item_id")));
+				pdbean.setMrp(Float.parseFloat(jobj1.optString("price")));
+				pdbean.setOklerPrice(Float.parseFloat(jobj1.optString("saleprice")));
+				pdbean.setDiscount(Float.parseFloat(jobj1.optString("discount")));
+				String ajimg = jobj1.optString("images");
 				String aurl2="";
 				if(ajimg.equals(null)){
 					aurl2 = "drawable://" + R.drawable.no_image_found;
@@ -323,17 +302,17 @@ WebJsonObjectRequest cartjson = new WebJsonObjectRequest(Method.GET, getMyCartUr
 					}
 				}
 				pdbean.setImgUrl(aurl2);
-				if(jobj1.getString("prescription_need").equals("null")||jobj1.getString("prescription_need").equals(null)||jobj1.getString("prescription_need").equals(""))
+				if(jobj1.optString("prescription_need").equals("null")||jobj1.optString("prescription_need").equals(null)||jobj1.optString("prescription_need").equals(""))
 				{
 				pdbean.setPresc_needed(0);	
 				}else{
-				pdbean.setPresc_needed(Integer.parseInt(jobj1.getString("prescription_need")));
+				pdbean.setPresc_needed(Integer.parseInt(jobj1.optString("prescription_need")));
 				}
 				pdbean.setCompany(jobj1.optString("company_name"));
 				if(jobj1.has("generic_val")){
 				pdbean.setGeneric_name(jobj1.optString("generic_val"));//need string from webservice
 				}
-				pdbean.setProdType(Integer.parseInt(jobj1.getString("pro_type")));
+				pdbean.setProdType(Integer.parseInt(jobj1.optString("pro_type")));
 				
 				prodList.add(pdbean);
 				
@@ -342,13 +321,7 @@ WebJsonObjectRequest cartjson = new WebJsonObjectRequest(Method.GET, getMyCartUr
 			mainCart.setProdList(prodList);
 			Okler.getInstance().setMainCart(mainCart);
 			
-			
-			
-			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 	}
 }, new Response.ErrorListener() {
@@ -500,5 +473,315 @@ WebJsonObjectRequest adjson = new WebJsonObjectRequest(Method.GET, get_addr, new
 	VolleyRequest.addJsonObjectRequest(ack, adjson);
 //address call ends here
 
+	}
+	
+	public void isUserExists(){
+		UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(ack);
+		if(ubean==null)
+			ubean = new UsersDataBean();
+		String phone = ubean.getPhone();
+		String isUserExist = getString(R.string.is_user_exists_url)
+				+ phone+getString(R.string.mail);
+		WebJsonObjectRequest isExist = new WebJsonObjectRequest(Method.GET, isUserExist, new JSONObject(), new Response.Listener<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				JSONArray jarr = response.optJSONArray("result");
+				if(jarr!=null){
+				JSONObject job = jarr.optJSONObject(0);
+				UsersDataBean ubean2 = Utilities.getCurrentUserFromSharedPref(ack);
+				if(ubean2==null){
+					ubean2 = new UsersDataBean();
+				}
+				ubean2.setApprove_status(Integer.parseInt(job.optString("approved_status")));
+				ubean2.setId(Integer.parseInt(job.optString("id")));
+				ubean2.setPhone(job.optString("phone"));
+			Utilities.writeCurrentUserToSharedPref(ack, ubean2);
+			}
+			
+			}
+			
+		}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		VolleyRequest.addJsonObjectRequest(ack, isExist);
+		}
+	public void getAllFavourites()
+	{
+		
+			if (Utilities.getUserStatusFromSharedPref(this) == UserStatusEnum.LOGGED_IN ||
+					(Utilities.getUserStatusFromSharedPref(this) == UserStatusEnum.LOGGED_IN_FB) ||
+					(Utilities.getUserStatusFromSharedPref(this) == UserStatusEnum.LOGGED_IN_GOOGLE))
+			{
+				UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(this);
+				int uid = ubean.getId();
+	    	  String get_fav = getString(R.string.get_fav_url)+uid;
+	 	     
+	 	     
+	 	     WebJsonObjectRequest webjson= new WebJsonObjectRequest(Method.GET, get_fav, new JSONObject(),new Response.Listener<JSONObject>() 
+	 					{
+	 						@Override
+	 						public void onResponse(JSONObject response) 
+	 						{
+	 							// TODO Auto-generated method stub
+	 							
+	 							ProductDataBean pbean;
+	 							
+	 							try
+	 							{
+	 							JSONObject responseObj =(JSONObject)response;
+	 							String result = responseObj.getString("result");
+	 					//		Toast.makeText(getApplicationContext(), "result" + result, Toast.LENGTH_LONG).show();
+	 							
+	 							JSONArray doctorsArr = responseObj.getJSONArray("result");
+	 							//docCount=responseObj.getInt("TotalCount");
+	 							myfav = new ArrayList<ProductDataBean>();
+	 							for(int i = 0 ; i < doctorsArr.length();i++)
+	 							{
+	 								pbean = new ProductDataBean();
+	 								try
+	 								{
+	 									JSONObject docObj =(JSONObject) doctorsArr.get(i);
+	 									pbean.setProdName(docObj.getString("name"));
+	 									pbean.setProdId(docObj.getInt("id"));
+	 									pbean.setDesc(docObj.getString("description"));
+	 									pbean.setMrp(docObj.getInt("price"));
+	 									pbean.setOklerPrice(docObj.getInt("saleprice"));
+	 									Float discount = Float.parseFloat(docObj.getString("discount"));
+	 									pbean.setDiscount(discount);
+	 									
+	 									String jimg = docObj.getString("images");
+	 									String url2;
+	 									if(jimg.equals(null)||jimg.equals("null")||jimg.equals("")){
+	 										url2 = "drawable://" + R.drawable.tempcuff;
+	 									}else{
+	 									String j1[] =jimg.split(",");
+	 									String j2=j1[0];
+	 									String colon = ":";
+	 									String j3[]=j2.split(colon);
+	 									String url = j3[2];
+	 									//String url1 = url.substring(1);
+	 									int length = url.length();
+	 									url2 = url.substring(1, (length-1));
+	 									}
+	 									//JSONObject jimg2 = jimg.getJSONObject("");
+	 									//JSONObject jimg3 = jobj2.getJSONObject("images");
+	 									//pdBean.setImgUrl(jobj2.getJSONObject("images").getJSONObject("").getString("filename"));
+	 									pbean.setImgUrl(url2);
+	 									
+	 									Log.i("tag", "json object" + docObj);
+	 									}catch (JSONException e) {
+	 										// TODO: handle exception
+	 										Log.e("JSON Exception", e.getMessage());
+	 									}
+	 								
+	 								myfav.add(pbean);
+	 								
+	 							 }
+	 								Utilities.writeFavouritesToSharedPref(ack, myfav);
+	 								//Okler.getInstance().setFavourites(myfav);
+	 								
+	 							}catch(JSONException jsonEx)
+	 							{
+	 								Log.e("Exception json", jsonEx.getStackTrace().toString());
+	 							}
+	 					
+	 						}}, 
+	 						new Response.ErrorListener() 
+	 						{
+
+	 							@Override
+	 							public void onErrorResponse(VolleyError error) 
+	 							{
+	 								// TODO Auto-generated method stub
+	 					
+	 							}
+	 						}
+	 			);
+	 		
+	 	VolleyRequest.addJsonObjectRequest(getApplicationContext(),webjson);
+			}
+	      
+	      {
+	    	  ProductDataBean pbean = new ProductDataBean();
+	    	  //pbean = Utilities.getFavouritesFromSharedPref(this);
+	    	  Log.i("product", ""+pbean);
+	      }
+	}
+		public void webCallForUpdateVersion()
+	{
+		
+		
+		String getVersionCode;
+		String user = getString(R.string.getVersionCode1);
+		String version = getString(R.string.getVersionCode2);
+		
+		try {
+			currentVersion = Float.parseFloat(getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			version = URLEncoder.encode(version, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		getVersionCode = getString(R.string.serverUrl)+user+version;
+		
+		WebJsonObjectRequest isExist = new WebJsonObjectRequest(Method.GET, getVersionCode, new JSONObject(), new Response.Listener<JSONObject>() {
+
+			@Override
+			public void onResponse(JSONObject response) {
+				JSONObject jarr = response.optJSONObject("result");
+				try {
+					onlineVersion = Float.parseFloat(jarr.getString("current_version"));
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				Log.e("jarr", ""+jarr);
+				
+				//if (onlineVersion == 0 ) {
+	            if (currentVersion < onlineVersion) 
+	            {
+	            	VersionUpdateDialog versionDialog = new VersionUpdateDialog(SplashActivity.this);
+	            	versionDialog.setCancelable(false);
+	            	versionDialog.show(ack.getFragmentManager(),"");
+	            }
+	            else
+	            {
+	            	
+	             	isUserExists();
+	            	setUserData();
+	            	//SetCategories
+	            	UIUtils.setCategories(SplashActivity.this,categoriesUrl);
+	            	//SetSubcategories
+	           
+	            	//SetHomeoBrands
+	            	setHomeoBrands();
+	            	 //	SetAlloBrands
+	            	setAlloBrands();
+	            	setHSBrands();
+	            	
+	            	UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(SplashActivity.this);
+	                   // 	Toast.makeText(ack, ""+ubean.getApprove_status(), Toast.LENGTH_SHORT).show();
+	                        	if (Utilities.getUserStatusFromSharedPref(SplashActivity.this) == UserStatusEnum.LOGGED_IN||Utilities.getUserStatusFromSharedPref(SplashActivity.this) == UserStatusEnum.LOGGED_IN_FB||Utilities.getUserStatusFromSharedPref(SplashActivity.this) == UserStatusEnum.LOGGED_IN_GOOGLE)
+	                			{	
+	                        		if(ubean.getApprove_status() == 0)
+	                            	{
+	                                		Intent intent = new Intent(SplashActivity.this, OtpConfirmationActivity.class);
+	                                		startActivity(intent);
+	                                		finish();
+	                                }
+	                        		else
+	                        		{
+	                        			Intent startAct = new Intent(getApplicationContext(),ServiceCategoryActivity.class);
+	                            		startActivity(startAct);
+	                            		finish();
+	                        		}
+	                			}
+	                        	else
+	                        	{	
+	            	            	Intent startAct = new Intent(getApplicationContext(),IntroScreen.class);
+	            	        		startActivity(startAct);
+	            	        		finish();
+	                        	}
+	            }
+				//}
+	        
+			
+			}
+			
+		}, new Response.ErrorListener() {
+
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				// TODO Auto-generated method stub
+				//Log.e("Error", new String(error.networkResponse.data));
+				ErrorDialog versionDialog = new ErrorDialog(SplashActivity.this);
+            	versionDialog.setCancelable(false);
+            	versionDialog.show(ack.getFragmentManager(),"");
+				Log.e("error", error.toString());
+				
+			}
+		}, true);
+		VolleyRequest.addJsonObjectRequest(ack, isExist);
+		
+	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		
+		
+		try {
+			if (NetworkUtils.checkNetworkAvailable(SplashActivity.this)) {
+				
+				webCallForUpdateVersion();
+			} else
+			{
+				new Handler().postDelayed(new Runnable() {			 
+	            @Override
+	            public void run() {
+	                // This method will be executed once the timer is over
+	                // Start your app main activity
+	            	//if user status is log in fb / log in google, then make user login again
+	            	
+	            	UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(SplashActivity.this);
+	           // 	Toast.makeText(ack, ""+ubean.getApprove_status(), Toast.LENGTH_SHORT).show();
+	                	if (Utilities.getUserStatusFromSharedPref(SplashActivity.this) == UserStatusEnum.LOGGED_IN||Utilities.getUserStatusFromSharedPref(SplashActivity.this) == UserStatusEnum.LOGGED_IN_FB||Utilities.getUserStatusFromSharedPref(SplashActivity.this) == UserStatusEnum.LOGGED_IN_GOOGLE)
+	        			{	
+	                		if(ubean.getApprove_status() == 0)
+	                    	{
+	                        		Intent intent = new Intent(SplashActivity.this, OtpConfirmationActivity.class);
+	                        		startActivity(intent);
+	                        		finish();
+	                        }
+	                		else
+	                		{
+	                			Intent startAct = new Intent(getApplicationContext(),ServiceCategoryActivity.class);
+	                    		startActivity(startAct);
+	                    		finish();
+	                		}
+	        			}
+	                	else
+	                	{	
+	    	            	Intent startAct = new Intent(getApplicationContext(),IntroScreen.class);
+	    	        		startActivity(startAct);
+	    	        		finish();
+	                	}
+	            }
+	        }, SPLASH_TIME_OUT);
+	    	isUserExists();
+	    	setUserData();
+	    	//SetCategories
+	    	UIUtils.setCategories(this,categoriesUrl);
+	    	//SetSubcategories
+	   
+	    	//SetHomeoBrands
+	    	setHomeoBrands();
+	    	 //	SetAlloBrands
+	    	setAlloBrands();
+	    	setHSBrands();
+	    	getAllFavourites();
+			}
+		} catch (Exception localException) {
+			localException.printStackTrace();
+		}
+		
 	}
 }

@@ -1,9 +1,7 @@
 package com.okler.android;
 
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,7 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -20,8 +17,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-
-import com.google.gson.Gson;
 import com.okler.databeans.CartDataBean;
 import com.okler.databeans.PrescriptionImagesDataBean;
 import com.okler.databeans.PrescriptionsDataBean;
@@ -32,7 +27,6 @@ import com.okler.utils.Okler;
 import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -47,7 +41,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,7 +64,6 @@ public class AlloUpPrescActivity extends BaseActivity {
 	int totalCnt;
 	Activity ack;
 	UsersDataBean ubean;
-	RelativeLayout back_layout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +75,9 @@ public class AlloUpPrescActivity extends BaseActivity {
 		check = getIntent().getIntExtra("Check", 11);
 		setSupportActionBar(toolBar);
 		ack = this;
-		ActionBar ab = getSupportActionBar();
 		ubean = new UsersDataBean();
 		ubean = Utilities.getCurrentUserFromSharedPref(ack);
-		// ab.setDisplayHomeAsUpEnabled(true);
 		Utilities.setTitleText(toolBar, getString(R.string.allopathy));
-		// ab.setTitle(R.string.title_activity_allopathy);
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_medicine);
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
@@ -98,28 +87,7 @@ public class AlloUpPrescActivity extends BaseActivity {
 		choose_from_existing = (TextView) findViewById(R.id.choose_from_existing);
 		choose_from_existing.setVisibility(View.INVISIBLE);
 
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
-		
 		UIUtils.setBackClick(toolBar, ack);
-		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
-		back_layout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-			finish();	
-			}
-		});
-		imgBack.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Okler.getInstance().getPrescriptionsDataBeans().getPresImages()
-						.clear();
-				finish();
-			}
-		});*/
 		if (check == 0) {
 			toolBar.setBackgroundColor(Color.BLUE);
 			checkout_Tv.setBackgroundColor(Color.BLUE);
@@ -128,8 +96,6 @@ public class AlloUpPrescActivity extends BaseActivity {
 		View view = findViewById(R.id.frag_preview);
 
 		imgPreview = (ImageView) view.findViewById(R.id.selected_image);
-		// thumbnail = (ImageView) view.findViewById(R.id.thumbnail_image);
-
 		upload = (Button) findViewById(R.id.upload);
 
 		if (getIntent().getExtras().get("imageFilePath") != null) {
@@ -138,12 +104,9 @@ public class AlloUpPrescActivity extends BaseActivity {
 			if (getIntent().getExtras().get("imgFileName") != null) {
 				imageFileName = getIntent().getExtras().get("imgFileName")
 						.toString();
-				imageFilePath = imageFilePath + "/" + imageFileName;// 06_01_2016
-																	// Gitesh
+				imageFilePath = imageFilePath + "/" + imageFileName;
 			}
 		}
-		// flag =getIntent().getBooleanExtra("flag",false);
-		// Create a bundle and put bitmap in compressed format in a bundle
 		Bundle bundle = new Bundle();
 		imageFileName = null;
 		imgBitmap = Utilities.getImageBitmapFromStorage(imageFilePath,
@@ -151,14 +114,12 @@ public class AlloUpPrescActivity extends BaseActivity {
 		ByteArrayOutputStream bs = new ByteArrayOutputStream();
 		imgBitmap.compress(Bitmap.CompressFormat.JPEG, 50, bs);
 		bundle.putByteArray("image", bs.toByteArray());
-
 		imgPreview.setImageBitmap(imgBitmap);
 
 		upload.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-
 				int size = prescriptionsDataBean.getPresImages().size();
 				imagesBase64 = new String[prescriptionsDataBean.getPresImages()
 						.size()];
@@ -169,31 +130,21 @@ public class AlloUpPrescActivity extends BaseActivity {
 							.get(i).getBase64ConvrtedImg();
 					imageTypes[i] = "jpeg";
 				}
-				Gson gson = new Gson();
-				String base64 = gson.toJson(imagesBase64);
-				String imgTypes = gson.toJson(imageTypes);
-				// to change user id later on
-				// nameValuePairs.add(new BasicNameValuePair("patient_name",
-				// prescriptionsDataBean.getPatientName()));
 				nameValuePairs
 						.add(new BasicNameValuePair("required_type", "1"));
 				nameValuePairs.add(new BasicNameValuePair("phoneno", ubean
 						.getPhone().toString()));
 				for (int imgCount = 0; imgCount < prescriptionsDataBean
 						.getPresImages().size(); imgCount++) {
-					String base641 = imagesBase64[imgCount];
-					String tp = imageTypes[imgCount];
 					nameValuePairs.add(new BasicNameValuePair("image["
 							+ imgCount + "]", imagesBase64[imgCount]));
 					nameValuePairs.add(new BasicNameValuePair("imgtype["
 							+ imgCount + "]", imageTypes[imgCount]));
 				}
-
 				nameValuePairs.add(new BasicNameValuePair("user_id", ""
 						+ ubean.getId()));
 				nameValuePairs.add(new BasicNameValuePair("service_type", "2"));
-
-				String str = "";// gson.toJson(postParams);
+				String str = "";
 				new UploadPrescAsyncTask().execute(str);
 			}
 		});
@@ -201,7 +152,6 @@ public class AlloUpPrescActivity extends BaseActivity {
 
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
 		super.onBackPressed();
 		Okler.getInstance().getPrescriptionsDataBeans().getPresImages().clear();
 		finish();
@@ -209,7 +159,6 @@ public class AlloUpPrescActivity extends BaseActivity {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		UIUtils.setCartCount(notifCount, ack);
 		layout = (LinearLayout) findViewById(R.id.image_layout);
@@ -250,8 +199,6 @@ public class AlloUpPrescActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
 				if (totalCnt < 4) {
 					CameraGalleryDialog cdd = new CameraGalleryDialog(ack);
 					cdd.show();
@@ -260,22 +207,17 @@ public class AlloUpPrescActivity extends BaseActivity {
 							"You can only add 4 prescriptions at a time",
 							Toast.LENGTH_LONG).show();
 				}
-
 			}
 		});
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -288,12 +230,11 @@ public class AlloUpPrescActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (resultCode == RESULT_OK) {
-
 			CameraGalleryImageInfo imgInfo = Utilities.getImageInfo(
 					requestCode, resultCode, this, data);
 			PrescriptionImagesDataBean pImgBean = new PrescriptionImagesDataBean();
 			Bitmap iBitmap = imgInfo.getImgBitmap();
-
+			if(iBitmap!=null){
 			String base64string = Utilities.convertImageToBase64(iBitmap);
 			pImgBean.setPrescImages(iBitmap);
 			pImgBean.setBase64ConvrtedImg(base64string);
@@ -311,10 +252,12 @@ public class AlloUpPrescActivity extends BaseActivity {
 						imgFound = true;
 				}
 			}
-
 			if (!imgFound)
 				Okler.getInstance().getPrescriptionsDataBeans().getPresImages()
 						.add(pImgBean);
+			}else{
+				Toast.makeText(ack, "Unable to locate image file.", Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 
@@ -322,7 +265,6 @@ public class AlloUpPrescActivity extends BaseActivity {
 
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
 			super.onPreExecute();
 		}
 
@@ -332,16 +274,11 @@ public class AlloUpPrescActivity extends BaseActivity {
 				InputStream inputStream = null;
 				HttpClient httpClient = new DefaultHttpClient();
 				HttpPost httpPost = new HttpPost(uploadPrescrUrl);
-				// StringEntity stringEntity = new StringEntity(params[0]);
-				// httpPost.setEntity(stringEntity);
-				ArrayList<NameValuePair> n = nameValuePairs;
 				httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-				// httpPost.setHeader("Accept","application/Json");
 				httpPost.addHeader("content-type",
 						"application/x-www-form-urlencoded");
 				HttpResponse httpResponse = httpClient.execute(httpPost);
 				inputStream = httpResponse.getEntity().getContent();
-
 				if (inputStream != null) {
 					BufferedReader bufferedReader = new BufferedReader(
 							new InputStreamReader(inputStream));
@@ -350,7 +287,6 @@ public class AlloUpPrescActivity extends BaseActivity {
 					while ((line = bufferedReader.readLine()) != null) {
 						result += line;
 					}
-
 					Log.e("ERRORISIS", "IS: " + result);
 					inputStream.close();
 					return result;
@@ -370,13 +306,12 @@ public class AlloUpPrescActivity extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(Object result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			String resu = result.toString();
 			if (resu.contains("Prescription added successfully")) {
 				Toast.makeText(getApplicationContext(),
 						"Prescription is uploaded", Toast.LENGTH_LONG).show();
-				cdbean = Okler.getInstance().getSingleCart();
+				cdbean = Utilities.getCartDataBean(ack);
 				String s1[] = resu.split(",");
 				String s2 = s1[3];
 				String s3[] = s2.split(":");
@@ -384,6 +319,7 @@ public class AlloUpPrescActivity extends BaseActivity {
 				String presc_id = ss;
 				cdbean.setPresc_id(presc_id);
 				Okler.getInstance().setSingleCart(cdbean);
+				Utilities.writeCartToSharedPref(ack, cdbean);
 				Intent in = new Intent(AlloUpPrescActivity.this,
 						ProductCheckoutSummary.class);
 				in.putExtra("Check", check);
@@ -394,7 +330,5 @@ public class AlloUpPrescActivity extends BaseActivity {
 						Toast.LENGTH_LONG).show();
 			}
 		}
-
 	}
-
 }

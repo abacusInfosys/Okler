@@ -40,39 +40,38 @@ public class IntroScreen extends BaseActivity implements OnClickListener {
 		setContentView(R.layout.activity_intro_screen);
 		
 		txtSkip = (TextView) findViewById(R.id.skip_textView);
-		btnSignUp = (Button) findViewById(R.id.Signup_button);
-		btnLogIn = (Button) findViewById(R.id.login_button);
-		//diff check 1
-		flip = (ViewFlipper) findViewById(R.id.flipper);
+        btnSignUp = (Button) findViewById(R.id.Signup_button);
+        btnLogIn = (Button) findViewById(R.id.login_button);
+        
+        flip = (ViewFlipper) findViewById(R.id.flipper);
 		flip.setInAnimation(this, R.anim.right_enter);
 		flip.setOutAnimation(this, R.anim.left_out);
-		//commit check
-		//diff check
-		txtSkip.setOnClickListener(this);
-		btnSignUp.setOnClickListener(this);
-		btnLogIn.setOnClickListener(this);
-		calculateHashKey("com.okleruser");
+        
+        txtSkip.setOnClickListener(this);
+        btnSignUp.setOnClickListener(this);
+        btnLogIn.setOnClickListener(this);
+        calculateHashKey("com.okleruser");
 	}
 
 	private void calculateHashKey(String yourPackageName) {
-		try {
-			PackageInfo info = getPackageManager().getPackageInfo(
-					yourPackageName,
-					PackageManager.GET_SIGNATURES);
-			for (Signature signature : info.signatures) {
-				MessageDigest md = MessageDigest.getInstance("SHA");
-				md.update(signature.toByteArray());
-				Log.d("KeyHash:",
-						Base64.encodeToString(md.digest(), Base64.DEFAULT));
-				Log.i("KeyHash:",
-						Base64.encodeToString(md.digest(), Base64.DEFAULT));
-			   // Toast.makeText(getApplicationContext(), Base64.encodeToString(md.digest(), Base64.DEFAULT), Toast.LENGTH_LONG).show();
-			}
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+	    try {
+	        PackageInfo info = getPackageManager().getPackageInfo(
+	                yourPackageName,
+	                PackageManager.GET_SIGNATURES);
+	        for (Signature signature : info.signatures) {
+	            MessageDigest md = MessageDigest.getInstance("SHA");
+	            md.update(signature.toByteArray());
+	            Log.d("KeyHash:",
+	                    Base64.encodeToString(md.digest(), Base64.DEFAULT));
+	            Log.i("KeyHash:",
+	                    Base64.encodeToString(md.digest(), Base64.DEFAULT));
+	           // Toast.makeText(getApplicationContext(), Base64.encodeToString(md.digest(), Base64.DEFAULT), Toast.LENGTH_LONG).show();
+	        }
+	    } catch (NameNotFoundException e) {
+	        e.printStackTrace();
+	    } catch (NoSuchAlgorithmException e) {
+	        e.printStackTrace();
+	    }
 	}
 	
 	@Override
@@ -135,28 +134,28 @@ public class IntroScreen extends BaseActivity implements OnClickListener {
 		
 	}
 	private void runFlipper() {
-		if (isStarted == false) {
-			Message msg = mHandler.obtainMessage(42);
-			mHandler.sendMessageDelayed(msg, 4000);
-			isStarted = true;
-		}
+	    if (isStarted == false) {
+	        Message msg = mHandler.obtainMessage(42);
+	        mHandler.sendMessageDelayed(msg, 4000);
+	        isStarted = true;
+	    }
 	}
 	
 	private void stopFlipper() {
-		mHandler.removeMessages(42);
-		isStarted = false;
+	    mHandler.removeMessages(42);
+	    isStarted = false;
 	}
 	
 	private final Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			if (msg.what == 42) {
-				Log.d("ImageFlipper", "Next picture...");
-				flip.showNext();
-				msg = obtainMessage(42);
-				sendMessageDelayed(msg, 4000);
-			}
-		}
+	    @Override
+	    public void handleMessage(Message msg) {
+	        if (msg.what == 42) {
+	            Log.d("ImageFlipper", "Next picture...");
+	            flip.showNext();
+	            msg = obtainMessage(42);
+	            sendMessageDelayed(msg, 4000);
+	        }
+	    }
 	};
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

@@ -8,7 +8,8 @@
             android:id="@+id/toolbar" 
             layout="@layout/toolbar_my_acc"            
             android:layout_alignParentTop="true"
-            />
+            android:layout_height="wrap_content"
+			android:layout_width="fill_parent" />
      
      <RelativeLayout
          android:id="@+id/layout_personal_info"
@@ -51,29 +52,35 @@
              android:layout_marginTop="10dp"
              android:text=""
              android:textSize="20sp" />
-         <LinearLayout 
-             android:layout_width="wrap_content"
+         <RelativeLayout
+             android:id="@+id/location_layout"
+             android:layout_width="fill_parent"
              android:layout_height="wrap_content"
-             android:layout_centerHorizontal="true"
-             android:id="@+id/addr_RL"
-             android:layout_marginTop="5dp"
-             android:orientation="horizontal"
-             android:layout_below="@+id/text_name"
-             >
-         <ImageView
-             android:id="@+id/image_red_location"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:src="@drawable/red_location_icon"
-             android:baselineAlignBottom="true" />
-         <TextView
-             android:id="@+id/text_addr"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
+             android:layout_below="@+id/text_name" >
+
+             <LinearLayout
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerInParent="true" >
+   
+             <ImageView
+                     android:id="@+id/imageView2"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:src="@drawable/red_location_icon" 
+                     android:baselineAlignBottom="true"/>
+
+             <TextView
+                     android:layout_toRightOf="@id/imageView2"
+                     android:id="@+id/text_location"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:textSize="16sp"
+                     android:layout_marginLeft="3dp"
+                     android:text="" />
              
-             android:text=""
-             />
-</LinearLayout>
+             </LinearLayout>
+         </RelativeLayout>
      </RelativeLayout>
 
      <!-- <include layout="@layout/separator_grey_1dp"
@@ -266,9 +273,7 @@
                  android:layout_width="wrap_content"
                  android:layout_height="1dp"
                  android:layout_marginLeft="3dp"
-                 android:layout_marginRight="3dp" 
-                 android:visibility="gone"
-                 />
+                 android:layout_marginRight="3dp" />
 
              <LinearLayout
                  android:layout_width="match_parent"
@@ -362,10 +367,10 @@
                  android:visibility="gone" />
 
              <LinearLayout
+                 android:id="@+id/favouritesLL"
                  android:layout_width="match_parent"
                  android:layout_height="40dp"
-                 android:background="@color/LightGreyWhite"
-                 android:visibility="gone" >
+                 android:background="@color/LightGreyWhite" >
                 
                  <ImageView 
                     android:id="@+id/image9"
@@ -389,8 +394,7 @@
                  android:layout_width="wrap_content"
                  android:layout_height="1dp"
                  android:layout_marginLeft="3dp"
-                 android:layout_marginRight="3dp" 
-                 android:visibility="gone"/>
+                 android:layout_marginRight="3dp" />
 
              <RelativeLayout
                  android:layout_width="match_parent"

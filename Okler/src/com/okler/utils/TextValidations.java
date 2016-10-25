@@ -47,7 +47,7 @@ public class TextValidations {
 	}
 
 	public boolean ValidateMinimumChars(String errorMessage, int length) {
-		String text = editTextToValidate.getText().toString();
+		String text = editTextToValidate.getText().toString().trim();
 		if (text == null || text.equals("")) {
 			editTextToValidate.setError(errorMessage);
 			editTextToValidate.requestFocus();
@@ -118,12 +118,27 @@ public class TextValidations {
 			editTextToValidate.setError(errorMessage);
 			editTextToValidate.requestFocus();
 			return false;
-		} else if(text.equals(0000))
+		} else if(!(text.startsWith("9") || text.startsWith("8") || text
+				.startsWith("7"))){
+			editTextToValidate.setError("Number should starts with 9,8 or 7.");
+			editTextToValidate.requestFocus();
+			return false;
+		}
+		try {
+		long number = Long.parseLong(text);
+		if(number==0)
 		{
 			editTextToValidate.setError(errorMessage);
 			editTextToValidate.requestFocus();
+			return false;
 		}
-			return true;
+		}catch(NumberFormatException e){
+			editTextToValidate.setError(errorMessage);
+			editTextToValidate.requestFocus();
+			return false;
+		}
+		
+		return true;
 	}
 
 	public boolean ValidateEmailId() {
@@ -135,18 +150,66 @@ public class TextValidations {
 			return false;
 		} else {
 			if (inputText.equals("")) {
-				editTextToValidate.setError("Please enter Emailid");
-				editTextToValidate.requestFocus();
-				return false;
+				/*editTextToValidate.setError("Please enter Emailid");
+				editTextToValidate.requestFocus();*/
+					return true;
 			} else if (!inputText.contains("@") || !(inputText.contains("."))) {
 				editTextToValidate.setError("Please enter valid Emailid");
 				editTextToValidate.requestFocus();
 				return false;
 			} else
-				return true;
+			{
+				//Validation for 2 or more occurrences of @
+				String emailStr = inputText;
+				int occurenaces = inputText.length() - emailStr.replace("@", "").length();
+				if(occurenaces>=2)
+				{
+					editTextToValidate.setError("Please enter valid Emailid");
+					editTextToValidate.requestFocus();
+					return false;
+				}
+				else
+					return true;
+			}
 		}
 	}
 
+	public boolean validatePassword(String error){
+		String input = editTextToValidate.getText().toString();
+		if(input==null){
+			editTextToValidate.setError(error);
+			editTextToValidate.requestFocus();
+			return false;
+		}
+		if(input.equals("")){
+			editTextToValidate.setError(error);
+			editTextToValidate.requestFocus();
+			return false;
+		}
+		if(input.contains(" ")){
+			editTextToValidate.setError("Password should not contain empty spaces.");
+			editTextToValidate.requestFocus();
+			return false;
+		}
+		if(input.trim().length()<6){
+			editTextToValidate.setError("Password must be at least 6 character long.");
+			editTextToValidate.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	public boolean validateEmailPhone(String errorMessage){
+		if(!validateText(errorMessage)){
+			editTextToValidate.requestFocus();
+			return false;
+		}if(editTextToValidate.getText().toString().contains(" ")){
+			editTextToValidate.setError("Email or phone number should not contain empty spaces.");
+			editTextToValidate.requestFocus();
+			return false;
+		}
+		return true;
+	}
 	public TextWatcher watch = new TextWatcher() {
 
 		@Override

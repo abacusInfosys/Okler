@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+     >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Enter your email address"
+            android:text="Enter email or mobile number"
             android:textSize="16sp"
             android:textStyle="normal" />
 
@@ -32,7 +32,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp" >
 
         <EditText
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="Required"
+            android:hint="Email/Mobile"
             android:inputType="textEmailAddress" >
 
             <requestFocus />
@@ -53,7 +53,8 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:orientation="vertical" >
+        android:orientation="vertical" 
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/text_too_late"
@@ -70,14 +71,15 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone" >
 
         <EditText
             android:id="@+id/edt_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Optional"
+            android:hint="Mobile"
             android:inputType="number" />
     </LinearLayout>
 
@@ -101,8 +103,20 @@
     </LinearLayout>
 
     </LinearLayout>  
-
+<LinearLayout 
+        android:orientation="vertical" 
+        android:layout_height="wrap_content" 
+        android:layout_width="wrap_content" 
+        android:id="@+id/progressLinLayout" 
+        android:gravity="center" 
+        android:visibility="gone" 
+        android:layout_centerInParent="true">
+	<ProgressBar 
+	    android:layout_height="wrap_content" 
+	    android:layout_width="wrap_content" 
+	    android:indeterminate="true"/>
+    </LinearLayout>
 
     
 
-</LinearLayout>
+</RelativeLayout>

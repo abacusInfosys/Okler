@@ -18,15 +18,17 @@ import com.android.volley.Response.Listener;
 import com.okler.android.MedicalServices;
 import com.okler.android.Physiotherapy;
 import com.okleruser.R;
-
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,24 +49,28 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 	EditText edt_firstname, edt_surname, edt_email, edt_phoneno;
 	TextView edt_From, edt_To;
 	Calendar calendar;
-	ArrayList<String> citi_ids = new ArrayList<String>();
+	static ArrayList<String> citi_ids = new ArrayList<String>();
 	int year, month, day;
-
-	AutoCompleteTextView edt_city, edt_state;
+	boolean flag=false;
+	static AutoCompleteTextView edt_city;
+	static AutoCompleteTextView edt_state;
 
 	// PhysiotherapyDatabean physioDataBean;
 
 	// String[10][10] states1 = new String();
 
-	ArrayAdapter<String> adapter;
+	static ArrayAdapter<String> adapter;
 
-	ArrayList<String> cities = new ArrayList<String>();
-	ArrayList<String> states = new ArrayList<String>();
-	int state_id;
+	static ArrayList<String> cities = new ArrayList<String>();
+	static ArrayList<String> states = new ArrayList<String>();
+	static ArrayList<String> state_ids = new ArrayList<String>();
+	static String state_id;
 	Calendar newDate, now, date;
-	String cityUrl, cityId, city;
-	String st;
-	WebJsonObjectRequest webjson;
+	static String cityUrl;
+	static String cityId;
+	static String city;
+	static String st;
+	static WebJsonObjectRequest webjson;
 
 	public PersonalInfo() {
 
@@ -88,6 +94,7 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 		now.set(Calendar.MILLISECOND, 00);
 
 		edt_city = (AutoCompleteTextView) view.findViewById(R.id.edtTxt_city);
+		edt_city.setTag(false);
 		edt_state = (AutoCompleteTextView) view.findViewById(R.id.edtTxt_state);
 		;
 
@@ -97,28 +104,32 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 		edt_From.setOnClickListener(this);
 		edt_To.setOnClickListener(this);
 		String Url = getString(R.string.stateUrl);
+		states.clear();
 		// web call for states
-
 		getStates();
+		/*adapter = new ArrayAdapter<String>(getActivity(),
+				android.R.layout.simple_dropdown_item_1line, cities);
+		edt_city.setAdapter(adapter);*/
+
 		adapter = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_dropdown_item_1line, states);
 		edt_state.setAdapter(adapter);
-
-		edt_state.setOnFocusChangeListener(new OnFocusChangeListener() {
+		
+		edt_state.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
 				// TODO Auto-generated method stub
-
-				int id = 0;
-
+				
+				int id1 = 0;
 				String state = edt_state.getText().toString();
-
-				id = states.indexOf(state);
-
+				id1 = states.indexOf(state);
 				Log.i("id_tag", "id is:" + id);
+				state_id = state_ids.get(id1);
 
-				state_id = 1268 + id;
+				Log.i("id_tag", "id is:" + id1);
+
 				st = String.valueOf(state_id);
 				String st1 = String.valueOf(state_id);
 				cityUrl = getResources().getString(R.string.cityUrl)
@@ -149,12 +160,12 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 													e.getMessage());
 										}
 									}
+									Okler.getInstance().setCities(cities);
+									Okler.getInstance().setCiti_ids(citi_ids);
 									
 									adapter = new ArrayAdapter<String>(getActivity(),
 											android.R.layout.simple_dropdown_item_1line, cities);
 									edt_city.setAdapter(adapter);
-									Okler.getInstance().setCities(cities);
-									Okler.getInstance().setCiti_ids(citi_ids);
 								} catch (JSONException jsonEx) {
 									Log.e("Exception json", jsonEx
 											.getStackTrace().toString());
@@ -169,7 +180,7 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 
 							}
 						});
-
+				cities.clear();
 				VolleyRequest.addJsonObjectRequest(getActivity(), webjson);
 
 				Log.i("city url", cityUrl);
@@ -189,11 +200,45 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 						cityId = citi_ids.get(cid);
 					}
 				}
+				
+				flag=true;
+				edt_city.setTag(true);
 				MedicalServices.stateCityIds(st, cityId);
 				Physiotherapy.stateCityIds(st, cityId);
+				
 			}
+			
+			
+			
+			 
 		});
+		
+		edt_city.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				flag=false;
+				edt_city.setTag(false);
+			}
 
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+				
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+		
+			
+		});
 		return view;
 	}
 
@@ -256,10 +301,34 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 								} else {
 									edt_From.setText("");
 								}
-								if (newDate.compareTo(date) == 1) {
+								/*if (newDate.compareTo(date) == 1) {
 									edt_From.setText("");
-									// edt_From.setText(dateFormatter.format(newDate.getTime()));
-								}
+									 edt_From.setText(dateFormatter.format(newDate.getTime()));
+								}*/
+								String s=edt_From.getText().toString();
+								String e=edt_To.getText().toString();
+								try {
+									if (dateFormatter.parse(s).before( dateFormatter.parse(e)))
+									{
+										edt_From.setText(dateFormatter
+												.format(newDate.getTime()));
+										
+									}
+									else if(dateFormatter.parse(s).equals(dateFormatter.parse(e)))
+									{
+										edt_From.setText(dateFormatter
+												.format(newDate.getTime()));
+									}
+									else
+									{
+										edt_From.setText("");
+									   edt_From.setError("Select start date before end date");
+									   
+									}
+								} catch (ParseException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}	
 
 							}
 						}
@@ -331,8 +400,8 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 			fromDatePickerDialog.show();
 		}
 	}
-
-	public void getStates() {
+	public void getStates() 
+	{
 		// web call for states
 		webjson = new WebJsonObjectRequest(Method.GET, getResources()
 				.getString(R.string.stateUrl), new JSONObject(),
@@ -340,7 +409,8 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 					@Override
 					public void onResponse(JSONObject response) {
 						// TODO Auto-generated method stub
-
+						states.clear();
+						state_ids.clear();
 						try {
 							JSONObject responseObj = (JSONObject) response;
 							JSONArray doctorsArr = responseObj
@@ -351,6 +421,7 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 									JSONObject docObj = (JSONObject) doctorsArr
 											.get(i);
 									states.add(docObj.getString("state_name"));
+									state_ids.add(docObj.getString("id"));
 									Log.i("tag", "json object" + docObj);
 								} catch (JSONException e) {
 									// TODO: handle exception
@@ -378,5 +449,7 @@ public class PersonalInfo extends Fragment implements OnClickListener {
 				}, true);
 
 		VolleyRequest.addJsonObjectRequest(getActivity(), webjson);
+		
+		
 	}
 }

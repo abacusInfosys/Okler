@@ -4,6 +4,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +23,7 @@ import com.okler.android.BaseActivity;
 import com.okleruser.R;
 import com.okler.databeans.AddressDataBean;
 import com.okler.databeans.UsersDataBean;
+import com.okler.diagno.DiagnoLabPickup;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
@@ -48,6 +51,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,8 +79,10 @@ public class EnterPatientInfoActivity extends BaseActivity {
 	UsersDataBean ubean;
 	ArrayAdapter<String> adapter, adapter1;
 	ArrayList<String> states = new ArrayList<String>();
+	ArrayList<String> state_ids = new ArrayList<String>();
 	String[] gender = new String[] { "Gender", "Male", "Female" };
-	int state_id, pat_id;
+	int pat_id;
+	String state_id;
 	String city;
 	String cityId;
 	int UserId;
@@ -85,6 +91,7 @@ public class EnterPatientInfoActivity extends BaseActivity {
 	int rel_id;
 	int gender_id;
 	boolean flag = false;
+	LinearLayout progressLinLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +121,9 @@ public class EnterPatientInfoActivity extends BaseActivity {
 		relationSpinner = (Spinner) findViewById(R.id.relationSpinner);
 		genderSpinner = (Spinner) findViewById(R.id.genderSpinner);
 		stateTv = (AutoCompleteTextView) findViewById(R.id.stateTv);
+		progressLinLayout = (LinearLayout)findViewById(R.id.progressLinLayout);
 
-		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -123,12 +131,35 @@ public class EnterPatientInfoActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});*/
-		UIUtils.setBackClick(toolBar, ack);
+		});
 		Utilities.setTitleText(toolBar, "Diagnostic Test [3/5]");
 		toolBar.setBackgroundResource(R.drawable.custom_view_grad_diagno);
 		btn_sced_pickup = (Button) findViewById(R.id.btn_sced_pickup);
+		relation = new ArrayList<String>();
+		relation_id = new ArrayList<String>();
+		adapter = new ArrayAdapter<String>(ack,
+				android.R.layout.simple_dropdown_item_1line, relation);
+		relationSpinner.setAdapter(adapter);
+		relation.add("Relation");
+		relation_id.add("0");
+		adapter.notifyDataSetChanged();
+		
+		/*relationSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				Toast.makeText(ack, "clicked on item", 100).show();
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				Toast.makeText(ack, "clicked nothing selected", 100).show();
+				
+			}
+		});*/
+		
+		
 		// setData();
 		btn_sced_pickup.setOnClickListener(new OnClickListener() {
 
@@ -215,7 +246,7 @@ public class EnterPatientInfoActivity extends BaseActivity {
 													if (!(relation_id.size() <= 0))
 														rel_id = (Integer
 																.parseInt(relation_id
-																		.get(rid - 1)));
+																		.get(rid)));
 													int r = rel_id;
 													UIUtils uiUtils2 = new UIUtils();
 													if (uiUtils2
@@ -271,6 +302,8 @@ public class EnterPatientInfoActivity extends BaseActivity {
 															}
 														}
 													}
+												}else{
+													getRelation();
 												}
 											}
 										}
@@ -280,12 +313,24 @@ public class EnterPatientInfoActivity extends BaseActivity {
 						}
 					}
 				}
+				
+				try {
+					fname = URLEncoder.encode(fname,"UTF-8");
+					lname = URLEncoder.encode(lname,"UTF-8");
+					addr1 = URLEncoder.encode(addr1,"UTF-8");
+					addr2 = URLEncoder.encode(addr2,"UTF-8");
+					land_mark = URLEncoder.encode(land_mark,"UTF-8");
+					
+				} catch (UnsupportedEncodingException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
 				if (flag) {
 
 					String Url = addpatientpart1 + UserId + "&pat_id=" + pat_id
 							+ "&firstname=" + fname + "&surname=" + lname
-							+ "&dob=" + dob + "&relationid" + rel_id
+							+ "&dob=" + dob + "&relationid=" + rel_id
 							+ "&gender=" + gender_id + "&mobileno=" + mobileNo
 							+ "&addr1=" + addr1 + "&addr2=" + addr2
 							+ "&land_mark=" + land_mark + "&pincode=" + pincode
@@ -389,7 +434,7 @@ public class EnterPatientInfoActivity extends BaseActivity {
 													 * Log.e("City", cd); } }
 													 */
 													// abean.setCity_id(cityId);
-
+													Okler.getInstance().getDiagnoOrder().setPatientAddr(abean);
 													paList.add(abean);
 													ubean.setAddDatabean(paList);
 													Utilities
@@ -397,7 +442,7 @@ public class EnterPatientInfoActivity extends BaseActivity {
 																	ack, ubean);
 													Intent intent = new Intent(
 															getApplicationContext(),
-															DiagnoSchedulePickup.class);
+															DiagnoLabPickup.class);
 													startActivity(intent);
 												}
 											} catch (JSONException e) {
@@ -431,8 +476,8 @@ public class EnterPatientInfoActivity extends BaseActivity {
 					VolleyRequest.addJsonObjectRequest(ack, addjson);
 					// end
 				} else {
-					Toast.makeText(ack, "Please Enter Valid Address",
-							Toast.LENGTH_LONG).show();
+					/*Toast.makeText(ack, "Please Enter Valid Address",
+							Toast.LENGTH_LONG).show();*/
 				}
 			}
 
@@ -541,6 +586,7 @@ public class EnterPatientInfoActivity extends BaseActivity {
 	}
 
 	public void getRelation() {
+		showProgress(true);
 		String relationUrl = getResources().getString(R.string.relationUrl);
 		// web call for relation
 		WebJsonObjectRequest webjson = new WebJsonObjectRequest(Method.GET,
@@ -567,16 +613,19 @@ public class EnterPatientInfoActivity extends BaseActivity {
 								} catch (JSONException e) {
 									// TODO: handle exception
 									Log.e("JSON Exception", e.getMessage());
+									showProgress(false);
 								}
 							}
+							showProgress(false);
 						} catch (JSONException jsonEx) {
 							Log.e("Exception json", jsonEx.getStackTrace()
 									.toString());
+							showProgress(false);
 							// Toast.makeText(getApplicationContext(),
 							// String.valueOf(jsonEx),
 							// Toast.LENGTH_LONG).show();
 						}
-
+						adapter.notifyDataSetChanged();
 					}
 				}, new Response.ErrorListener() {
 
@@ -584,15 +633,17 @@ public class EnterPatientInfoActivity extends BaseActivity {
 					public void onErrorResponse(VolleyError error) {
 
 						Log.i("error", String.valueOf(error));
+						showProgress(false);
 
 					}
 				}, true);
 
-		VolleyRequest.addJsonObjectRequest(ack, webjson);
+		if(VolleyRequest.addJsonObjectRequest(ack, webjson))
+			showProgress(true);
+		else
+			showProgress(false);
 
-		adapter = new ArrayAdapter<String>(ack,
-				android.R.layout.simple_dropdown_item_1line, relation);
-		relationSpinner.setAdapter(adapter);
+		
 	}
 
 	public void getCity() {
@@ -669,20 +720,20 @@ public class EnterPatientInfoActivity extends BaseActivity {
 			}
 		};
 		stateTv.setAdapter(adapter1);
-
-		stateTv.setOnFocusChangeListener(new OnFocusChangeListener() {
+		
+		stateTv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				int id = 0;
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				
+				int id1 = 0;
 
 				String state = stateTv.getText().toString();
 
-				id = states.indexOf(state);
-
-				Log.i("id_tag", "id is:" + id);
-
-				state_id = 1268 + id;
+				id1 = states.indexOf(state);
+				state_id = state_ids.get(id1);
 				getCity();
 			}
 		});
@@ -718,6 +769,7 @@ public class EnterPatientInfoActivity extends BaseActivity {
 									JSONObject docObj = (JSONObject) doctorsArr
 											.get(i);
 									states.add(docObj.getString("state_name"));
+									state_ids.add(docObj.getString("id"));
 									Log.i("tag", "json object" + docObj);
 								} catch (JSONException e) {
 									// TODO: handle exception
@@ -741,5 +793,13 @@ public class EnterPatientInfoActivity extends BaseActivity {
 				}, true);
 
 		VolleyRequest.addJsonObjectRequest(getApplicationContext(), webjson);
+	}
+	
+	private void showProgress(boolean paramBoolean) {
+		if (paramBoolean) {
+			this.progressLinLayout.setVisibility(View.VISIBLE);
+			return;
+		}
+		this.progressLinLayout.setVisibility(View.INVISIBLE);
 	}
 }

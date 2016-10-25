@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -22,7 +21,6 @@ import com.okler.utils.Okler;
 import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 import com.okleruser.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -45,24 +43,24 @@ import android.widget.Toast;
 public class ProductCheckoutSummary extends BaseActivity {
 	View bottomBarLayout;
 	Toolbar toolBar;
-	Button notifCount;
+	Button next,notifCount;
 	RelativeLayout customViewRL1, billing_RL, delivery_RL, customViewRL2,
 			customViewRL3, coupon_disc_RL, checkout_quant_RL;
 	LinearLayout parentForCustomView;
-	CustomViewProdCheckoutSummary[] prodSummary = new CustomViewProdCheckoutSummary[500];
+	CustomViewProdCheckoutSummary[] prodSummary;
 	Button apply_button;
 	TextView coupon_appl_text, net_pay_value_tv, amount_value_tv,
 			okler_disc_value_tv, coupon_disc_value_tv, shipping_charg_value_tv,
 			tax_value_tv;
-	TextView next, baddr_title_tv, baddr_tv, addr_title_tv, addr_tv,
+	TextView baddr_title_tv, baddr_tv, addr_title_tv, addr_tv,
 			firstnameValueTv, surnameValueTv, mobileValueTv, emailValueTv;
 	ImageView checkout_progress_summary_Iv;
 	ImageView imgBack, bedit_red_pencil, edit_red_pencil;
 	CartDataBean odbean;
 	ArrayList<ProductDataBean> pdList;
 	float redAmt = 0.00f, amount = 0.00f, okler_disc = 0.00f,
-			shipping_charg = 0.00f, taxes = 0.00f, net_pay = 0.00f,
-			coupon_disc = 0.00f;
+			shipping_charg = 0.00f, taxes = 0.00f, net_pay = 0.00f, totalMrpPrice = 0.0f,
+			coupon_disc = 0.00f, subTotal = 0.00f;
 	boolean flagbill = false, flagship = false;
 	int check;
 	EditText coupon_code;
@@ -74,6 +72,7 @@ public class ProductCheckoutSummary extends BaseActivity {
 	Button checkout_count;
 	String ccCode;
 	RelativeLayout back_layout;
+	String addr="";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,15 +83,10 @@ public class ProductCheckoutSummary extends BaseActivity {
 		setSupportActionBar(toolBar);
 		ActionBar ab = getSupportActionBar();
 		ack = this;
-		// ab.setDisplayHomeAsUpEnabled(true);
 		bottomBarLayout = findViewById(R.id.bottombar);
 		handleMapping(bottomBarLayout);
 		check = getIntent().getIntExtra("Check", 11);
-		if (check == 1) {
-			odbean = Okler.getInstance().getSingleCart();
-		} else {
-			odbean = Okler.getInstance().getMainCart();
-		}
+		odbean = Utilities.getCartDataBean(ack);
 		pdList = new ArrayList<ProductDataBean>();
 		checkout_quant_RL = (RelativeLayout) findViewById(R.id.checkout_quant_RL);
 		parentForCustomView = (LinearLayout) findViewById(R.id.LL_for_prods_custom_view);
@@ -131,22 +125,16 @@ public class ProductCheckoutSummary extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
 				blueuntick.setVisibility(View.GONE);
 				bluetick.setVisibility(View.VISIBLE);
-
 			}
 		});
 		bluetick.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
 				bluetick.setVisibility(View.GONE);
 				blueuntick.setVisibility(View.VISIBLE);
-
 			}
 		});
 
@@ -154,8 +142,6 @@ public class ProductCheckoutSummary extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
 				Intent i = new Intent(ProductCheckoutSummary.this,
 						LegalActivity.class);
 				int in = 1;
@@ -163,15 +149,13 @@ public class ProductCheckoutSummary extends BaseActivity {
 				startActivity(i);
 			}
 		});
-
 		imgloader = VolleyRequest.getInstance(getApplicationContext())
 				.getImageLoader();
-		next = (TextView) findViewById(R.id.proceed_to_pay);
+		next = (Button) findViewById(R.id.proceed_to_pay);
 		next.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				if (bluetick.getVisibility() == View.GONE) {
 					Toast.makeText(getApplicationContext(),
 							"Please accept Terms and Conditions",
@@ -180,15 +164,18 @@ public class ProductCheckoutSummary extends BaseActivity {
 					if (amount >= 0 || net_pay >= 0) {
 						odbean.setProdList(pdList);
 						odbean.setTotalPrice(net_pay);
+						odbean.setTotalMrp(amount);
 						odbean.setShip_charge("" + shipping_charg);
 						odbean.setCoupon_disc(redAmt);
 						odbean.setTax(taxes);
 						odbean.setcCode(ccCode);
+							odbean.setSubTotal(subTotal);
 						if (check == 1) {
 							Okler.getInstance().setSingleCart(odbean);
 						} else {
 							Okler.getInstance().setMainCart(odbean);
 						}
+						Utilities.writeCartToSharedPref(ack, odbean);
 						Intent intent = new Intent(getApplicationContext(),
 								ProductCheckoutPaymentMode.class);
 						intent.putExtra("Check", check);
@@ -205,53 +192,23 @@ public class ProductCheckoutSummary extends BaseActivity {
 					}
 				}
 			}
-
 		});
-		/*back_layout = (RelativeLayout)toolBar.findViewById(R.id.back_layout);
-		back_layout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-			finish();	
-			}
-		});
-		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
-		imgBack.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				finish();
-			}
-		});*/
-		
 		UIUtils.setBackClick(toolBar, ack);
-
-		// code to be copied for checkout summary for action bar and etc
 		checkout_progress_summary_Iv = (ImageView) findViewById(R.id.checkout_progress_summary_Iv);
 		if (Okler.getInstance().getBookingType() == 0) {
-			// ab.setTitle(R.string.title_activity_allopathy);
 			Utilities.setTitleText(toolBar, getString(R.string.allopathy));
 			checkout_progress_summary_Iv
 					.setImageResource(R.drawable.md_process_summary_image);
 			checkout_quant_RL.setBackgroundColor(getResources().getColor(
 					R.color.Brightyellow));
-
 		} else if (Okler.getInstance().getBookingType() == 3) {
-			// checkout_progress_summary_Iv.setImageResource(R.drawable.md_process_summary_image);
 			checkout_quant_RL.setBackgroundColor(getResources().getColor(
 					R.color.Brightyellow));
-
 			Utilities.setTitleText(toolBar, getString(R.string.ayurvedic));
-			// ab.setTitle(R.string.title_activity_ayurvedic);
 		} else if (Okler.getInstance().getBookingType() == 4) {
-			// checkout_progress_summary_Iv.setImageResource(R.drawable.md_process_summary_image);
 			checkout_quant_RL.setBackgroundColor(getResources().getColor(
 					R.color.Brightyellow));
-			// ab.setTitle(R.string.title_activity_homeopathy);
 			Utilities.setTitleText(toolBar, getString(R.string.homeopathy));
-
 		} else {
 			ab.setTitle(R.string.title_activity_health_shop_grid);
 			checkout_quant_RL.setBackgroundColor(Color.parseColor("#FCAB12"));
@@ -268,17 +225,13 @@ public class ProductCheckoutSummary extends BaseActivity {
 			Utilities.setTitleText(toolBar, "Cart");
 
 		}
-		// end of code to be copied
-
 		apply_button.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				String cCode = coupon_code.getText().toString();
-				// float amt =
-				// Float.parseFloat(amount_value_tv.getText().toString());
 				couponCodeUrl = getString(R.string.couponCodeUrlPart1) + cCode
-						+ getString(R.string.couponCodeUrlPart2) + "product"
+						+ getString(R.string.couponCodeUrlPart2) + 1
 						+ getString(R.string.couponCodeUrlPart3) + amount;
 
 				WebJsonObjectRequest cjson = new WebJsonObjectRequest(
@@ -294,12 +247,8 @@ public class ProductCheckoutSummary extends BaseActivity {
 											"Coupon Valid")) {
 										redAmt = Float.parseFloat(jobj
 												.getString("reduction_amount"));
-										// float net =
-										// Float.parseFloat(net_pay_value_tv.getText().toString());
-
 										if (net_pay > redAmt) {
 											net_pay = net_pay - redAmt;
-											// net_pay = net;
 											ccCode = coupon_code.getText()
 													.toString();
 											;
@@ -342,14 +291,10 @@ public class ProductCheckoutSummary extends BaseActivity {
 
 				VolleyRequest.addJsonObjectRequest(getApplicationContext(),
 						cjson);
-				/*
-				 * coupon_disc_RL.setVisibility(View.VISIBLE);
-				 * coupon_appl_text.setVisibility(View.VISIBLE);
-				 * net_pay_value_tv.setText("RS. 14.20");
-				 */
 			}
 		});
 		pdList = odbean.getProdList();
+		pdList.trimToSize();
 		int size = pdList.size();
 		if (size > 9) {
 			checkout_count.setText("" + size);
@@ -357,6 +302,7 @@ public class ProductCheckoutSummary extends BaseActivity {
 			checkout_count.setText("0" + size);
 		}
 		String First;
+		prodSummary = new CustomViewProdCheckoutSummary[size];
 		for (int i = 0; i < size; i++) {
 			prodSummary[i] = new CustomViewProdCheckoutSummary(
 					getApplicationContext());
@@ -384,21 +330,17 @@ public class ProductCheckoutSummary extends BaseActivity {
 					two = "";
 				}
 				desc = two;
-				
 			} else {
 				desc = pdbean1.getDesc();
 				if (desc == null || desc.equals("null"))
 					desc="";
-				
 			}
 			item_description.setText(desc);
 			tv_MrpValue.setText(pdbean1.getMrp() + "");
 			tv_youSaveValue.setText(pdbean1.getDiscount() + "%");
 			okler_Amount.setText(okler_Amount.getText().toString()
 					+ pdbean1.getOklerPrice());
-			// First=
-			// "http://183.82.110.105:8081/oklerdevv2/uploads/images/medium/";
-			First = "";// pdList.get(i).getThumbUrl();
+			First = "";
 			if (Okler.getInstance().getBookingType() == 0) {
 				First = pdList.get(i).getClipArtUrl();
 			} else {
@@ -416,14 +358,13 @@ public class ProductCheckoutSummary extends BaseActivity {
 			taxes = taxes + (pdbean1.getTax() * pdbean1.getUnits());
 		}
 		okler_disc = (amount - net_pay);
+		subTotal = net_pay;
 		shipping_charg = 0;
-		// taxes = 0;
 		coupon_disc = 0;
 		net_pay = net_pay + taxes - coupon_disc;
 		if (net_pay < 500 && net_pay > 0) {
 			shipping_charg = 50;
 		}
-
 		net_pay = net_pay + shipping_charg;
 		amount_value_tv.setText("Rs." + amount);
 		okler_disc_value_tv.setText("Rs." + okler_disc);
@@ -434,30 +375,14 @@ public class ProductCheckoutSummary extends BaseActivity {
 
 		UsersDataBean ubean = Utilities.getCurrentUserFromSharedPref(ack);
 		ArrayList<AddressDataBean> aList = ubean.getAddDatabean();
+		aList.trimToSize();
 		for (int i = 0; i < aList.size(); i++) {
 			AddressDataBean abean = new AddressDataBean();
 			abean = aList.get(i);
-			if (abean.getDefault_billing() != 0) {
-				/* if(flagbill==false){ */
-				baddr_title_tv.setText("Billing Address");
-				String addr = aList.get(i).getFirstname() + " "
-						+ aList.get(i).getLastname() + "\n"
-						+ aList.get(i).getAddress1() + ", "
-						+ aList.get(i).getAddress2() + ", " + "\n"
-						+ aList.get(i).getCity() + " - "
-						+ aList.get(i).getZip() + ", "
-						+ aList.get(i).getState() + ".";
-				baddr_tv.setText(addr);
-				/*
-				 * flagbill=true; } else{
-				 * 
-				 * }
-				 */
-			}
+			
 			if (abean.isSelected()) {
-				/* if(flagship==false){ */
 				addr_title_tv.setText("Delivery Address");
-				String addr = aList.get(i).getFirstname() + " "
+				addr = aList.get(i).getFirstname() + " "
 						+ aList.get(i).getLastname() + "\n"
 						+ aList.get(i).getAddress1() + ", "
 						+ aList.get(i).getAddress2() + ", " + "\n"
@@ -467,11 +392,20 @@ public class ProductCheckoutSummary extends BaseActivity {
 						+ "Preferred Delivery Time: "
 						+ aList.get(i).getPreferred_del_time();
 				addr_tv.setText(addr);
-				/*
-				 * flagbill=true; } else{
-				 * 
-				 * }
-				 */
+			}
+			if (abean.getDefault_billing() != 0) {
+				baddr_title_tv.setText("Billing Address");
+				String addr2 = aList.get(i).getFirstname() + " "
+						+ aList.get(i).getLastname() + "\n"
+						+ aList.get(i).getAddress1() + ", "
+						+ aList.get(i).getAddress2() + ", " + "\n"
+						+ aList.get(i).getCity() + " - "
+						+ aList.get(i).getZip() + ", "
+						+ aList.get(i).getState() + ".";
+				baddr_tv.setText(addr2);
+			}else{
+				baddr_title_tv.setText("Billing Address");
+				baddr_tv.setText(addr);
 			}
 		}
 		UsersDataBean ubean2 = new UsersDataBean();
@@ -482,21 +416,15 @@ public class ProductCheckoutSummary extends BaseActivity {
 		surnameValueTv.setText(ubean2.getLname());
 		mobileValueTv.setText(ubean2.getPhone());
 		emailValueTv.setText(ubean2.getEmail());
-
-	}// end of onCreate
-
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;

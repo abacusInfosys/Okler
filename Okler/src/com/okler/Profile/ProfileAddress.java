@@ -20,7 +20,6 @@ import com.okler.databeans.UsersDataBean;
 import com.okler.network.VolleyRequest;
 import com.okler.network.WebJsonObjectRequest;
 import com.okler.utils.Okler;
-import com.okler.utils.UIUtils;
 import com.okler.utils.Utilities;
 
 import android.app.Activity;
@@ -204,9 +203,10 @@ public class ProfileAddress extends BaseActivity {
 					int pat_id = udatabean.getId();
 					int uid = udatabean.getId();
 					String addr_id = addbean.getAddr_id();
-					int default_billing = addbean.getDefault_billing();
-					if(default_billing>=1){
-					Toast toast =	Toast.makeText(act, "You cannot delete default billing address", Toast.LENGTH_LONG);
+					//int default_billing = addbean.getDefault_billing();
+					if(addre.size()>0)
+					if(addre.size()==1){
+					Toast toast =	Toast.makeText(act, "Minimum one address is required.", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.CENTER, 0, 0);
 					toast.show();
 					}else{
@@ -331,7 +331,7 @@ public class ProfileAddress extends BaseActivity {
 
 		selectAddress.setText(length + " " + "Saved Addresses");
 
-		/*imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
+		imgBack = (ImageView) toolBar.findViewById(R.id.toolbar_back);
 		imgBack.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -339,8 +339,7 @@ public class ProfileAddress extends BaseActivity {
 				// TODO Auto-generated method stub
 				finish();
 			}
-		});*/
-		UIUtils.setBackClick(toolBar, act);
+		});
 		Utilities.setTitleText(toolBar, "Address");
 	}
 
